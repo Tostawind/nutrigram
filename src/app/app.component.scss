@@ -1,0 +1,24 @@
+:host {
+  display: grid;
+  min-height: 100dvh;
+  grid-template-rows: auto 1fr auto;
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: #f8f9fa;
+}
+
+.main {
+  padding: 1rem;
+}
+
+.footer {
+  text-align: center;
+  padding: 1rem;
+  background-color: #f8f9fa;
+}
