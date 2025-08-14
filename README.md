@@ -5,7 +5,7 @@
 ## To Do ✅
 
 - [ ] Crear vistas
-  - [ ] Meals (home)
+  - [x] Meals (home)
   - [ ] Recipes
   - [ ] Recipe
   - [ ] Config

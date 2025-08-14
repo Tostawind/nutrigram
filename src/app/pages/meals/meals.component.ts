@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CardModule } from 'primeng/card';
+import { MEALS } from '../../core/constants/meals';
 
 @Component({
   selector: 'app-meals',
@@ -9,11 +10,5 @@ import { CardModule } from 'primeng/card';
   styleUrl: './meals.component.scss',
 })
 export class MealsComponent {
-  meals = [
-    { id: 1, name: '☀️ Desayuno' },
-    { id: 2, name: '🍽️ Comida' },
-    { id: 3, name: '🌕 Cena' },
-    { id: 4, name: '🍫 Snack' },
-    { id: 5, name: '🍌 Snack 2' },
-  ];
+  meals = MEALS;
 }
