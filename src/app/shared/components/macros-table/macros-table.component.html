@@ -9,10 +9,42 @@
   </ng-template>
   <ng-template #body let-macro>
     <tr>
-      <td>{{ macro.kcal }} <span class="unit">kcal</span></td>
-      <td>{{ macro.protein }} <span class="unit">g</span></td>
-      <td>{{ macro.carbs }} <span class="unit">g</span></td>
-      <td>{{ macro.fats }} <span class="unit">g</span></td>
+      <td
+        (click)="editCell('kcal', macro.kcal)"
+        [class.not-editable]="!editableFields.includes('kcal')"
+      >
+        {{ macro.kcal }} <span class="unit">kcal</span>
+      </td>
+      <td
+        (click)="editCell('protein', macro.protein)"
+        [class.not-editable]="!editableFields.includes('protein')"
+      >
+        {{ macro.protein }} <span class="unit">g</span>
+      </td>
+      <td
+        (click)="editCell('carbs', macro.carbs)"
+        [class.not-editable]="!editableFields.includes('carbs')"
+      >
+        {{ macro.carbs }} <span class="unit">g</span>
+      </td>
+      <td
+        (click)="editCell('fats', macro.fats)"
+        [class.not-editable]="!editableFields.includes('fats')"
+      >
+        {{ macro.fats }} <span class="unit">g</span>
+      </td>
     </tr>
   </ng-template>
 </p-table>
+
+<!-- MODAL -->
+<p-dialog header="Editar" [modal]="true" [(visible)]="modal.isVisible">
+  <p-floatlabel variant="in">
+    <input pInputText autocomplete="off" [(ngModel)]="modal.value" />
+    <label>{{ modal.label }}</label>
+  </p-floatlabel>
+  <br />
+  <div>
+    <p-button label="Save" (click)="saveCell()" />
+  </div>
+</p-dialog>

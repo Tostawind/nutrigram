@@ -16,3 +16,9 @@ td {
   opacity: 0.4;
   font-size: 12px;
 }
+
+.not-editable {
+  opacity: 0.8;
+  cursor: default;
+  pointer-events: none;
+}
