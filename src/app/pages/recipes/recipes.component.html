@@ -1,1 +1,15 @@
 <h2 class="title--1">{{ mealTitle }}</h2>
+
+<app-macros-table />
+
+<h3 class="title--2">Recetas</h3>
+
+<ul class="meals-list">
+  @for(recipe of recipes; track recipe.id) {
+  <li>
+    <a [routerLink]="['/recipe', recipe.id]">
+      <p-card [header]="recipe.name" />
+    </a>
+  </li>
+  }
+</ul>

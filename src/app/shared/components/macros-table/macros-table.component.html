@@ -1,0 +1,18 @@
+<p-table [value]="macros" showGridlines stripedRows>
+  <ng-template #header>
+    <tr>
+      <th>Kcal</th>
+      <th class="cell--small">P</th>
+      <th class="cell--small">H</th>
+      <th class="cell--small">G</th>
+    </tr>
+  </ng-template>
+  <ng-template #body let-macro>
+    <tr>
+      <td>{{ macro.kcal }} <span class="unit">kcal</span></td>
+      <td>{{ macro.protein }} <span class="unit">g</span></td>
+      <td>{{ macro.carbs }} <span class="unit">g</span></td>
+      <td>{{ macro.fats }} <span class="unit">g</span></td>
+    </tr>
+  </ng-template>
+</p-table>
