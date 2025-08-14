@@ -1,0 +1,8 @@
+[
+  {
+    "id": "r0001",
+    "name": "Avena con leche",
+    "ingredients": ["i0001", "i0002"],
+    "notes": "La leche fria está mas buena"
+  }
+]

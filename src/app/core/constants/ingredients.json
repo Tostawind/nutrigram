@@ -1,0 +1,20 @@
+[
+  {
+    "id": "i0001",
+    "name": "Avena",
+    "portion": 100,
+    "unit": "g",
+    "macros": { "protein": 13, "fat": 6, "carbs": 68, "kcal": 379 },
+    "categories": ["carbs"],
+    "notes": "500g package"
+  },
+  {
+    "id": "i0002",
+    "name": "Leche ",
+    "portion": 100,
+    "unit": "ml",
+    "macros": { "protein": 3.4, "fat": 1.6, "carbs": 4.8, "kcal": 42 },
+    "categories": ["carbs"],
+    "notes": "1 glass = 200ml"
+  }
+]
