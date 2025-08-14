@@ -2,14 +2,19 @@ import { Routes } from '@angular/router';
 import { MealsComponent } from './pages/meals/meals.component';
 import { RecipesComponent } from './pages/recipes/recipes.component';
 import { SettingsComponent } from './pages/settings/settings.component';
+import { RecipeComponent } from './pages/recipe/recipe.component';
 export const routes: Routes = [
   {
     path: '',
     component: MealsComponent,
   },
   {
-    path: 'meals/:mealId',
+    path: 'meal/:mealId',
     component: RecipesComponent,
+  },
+  {
+    path: 'recipe/:recipeId',
+    component: RecipeComponent,
   },
   {
     path: 'settings',

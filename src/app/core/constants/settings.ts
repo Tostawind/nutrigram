@@ -1,3 +1,4 @@
+import { Meal } from '../models/meal.model';
 import { Settings } from '../models/settings.model';
 
 export const SETTINGS: Settings = {
@@ -33,5 +34,5 @@ export const SETTINGS: Settings = {
       name: '🍌 Snack 2',
       macros: { kcal: 300, protein: 25, carbs: 25, fats: 10 },
     },
-  ],
+  ] as Meal[],
 };

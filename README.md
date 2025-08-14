@@ -2,11 +2,9 @@
 
 ---
 
+> Importante: Settings esta creado pero no cambia los ajustes de momento está hardcodeado ya se verá si las comidas tambien son dinamicas
+
 ## To Do ✅
 
-- [ ] Crear vistas
-  - [x] Meals (home)
-  - [ ] Recipes
-  - [ ] Recipe
-  - [ ] Config
-- [x] BBDD (mock)
+- [ ] Vista Recipe
+- [ ] Calculo automatico de las unidades

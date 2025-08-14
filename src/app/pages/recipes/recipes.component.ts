@@ -4,10 +4,14 @@ import { MacrosTableComponent } from '../../shared/components/macros-table/macro
 import { CardModule } from 'primeng/card';
 import { Recipe } from '../../core/models/recipe.model';
 import { HttpClient } from '@angular/common/http';
-import { SETTINGS } from '../../core/constants/settings';
 import { Meal } from '../../core/models/meal.model';
+import { SettingsService } from '../../core/services/settings.service';
 
-const DEFAULT_MACROS = { kcal: 0, protein: 0, carbs: 0, fats: 0 };
+const DEFAULT_MEAL = {
+  id: '',
+  name: 'Error',
+  macros: { kcal: 0, protein: 0, carbs: 0, fats: 0 },
+};
 
 @Component({
   selector: 'app-recipes',
@@ -16,23 +20,17 @@ const DEFAULT_MACROS = { kcal: 0, protein: 0, carbs: 0, fats: 0 };
   styleUrl: './recipes.component.scss',
 })
 export class RecipesComponent implements OnInit {
-  meal: Meal = {
-    id: null,
-    name: 'Meal',
-    macros: DEFAULT_MACROS,
-  };
-  recipes: Recipe[] = [];
-
   private _route = inject(ActivatedRoute);
   private _http = inject(HttpClient);
+  private _settingsService = inject(SettingsService);
+
+  meal: Meal = DEFAULT_MEAL;
+  recipes: Recipe[] = [];
 
   ngOnInit() {
-    this.meal.id = this._route.snapshot.paramMap.get('mealId');
-    this.meal.name =
-      SETTINGS.meals.find((meal) => meal.id === this.meal.id)?.name || 'Meal';
-    this.meal.macros =
-      SETTINGS.meals.find((meal) => meal.id === this.meal.id)?.macros ||
-      DEFAULT_MACROS;
+    const mealId = this._route.snapshot.paramMap.get('mealId') || '';
+
+    this.meal = this._settingsService.getMealById(mealId) || DEFAULT_MEAL;
 
     this._http.get<Recipe[]>(`data/recipes.json`).subscribe((recipes) => {
       this.recipes = recipes;

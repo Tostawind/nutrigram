@@ -1,5 +1,5 @@
 export interface Meal {
-  id: string | null;
+  id: string;
   name: string;
   macros: {
     kcal: number;
