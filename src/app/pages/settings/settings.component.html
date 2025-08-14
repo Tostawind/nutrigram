@@ -1,6 +1,8 @@
 <h2 class="title--1">Configuración</h2>
 
-<app-macros-table />
+<app-macros-table [editableFields]="['kcal', 'protein', 'carbs', 'fats']" />
+
 <hr style="opacity: 0.2; margin-top: 32px" />
+
 <h3 class="title--2">Desayuno</h3>
 <app-macros-table [editableFields]="['protein', 'carbs', 'fats']" />

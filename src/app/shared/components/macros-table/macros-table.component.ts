@@ -21,6 +21,7 @@ import { MACROS, MacrosKey } from '../../../core/constants/macros';
   styleUrl: './macros-table.component.scss',
 })
 export class MacrosTableComponent {
+  @Input() macros: Macros[] = [{ kcal: 0, protein: 0, carbs: 0, fats: 0 }];
   @Input() editableFields: MacrosKey[] = [];
 
   modal = signal({
@@ -29,15 +30,6 @@ export class MacrosTableComponent {
     field: '' as MacrosKey | '',
     value: '',
   });
-
-  macros: Macros[] = [
-    {
-      kcal: 0,
-      protein: 0,
-      carbs: 0,
-      fats: 0,
-    },
-  ];
 
   columns = [
     { key: 'kcal' as MacrosKey, label: 'Kcal', unit: 'kcal' },

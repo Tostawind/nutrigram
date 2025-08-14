@@ -1,6 +1,6 @@
-<h2 class="title--1">{{ mealTitle }}</h2>
+<h2 class="title--1">{{ meal.name }}</h2>
 
-<app-macros-table />
+<app-macros-table [macros]="[meal.macros]" />
 
 <h3 class="title--2">Recetas</h3>
 
