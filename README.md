@@ -9,6 +9,4 @@
   - [ ] Recipes
   - [ ] Recipe
   - [ ] Config
-- [ ] BBDD (mock)
-  - ingredients
-  - recipes
+- [x] BBDD (mock)
