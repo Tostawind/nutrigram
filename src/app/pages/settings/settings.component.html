@@ -3,16 +3,16 @@
 <app-macros-table
   [macros]="[settings.macros]"
   [editableFields]="['kcal', 'protein', 'carbs', 'fats']"
-  (save)="updateMainMacros($event)"
+  (save)="updateSettings($event)"
 />
 
-@for(meal of settings.meals; track meal.id) {
+@for(meal of meals(); track meal.id) {
 <hr style="opacity: 0.2; margin-top: 32px" />
 <h3 class="title--2">{{ meal.name }}</h3>
 <app-macros-table
   [macros]="[meal.macros]"
   [editableFields]="['protein', 'carbs', 'fats']"
-  (save)="updateMealMacros($event, meal.id)"
+  (save)="updateMeal($event, meal.id)"
 />
 } } @else {
 <p>Cargando...</p>

@@ -30,7 +30,7 @@ export class RecipesComponent implements OnInit {
   ngOnInit() {
     const mealId = this.route.snapshot.paramMap.get('mealId') || '';
 
-    this.meal = this.settingsService.getMealById(mealId) || DEFAULT_MEAL;
+    // this.meal = this.settingsService.getMealById(mealId) || DEFAULT_MEAL;
 
     this.http.get<Recipe[]>(`data/recipes.json`).subscribe((recipes) => {
       this.recipes = recipes;

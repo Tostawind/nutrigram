@@ -7,6 +7,7 @@ import { SettingsService } from '../../core/services/settings.service';
 import { Meal } from '../../core/models/meal.model';
 import { Macros } from '../../core/models/macros.model';
 import { MACROS_DEFAULT } from '../../core/constants/macros';
+import { MealService } from '../../core/services/meal.service';
 
 @Component({
   selector: 'app-meals',
@@ -16,18 +17,25 @@ import { MACROS_DEFAULT } from '../../core/constants/macros';
 })
 export class MealsComponent implements OnInit {
   readonly settingsService = inject(SettingsService);
+  readonly mealService = inject(MealService);
 
   meals = signal<Meal[]>([]);
   macros = signal<Macros>(MACROS_DEFAULT);
 
   ngOnInit(): void {
     this._loadSettings();
+    this._loadMeals();
   }
 
   private _loadSettings(): void {
     this.settingsService.getSettings().subscribe((settings) => {
-      this.meals.set(settings.meals);
       this.macros.set(settings.macros);
+    });
+  }
+
+  private _loadMeals() {
+    this.mealService.getMeals().subscribe((data) => {
+      this.meals.set(data);
     });
   }
 }

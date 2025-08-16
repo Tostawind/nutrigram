@@ -4,6 +4,8 @@ import { Settings } from '../../core/models/settings.model';
 import { SETTINGS } from '../../core/constants/settings';
 import { SettingsService } from '../../core/services/settings.service';
 import { Macros } from '../../core/models/macros.model';
+import { MealService } from '../../core/services/meal.service';
+import { Meal } from '../../core/models/meal.model';
 
 @Component({
   selector: 'app-settings',
@@ -13,11 +15,14 @@ import { Macros } from '../../core/models/macros.model';
 })
 export class SettingsComponent implements OnInit {
   readonly settingsService = inject(SettingsService);
+  readonly mealService = inject(MealService);
 
   settings = signal<Settings | null>(null);
+  meals = signal<Meal[]>([]);
 
   ngOnInit() {
     this._loadSettings();
+    this._loadMeals();
   }
 
   private _loadSettings() {
@@ -26,33 +31,37 @@ export class SettingsComponent implements OnInit {
     });
   }
 
-  private _saveSettings(updated: Settings) {
+  private _loadMeals() {
+    this.mealService.getMeals().subscribe((data) => {
+      this.meals.set(data);
+    });
+  }
+
+  updateSettings(macros: Macros[]) {
+    const current = this.settings();
+    if (!current) return;
+
+    const updated = { ...current, macros: macros[0] };
+
     this.settingsService.updateSettings(updated).subscribe((data) => {
       this.settings.set(data);
     });
   }
 
-  updateMainMacros(macros: Macros[]) {
-    const current = this.settings();
-    if (!current) return;
-
-    const updated = { ...current, macros: macros[0] };
-    this._saveSettings(updated);
-  }
-
-  updateMealMacros(macros: Macros[], mealId: string) {
-    const current = this.settings();
-    if (!current) return;
-
-    const meal = current.meals.find((m) => m.id === mealId);
+  updateMeal(macros: Macros[], mealId: string) {
+    const current = this.meals();
+    const meal = current.find((m) => m.id === mealId);
     if (!meal) return;
 
-    const updatedMeal = { ...meal, macros: macros[0] };
-    const updated = {
-      ...current,
-      meals: current.meals.map((m) => (m.id === mealId ? updatedMeal : m)),
-    };
+    const updated = { ...meal, macros: macros[0] };
 
-    this._saveSettings(updated);
+    this.mealService.updateMeal(updated).subscribe((data) => {
+      const meals = this.meals();
+      const index = meals.findIndex((m) => m.id === mealId);
+      if (index !== -1) {
+        meals[index] = data;
+        this.meals.set(meals);
+      }
+    });
   }
 }

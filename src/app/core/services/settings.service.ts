@@ -20,10 +20,4 @@ export class SettingsService {
   updateSettings(settings: Settings): Observable<Settings> {
     return this.http.put<Settings>(this._apiUrl, settings);
   }
-
-  // TODO:
-  getMealById(mealId: string): Meal | null {
-    const meal = SETTINGS.meals.find((meal) => meal.id === mealId) || null;
-    return meal;
-  }
 }

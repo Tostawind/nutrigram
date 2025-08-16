@@ -1,64 +1,64 @@
 {
   "settings": {
     "macros": {
-      "kcal": 1000,
+      "kcal": 20,
       "protein": 200,
       "carbs": 170,
       "fats": 70
-    },
-    "meals": [
-      {
-        "id": "desayuno",
-        "name": "☀️ Desayuno",
-        "macros": {
-          "kcal": 0,
-          "protein": 100,
-          "carbs": 0,
-          "fats": 0
-        }
-      },
-      {
-        "id": "comida",
-        "name": "🍽️ Comida",
-        "macros": {
-          "kcal": 600,
-          "protein": 40,
-          "carbs": 50,
-          "fats": 20
-        }
-      },
-      {
-        "id": "cena",
-        "name": "🌕 Cena",
-        "macros": {
-          "kcal": 400,
-          "protein": 25,
-          "carbs": 35,
-          "fats": 15
-        }
-      },
-      {
-        "id": "snack",
-        "name": "🍫 Snack",
-        "macros": {
-          "kcal": 300,
-          "protein": 25,
-          "carbs": 25,
-          "fats": 10
-        }
-      },
-      {
-        "id": "snack2",
-        "name": "🍌 Snack 2",
-        "macros": {
-          "kcal": 300,
-          "protein": 25,
-          "carbs": 25,
-          "fats": 10
-        }
-      }
-    ]
+    }
   },
+  "meals": [
+    {
+      "id": "desayuno",
+      "name": "☀️ Desayuno",
+      "macros": {
+        "kcal": 0,
+        "protein": 150,
+        "carbs": 0,
+        "fats": 0
+      }
+    },
+    {
+      "id": "comida",
+      "name": "🍽️ Comida",
+      "macros": {
+        "kcal": 600,
+        "protein": 40,
+        "carbs": 50,
+        "fats": 20
+      }
+    },
+    {
+      "id": "cena",
+      "name": "🌕 Cena",
+      "macros": {
+        "kcal": 400,
+        "protein": 25,
+        "carbs": 35,
+        "fats": 15
+      }
+    },
+    {
+      "id": "snack",
+      "name": "🍫 Snack",
+      "macros": {
+        "kcal": 300,
+        "protein": 25,
+        "carbs": 25,
+        "fats": 10
+      }
+    },
+    {
+      "id": "snack2",
+      "name": "🍌 Snack 2",
+      "macros": {
+        "kcal": 300,
+        "protein": 25,
+        "carbs": 25,
+        "fats": 10
+      }
+    }
+  ],
   "ingredients": [
     {
       "id": "i0001",
@@ -67,12 +67,14 @@
       "unit": "g",
       "macros": {
         "protein": 13,
-        "fat": 6,
+        "fats": 6,
         "carbs": 68,
         "kcal": 379
       },
-      "categories": ["carbs"],
-      "notes": "500g package"
+      "categories": [
+        "carbs"
+      ],
+      "note": "500g package"
     },
     {
       "id": "i0002",
@@ -81,22 +83,41 @@
       "unit": "ml",
       "macros": {
         "protein": 3.4,
-        "fat": 1.6,
+        "fats": 1.6,
         "carbs": 4.8,
         "kcal": 42
       },
-      "categories": ["carbs"],
-      "notes": "1 glass = 200ml"
+      "categories": [
+        "carbs"
+      ],
+      "note": "1 glass = 200ml"
     }
   ],
   "recipes": [
     {
       "id": "r0001",
-      "name": "Avena con Leche"
+      "name": "Avena con Leche",
+      "note": "",
+      "ingredients": [
+        "i0001",
+        "i0002"
+      ],
+      "meals": [
+        "desayuno",
+        "snack"
+      ]
     },
     {
       "id": "r0002",
-      "name": "Tofu firme con patatas"
+      "name": "Tofu firme con patatas",
+      "note": "Receta alta en proteínas",
+      "ingredients": [
+        "i0001",
+        "i0002"
+      ],
+      "meals": [
+        "comida"
+      ]
     }
   ]
 }
