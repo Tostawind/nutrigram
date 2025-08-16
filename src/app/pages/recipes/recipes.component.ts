@@ -20,19 +20,19 @@ const DEFAULT_MEAL = {
   styleUrl: './recipes.component.scss',
 })
 export class RecipesComponent implements OnInit {
-  private _route = inject(ActivatedRoute);
-  private _http = inject(HttpClient);
-  private _settingsService = inject(SettingsService);
+  readonly route = inject(ActivatedRoute);
+  readonly http = inject(HttpClient);
+  readonly settingsService = inject(SettingsService);
 
   meal: Meal = DEFAULT_MEAL;
   recipes: Recipe[] = [];
 
   ngOnInit() {
-    const mealId = this._route.snapshot.paramMap.get('mealId') || '';
+    const mealId = this.route.snapshot.paramMap.get('mealId') || '';
 
-    this.meal = this._settingsService.getMealById(mealId) || DEFAULT_MEAL;
+    this.meal = this.settingsService.getMealById(mealId) || DEFAULT_MEAL;
 
-    this._http.get<Recipe[]>(`data/recipes.json`).subscribe((recipes) => {
+    this.http.get<Recipe[]>(`data/recipes.json`).subscribe((recipes) => {
       this.recipes = recipes;
     });
   }

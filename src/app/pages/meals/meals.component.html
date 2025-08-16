@@ -1,9 +1,9 @@
 <h2 class="title--1">Comidas</h2>
 
-<app-macros-table [macros]="[macros]" />
+<app-macros-table [macros]="[macros()]" />
 
 <ul class="meals-list">
-  @for(meal of meals; track meal.id) {
+  @for(meal of meals(); track meal.id) {
   <li>
     <a [routerLink]="['/meal', meal.id]">
       <p-card [header]="meal.name" />

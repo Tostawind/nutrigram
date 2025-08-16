@@ -13,7 +13,7 @@
       @for(col of columns; track col.key) {
       <td
         (click)="editCell(col.key, macro[col.key])"
-        [class.not-editable]="!editableFields.includes(col.key)"
+        [class.not-editable]="!editableFields().includes(col.key)"
       >
         {{ macro[col.key] }} <span class="unit">{{ col.unit }}</span>
       </td>
@@ -25,7 +25,13 @@
 <!-- MODAL -->
 <p-dialog header="Editar" [modal]="true" [(visible)]="modal().isVisible">
   <p-floatlabel variant="in">
-    <input pInputText autocomplete="off" [(ngModel)]="modal().value" />
+    <p-inputnumber
+      #modalInput
+      [(ngModel)]="modal().value"
+      [min]="0"
+      [max]="10000"
+      [step]="1"
+    />
     <label>{{ modal().label }}</label>
   </p-floatlabel>
   <br />

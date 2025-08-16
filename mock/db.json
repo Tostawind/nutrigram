@@ -71,9 +71,7 @@
         "carbs": 68,
         "kcal": 379
       },
-      "categories": [
-        "carbs"
-      ],
+      "categories": ["carbs"],
       "notes": "500g package"
     },
     {
@@ -87,10 +85,18 @@
         "carbs": 4.8,
         "kcal": 42
       },
-      "categories": [
-        "carbs"
-      ],
+      "categories": ["carbs"],
       "notes": "1 glass = 200ml"
+    }
+  ],
+  "recipes": [
+    {
+      "id": "r0001",
+      "name": "Avena con Leche"
+    },
+    {
+      "id": "r0002",
+      "name": "Tofu firme con patatas"
     }
   ]
 }
