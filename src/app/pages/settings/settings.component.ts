@@ -6,7 +6,7 @@ import { SettingsService } from '../../core/services/settings.service';
 import { Macros } from '../../core/models/macros.model';
 import { MealService } from '../../core/services/meal.service';
 import { Meal } from '../../core/models/meal.model';
-
+import { MessageService } from 'primeng/api';
 @Component({
   selector: 'app-settings',
   imports: [MacrosTableComponent],
@@ -16,6 +16,7 @@ import { Meal } from '../../core/models/meal.model';
 export class SettingsComponent implements OnInit {
   readonly settingsService = inject(SettingsService);
   readonly mealService = inject(MealService);
+  readonly messageService = inject(MessageService);
 
   settings = signal<Settings | null>(null);
   meals = signal<Meal[]>([]);
@@ -45,6 +46,12 @@ export class SettingsComponent implements OnInit {
 
     this.settingsService.updateSettings(updated).subscribe((data) => {
       this.settings.set(data);
+      this.messageService.add({
+        severity: 'info',
+        summary: 'Info',
+        detail: 'Message Content',
+        life: 3000,
+      });
     });
   }
 
