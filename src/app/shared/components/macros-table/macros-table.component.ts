@@ -1,4 +1,4 @@
-import { Component, Input, signal } from '@angular/core';
+import { Component, Input, Output, signal, input, output } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { Macros } from '../../../core/models/macros.model';
 import { DialogModule } from 'primeng/dialog';
@@ -7,6 +7,9 @@ import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { FloatLabel } from 'primeng/floatlabel';
 import { MACROS, MacrosKey } from '../../../core/constants/macros';
+
+const MACROS_DEFAULT = { kcal: 0, protein: 0, carbs: 0, fats: 0 };
+
 @Component({
   selector: 'app-macros-table',
   imports: [
@@ -21,7 +24,9 @@ import { MACROS, MacrosKey } from '../../../core/constants/macros';
   styleUrl: './macros-table.component.scss',
 })
 export class MacrosTableComponent {
-  @Input() macros: Macros[] = [{ kcal: 0, protein: 0, carbs: 0, fats: 0 }];
+  macros = input<Macros[]>([MACROS_DEFAULT]);
+  save = output<Macros[]>();
+
   @Input() editableFields: MacrosKey[] = [];
 
   modal = signal({
@@ -54,9 +59,12 @@ export class MacrosTableComponent {
   }
 
   saveCell(): void {
+    console.log('_______saveCell');
     const m = this.modal();
     if (m.field) {
-      this.macros[0][m.field] = Number(m.value);
+      const newMacros = [...this.macros()];
+      newMacros[0] = { ...newMacros[0], [m.field]: Number(m.value) };
+      this.save.emit(newMacros);
     }
     this.modal.update((modal) => ({ ...modal, isVisible: false }));
   }

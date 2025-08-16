@@ -1,4 +1,4 @@
-<p-table [value]="macros" showGridlines stripedRows>
+<p-table [value]="macros()" showGridlines stripedRows>
   <ng-template #header>
     <tr>
       @for(col of columns; track col.key) {
