@@ -74,7 +74,20 @@ server.get("/recipes", (req, res) => {
     recipes = recipes.filter((recipe) => recipe.meals.includes(req.query.meal));
   }
 
-  res.json(recipes);
+  // mapear cada receta y sustituir los ids de ingredientes por los objetos
+  const recipesWithIngredients = recipes.map((recipe) => {
+    const ingredients = db
+      .get("ingredients")
+      .filter((ingredient) => recipe.ingredients.includes(ingredient.id))
+      .value();
+
+    return {
+      ...recipe,
+      ingredients,
+    };
+  });
+
+  res.json(recipesWithIngredients);
 });
 
 server.get("/recipes/:recipeId", (req, res) => {
@@ -87,7 +100,17 @@ server.get("/recipes/:recipeId", (req, res) => {
     return res.status(404).json({ error: "Recipe not found" });
   }
 
-  res.json(recipe);
+  const ingredients = db
+    .get("ingredients")
+    .filter((ingredient) => recipe.ingredients.includes(ingredient.id))
+    .value();
+
+  const recipeWithIngredients = {
+    ...recipe,
+    ingredients,
+  };
+
+  res.json(recipeWithIngredients);
 });
 
 // Use default router for other routes

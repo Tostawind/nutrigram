@@ -1,7 +1,15 @@
+@let settings = settingsService.settings();
+@let settingLoading = settingsService.loading();
+@let settingError = settingsService.error();
+
+@let meals = mealService.meals();
+@let mealLoading = mealService.loading();
+@let mealError = mealService.error();
+
 <h2 class="title--1">Configuración</h2>
 
-@if(!settingsService.loading()) {
-  @if (settingsService.settings(); as settings) {
+@if(!settingLoading) {
+  @if (settings) {
     <app-macros-table
       [macros]="[settings.macros]"
       [editableFields]="['kcal', 'protein', 'carbs', 'fat']"
@@ -9,17 +17,17 @@
     />
   }
 }
-@if(settingsService.loading()) {
+@if(settingLoading) {
   <p>Cargando configuración...</p>
 } 
 
-@if(settingsService.error()) {
+@if(settingError) {
   <p>Error al cargar configuración</p>
   <button (click)="settingsService.getSettings()">volver a cargar</button>
 }
 
-@if(!mealService.loading()) {
-  @for(meal of mealService.meals(); track meal.id) {
+@if(!mealLoading) {
+  @for(meal of meals; track meal.id) {
     <hr style="opacity: 0.2; margin-top: 32px" />
     <h3 class="title--2">{{ meal.name }}</h3>
     <app-macros-table
@@ -30,11 +38,11 @@
   }
 } 
 
-@if(mealService.loading()) {
+@if(mealLoading) {
   <p>Cargando comidas...</p>
 } 
 
-@if(mealService.error()) {
+@if(mealError) {
   <p>Error al cargar comidas</p>
   <button (click)="mealService.getMeals()">volver a cargar</button>
 }

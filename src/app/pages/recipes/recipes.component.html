@@ -1,15 +1,23 @@
-<h2 class="title--1">{{ mealService.currentMeal()?.name }}</h2>
+@let meal = mealService.currentMeal();
+@let recipes = recipeService.recipes();
 
-<app-macros-table [macros]="[mealService.currentMeal()?.macros || macrosDefault]" />
+<h2 class="title--1">{{ meal?.name }}</h2>
+
+<app-macros-table [macros]="[meal?.macros || macrosDefault]" />
 
 <h3 class="title--2">Recetas</h3>
 
 <ul class="meals-list">
-  @for(recipe of recipeService.recipes(); track recipe.id) {
-  <li>
-    <a [routerLink]="['/recipe', recipe.id]">
-      <p-card [header]="recipe.name" />
-    </a>
-  </li>
+  @for(recipe of recipes; track recipe.id) {
+    <li>
+      <a [routerLink]="['/recipe', recipe.id]">
+        <p-card [header]="recipe.name" />
+      </a>
+    </li>
+  }
+  @if(recipes.length === 0) {
+    <li>
+      <p>No hay recetas disponibles para esta comida.</p>
+    </li>
   }
 </ul>

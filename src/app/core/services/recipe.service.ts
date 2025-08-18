@@ -28,7 +28,7 @@ export class RecipeService {
     this._error.set(null);
 
     try {
-      const result = await firstValueFrom(this._http.get<Recipe[]>(API_URL));
+      const result = await firstValueFrom(this._http.get<Recipe[]>(API_URL, {params: {meal: mealId}}));
       this._recipes.set(result);
     } catch (err) {
       this._error.set('No se pudieron cargar las recetas');

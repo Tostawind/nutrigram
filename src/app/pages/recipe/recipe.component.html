@@ -1,11 +1,14 @@
-<h2 class="title--1">{{ recipeService.currentRecipe()?.name }}</h2>
+@let ingredients = recipeService.currentRecipe()?.ingredients || [];
+@let recipeName = recipeService.currentRecipe()?.name;
+
+<h2 class="title--1">{{ recipeName }}</h2>
 
 <app-macros-table [macros]="[macrosDefault]" />
 
-<h3 class="title--2">Recetas</h3>
+<h3 class="title--2">Ingredientes</h3>
 
 <ul class="meals-list">
-  @for(ingredient of recipeService.currentRecipe()?.ingredients || []; track ingredient) {
-  <li></li>
+  @for(ingredient of ingredients; track ingredient.id) {
+    <li>{{ ingredient.name }} ({{ ingredient.portion }} {{ ingredient.unit }})</li>
   }
 </ul>

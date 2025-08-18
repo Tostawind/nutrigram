@@ -1,6 +1,8 @@
+import { Ingredient } from "./ingredient.model";
+
 export interface Recipe {
   id: string;
   name: string;
-  ingredients: string[]; // Aray of ingredient IDs
+  ingredients: Ingredient[];
   notes?: string;
 }
