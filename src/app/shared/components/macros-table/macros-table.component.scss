@@ -23,3 +23,11 @@ td {
   cursor: default;
   pointer-events: none;
 }
+
+.over {
+  color: var(--RED);
+}
+
+.under {
+  color: var(--ORANGE);
+}

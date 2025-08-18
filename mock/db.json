@@ -1,8 +1,8 @@
 {
   "settings": {
     "macros": {
-      "kcal": 2000,
-      "protein": 170,
+      "kcal": 1870,
+      "protein": 140,
       "carbs": 170,
       "fat": 70
     }
@@ -12,10 +12,10 @@
       "id": "desayuno",
       "name": "☀️ Desayuno",
       "macros": {
-        "kcal": 0,
-        "protein": 200,
-        "carbs": 20,
-        "fat": 0
+        "kcal": 395,
+        "protein": 25,
+        "carbs": 40,
+        "fat": 15
       }
     },
     {
@@ -52,9 +52,9 @@
       "id": "snack2",
       "name": "🍌 Snack 2",
       "macros": {
-        "kcal": 300,
+        "kcal": 270,
         "protein": 25,
-        "carbs": 25,
+        "carbs": 20,
         "fat": 10
       }
     }

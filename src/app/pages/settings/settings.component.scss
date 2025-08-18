@@ -1,0 +1,21 @@
+.macros-summary {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+
+  th, td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+  }
+
+  .over {
+    color: red;
+    font-weight: bold;
+  }
+
+  .under {
+    color: orange;
+    font-weight: bold;
+  }
+}

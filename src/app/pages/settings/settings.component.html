@@ -6,13 +6,15 @@
 @let mealLoading = mealService.loading();
 @let mealError = mealService.error();
 
+@let diffs = getDiffs();
+
 <h2 class="title--1">Configuración</h2>
 
 @if(!settingLoading) {
   @if (settings) {
     <app-macros-table
       [macros]="[settings.macros]"
-      [editableFields]="['kcal', 'protein', 'carbs', 'fat']"
+      [editableFields]="['protein', 'carbs', 'fat']"
       (save)="updateSettings($event)"
     />
   }
@@ -26,6 +28,15 @@
   <button (click)="settingsService.getSettings()">volver a cargar</button>
 }
 
+<h3 class="title--2">Diferencias</h3>
+<app-macros-table
+  [macros]="[{ protein: diffs?.protein || 0, carbs: diffs?.carbs || 0, fat: diffs?.fat || 0, kcal: diffs?.kcal || 0 }]"
+  [showDiffColors]="true"
+/>
+
+<hr style="opacity: 0.2; margin: 32px 0" />
+
+<h2 class="title--1">Comidas</h2>
 @if(!mealLoading) {
   @for(meal of meals; track meal.id) {
     <hr style="opacity: 0.2; margin-top: 32px" />

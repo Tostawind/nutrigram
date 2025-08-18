@@ -28,6 +28,7 @@ import {
 export class MacrosTableComponent {
   macros = input<Macros[]>([MACROS_DEFAULT]);
   editableFields = input<MacrosKey[]>([]);
+  showDiffColors = input<boolean>(false);
   save = output<Macros[]>();
 
   modal = signal({

@@ -14,6 +14,8 @@
       <td
         (click)="editCell(col.key, macro[col.key])"
         [class.not-editable]="!editableFields().includes(col.key)"
+        [class.over]="showDiffColors() && macro[col.key] > 0" 
+        [class.under]="showDiffColors() && macro[col.key] < 0"
       >
         {{ macro[col.key] }} <span class="unit">{{ col.unit }}</span>
       </td>
