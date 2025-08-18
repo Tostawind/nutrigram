@@ -1,11 +1,11 @@
-<h2 class="title--1">{{ meal.name }}</h2>
+<h2 class="title--1">{{ mealService.currentMeal()?.name }}</h2>
 
-<app-macros-table [macros]="[meal.macros]" />
+<app-macros-table [macros]="[mealService.currentMeal()?.macros || macrosDefault]" />
 
 <h3 class="title--2">Recetas</h3>
 
 <ul class="meals-list">
-  @for(recipe of recipes; track recipe.id) {
+  @for(recipe of recipeService.recipes(); track recipe.id) {
   <li>
     <a [routerLink]="['/recipe', recipe.id]">
       <p-card [header]="recipe.name" />

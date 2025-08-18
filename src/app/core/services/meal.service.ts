@@ -14,6 +14,9 @@ export class MealService {
   private _meals = signal<Meal[]>([]);
   meals = this._meals.asReadonly();
 
+  private _currentMeal = signal<Meal | null>(null);
+  currentMeal = this._currentMeal.asReadonly();
+
   private _loading = signal(false);
   loading = this._loading.asReadonly();
 
@@ -29,6 +32,20 @@ export class MealService {
       this._meals.set(result);
     } catch (err) {
       this._error.set('No se pudieron cargar las comidas');
+    } finally {
+      this._loading.set(false);
+    }
+  }
+
+  async getMeal(mealId: string): Promise<void> {
+    this._loading.set(true);
+    this._error.set(null);
+
+    try {
+      const result = await firstValueFrom(this._http.get<Meal>(`${API_URL}/${mealId}`));
+      this._currentMeal.set(result);
+    } catch (err) {
+      this._error.set('No se pudo cargar la comida');
     } finally {
       this._loading.set(false);
     }

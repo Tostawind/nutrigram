@@ -2,16 +2,10 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { MacrosTableComponent } from '../../shared/components/macros-table/macros-table.component';
 import { CardModule } from 'primeng/card';
-import { Recipe } from '../../core/models/recipe.model';
-import { HttpClient } from '@angular/common/http';
-import { Meal } from '../../core/models/meal.model';
-import { SettingsService } from '../../core/services/settings.service';
+import { MealService } from '../../core/services/meal.service';
+import { MACROS_DEFAULT } from '../../core/constants/macros';
+import { RecipeService } from '../../core/services/recipe.service';
 
-const DEFAULT_MEAL = {
-  id: '',
-  name: 'Error',
-  macros: { kcal: 0, protein: 0, carbs: 0, fat: 0 },
-};
 
 @Component({
   selector: 'app-recipes',
@@ -21,19 +15,16 @@ const DEFAULT_MEAL = {
 })
 export class RecipesComponent implements OnInit {
   readonly route = inject(ActivatedRoute);
-  readonly http = inject(HttpClient);
-  readonly settingsService = inject(SettingsService);
+  mealService = inject(MealService);
+  recipeService = inject(RecipeService);
 
-  meal: Meal = DEFAULT_MEAL;
-  recipes: Recipe[] = [];
+  macrosDefault = MACROS_DEFAULT;
 
   ngOnInit() {
     const mealId = this.route.snapshot.paramMap.get('mealId') || '';
 
-    // this.meal = this.settingsService.getMealById(mealId) || DEFAULT_MEAL;
 
-    this.http.get<Recipe[]>(`data/recipes.json`).subscribe((recipes) => {
-      this.recipes = recipes;
-    });
+    this.mealService.getMeal(mealId);
+    this.recipeService.getRecipesByMeal(mealId);
   }
 }
