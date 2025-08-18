@@ -1,10 +1,20 @@
 <h2 class="title--1">Configuración</h2>
-@if (settings(); as settings) {
+
+@if(settingsStatus() === 'ok') {
+  @if (settings(); as settings) {
 <app-macros-table
   [macros]="[settings.macros]"
   [editableFields]="['kcal', 'protein', 'carbs', 'fats']"
   (save)="updateSettings($event)"
 />
+}
+} @else if(settingsStatus() === 'loading') {
+  <p>Error al cargar la configuración.</p>
+} @else {
+  <p>Configuración cargada correctamente.</p>
+}
+
+
 
 @for(meal of meals(); track meal.id) {
 <hr style="opacity: 0.2; margin-top: 32px" />
@@ -14,6 +24,4 @@
   [editableFields]="['protein', 'carbs', 'fats']"
   (save)="updateMeal($event, meal.id)"
 />
-} } @else {
-<p>Cargando...</p>
 }

@@ -1,12 +1,14 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { MacrosTableComponent } from '../../shared/components/macros-table/macros-table.component';
 import { Settings } from '../../core/models/settings.model';
-import { SETTINGS } from '../../core/constants/settings';
 import { SettingsService } from '../../core/services/settings.service';
-import { Macros } from '../../core/models/macros.model';
 import { MealService } from '../../core/services/meal.service';
 import { Meal } from '../../core/models/meal.model';
-import { MessageService } from 'primeng/api';
+import { LayoutService } from '../../core/services/layout.service';
+import { Macros } from '../../core/models/macros.model';
+
+type LoadingStatus = 'ok' | 'loading' | 'error';
+
 @Component({
   selector: 'app-settings',
   imports: [MacrosTableComponent],
@@ -16,10 +18,12 @@ import { MessageService } from 'primeng/api';
 export class SettingsComponent implements OnInit {
   readonly settingsService = inject(SettingsService);
   readonly mealService = inject(MealService);
-  readonly messageService = inject(MessageService);
+  readonly layoutService = inject(LayoutService);
 
   settings = signal<Settings | null>(null);
   meals = signal<Meal[]>([]);
+  settingsStatus = signal<LoadingStatus>('ok');
+  mealsStatus = signal<LoadingStatus>('ok');
 
   ngOnInit() {
     this._loadSettings();
@@ -27,8 +31,16 @@ export class SettingsComponent implements OnInit {
   }
 
   private _loadSettings() {
-    this.settingsService.getSettings().subscribe((data) => {
-      this.settings.set(data);
+    this.settingsStatus.set('loading');
+    this.settingsService.getSettings().subscribe({
+      next: (data) => {
+        this.settings.set(data);
+        this.settingsStatus.set('ok');
+      },
+      error: (err) => {
+        this.layoutService.toast('Error al cargar la configuración', 'error');
+        this.settingsStatus.set('error');
+      },
     });
   }
 
@@ -46,12 +58,10 @@ export class SettingsComponent implements OnInit {
 
     this.settingsService.updateSettings(updated).subscribe((data) => {
       this.settings.set(data);
-      this.messageService.add({
-        severity: 'info',
-        summary: 'Info',
-        detail: 'Message Content',
-        life: 3000,
-      });
+      this.layoutService.toast(
+        'Configuración actualizada con exito',
+        'success'
+      );
     });
   }
 
