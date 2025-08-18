@@ -1,22 +1,25 @@
 <h2 class="title--1">Configuración</h2>
 
-@if(settingsStatus() === 'ok') {
-  @if (settings(); as settings) {
+@if(!settingsService.loading()) {
+  @if (settingsService.settings(); as settings) {
     <app-macros-table
       [macros]="[settings.macros]"
       [editableFields]="['kcal', 'protein', 'carbs', 'fat']"
       (save)="updateSettings($event)"
     />
   }
-} @else if(settingsStatus() === 'loading') {
+}
+@if(settingsService.loading()) {
   <p>Cargando configuración...</p>
-} @else {
+} 
+
+@if(settingsService.error()) {
   <p>Error al cargar configuración</p>
-  <button (click)="loadSettings()">volver a cargar</button>
+  <button (click)="settingsService.getSettings()">volver a cargar</button>
 }
 
-@if(mealsStatus() === 'ok') {
-  @for(meal of meals(); track meal.id) {
+@if(!mealService.loading()) {
+  @for(meal of mealService.meals(); track meal.id) {
     <hr style="opacity: 0.2; margin-top: 32px" />
     <h3 class="title--2">{{ meal.name }}</h3>
     <app-macros-table
@@ -25,9 +28,14 @@
       (save)="updateMeal($event, meal.id)"
     />
   }
-} @else if(mealsStatus() === 'loading') {
+} 
+
+@if(mealService.loading()) {
   <p>Cargando comidas...</p>
-} @else {
+} 
+
+@if(mealService.error()) {
   <p>Error al cargar comidas</p>
+  <button (click)="mealService.getMeals()">volver a cargar</button>
 }
 

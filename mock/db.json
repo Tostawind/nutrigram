@@ -1,8 +1,8 @@
 {
   "settings": {
     "macros": {
-      "kcal": 20,
-      "protein": 200,
+      "kcal": 2000,
+      "protein": 170,
       "carbs": 170,
       "fat": 70
     }
@@ -13,7 +13,7 @@
       "name": "☀️ Desayuno",
       "macros": {
         "kcal": 0,
-        "protein": 100,
+        "protein": 200,
         "carbs": 20,
         "fat": 0
       }
