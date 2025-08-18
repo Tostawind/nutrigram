@@ -10,7 +10,7 @@ import { SettingsService } from '../../core/services/settings.service';
 const DEFAULT_MEAL = {
   id: '',
   name: 'Error',
-  macros: { kcal: 0, protein: 0, carbs: 0, fats: 0 },
+  macros: { kcal: 0, protein: 0, carbs: 0, fat: 0 },
 };
 
 @Component({

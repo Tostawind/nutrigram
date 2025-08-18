@@ -3,6 +3,6 @@ export interface Settings {
     kcal: number;
     protein: number;
     carbs: number;
-    fats: number;
+    fat: number;
   };
 }

@@ -26,11 +26,11 @@ export class SettingsComponent implements OnInit {
   mealsStatus = signal<LoadingStatus>('ok');
 
   ngOnInit() {
-    this._loadSettings();
+    this.loadSettings();
     this._loadMeals();
   }
 
-  private _loadSettings() {
+  loadSettings() {
     this.settingsStatus.set('loading');
     this.settingsService.getSettings().subscribe({
       next: (data) => {
@@ -45,8 +45,14 @@ export class SettingsComponent implements OnInit {
   }
 
   private _loadMeals() {
-    this.mealService.getMeals().subscribe((data) => {
-      this.meals.set(data);
+    this.mealService.getMeals().subscribe({
+      next: (data) => {
+        this.meals.set(data);
+      },
+      error: (err) => {
+        this.layoutService.toast('Error al cargar comidas', 'error');
+        this.mealsStatus.set('error');
+      }
     });
   }
 

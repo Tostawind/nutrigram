@@ -2,26 +2,32 @@
 
 @if(settingsStatus() === 'ok') {
   @if (settings(); as settings) {
-<app-macros-table
-  [macros]="[settings.macros]"
-  [editableFields]="['kcal', 'protein', 'carbs', 'fats']"
-  (save)="updateSettings($event)"
-/>
-}
+    <app-macros-table
+      [macros]="[settings.macros]"
+      [editableFields]="['kcal', 'protein', 'carbs', 'fat']"
+      (save)="updateSettings($event)"
+    />
+  }
 } @else if(settingsStatus() === 'loading') {
-  <p>Error al cargar la configuración.</p>
+  <p>Cargando configuración...</p>
 } @else {
-  <p>Configuración cargada correctamente.</p>
+  <p>Error al cargar configuración</p>
+  <button (click)="loadSettings()">volver a cargar</button>
 }
 
-
-
-@for(meal of meals(); track meal.id) {
-<hr style="opacity: 0.2; margin-top: 32px" />
-<h3 class="title--2">{{ meal.name }}</h3>
-<app-macros-table
-  [macros]="[meal.macros]"
-  [editableFields]="['protein', 'carbs', 'fats']"
-  (save)="updateMeal($event, meal.id)"
-/>
+@if(mealsStatus() === 'ok') {
+  @for(meal of meals(); track meal.id) {
+    <hr style="opacity: 0.2; margin-top: 32px" />
+    <h3 class="title--2">{{ meal.name }}</h3>
+    <app-macros-table
+      [macros]="[meal.macros]"
+      [editableFields]="['protein', 'carbs', 'fat']"
+      (save)="updateMeal($event, meal.id)"
+    />
+  }
+} @else if(mealsStatus() === 'loading') {
+  <p>Cargando comidas...</p>
+} @else {
+  <p>Error al cargar comidas</p>
 }
+

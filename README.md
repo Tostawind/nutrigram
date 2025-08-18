@@ -4,7 +4,7 @@
 
 ## To Do ✅
 
-- [ ] **Fix fats**
+- [ ] **Fix fat**
 - [ ] **Toast**: Crear toast e implementar en llamadas (exito /success)
 - [ ] **JSON-SERVER**
   - [ ] Verificar settings

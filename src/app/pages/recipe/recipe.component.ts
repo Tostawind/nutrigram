@@ -16,7 +16,7 @@ export class RecipeComponent implements OnInit {
   private _settingsService = inject(SettingsService);
 
   recipeName: string = 'Receta de ejemplo';
-  macros: Macros = { kcal: 0, protein: 0, carbs: 0, fats: 0 };
+  macros: Macros = { kcal: 0, protein: 0, carbs: 0, fat: 0 };
   ingredients: Ingredient[] = [];
 
   ngOnInit(): void {

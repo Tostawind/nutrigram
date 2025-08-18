@@ -10,7 +10,7 @@ server.use(jsonServer.bodyParser);
 
 // ----------------- HELPERS -----------------
 function validateMacros(macros) {
-  const required = ["kcal", "protein", "carbs", "fats"];
+  const required = ["kcal", "protein", "carbs", "fat"];
   return required.every((key) => macros.hasOwnProperty(key));
 }
 

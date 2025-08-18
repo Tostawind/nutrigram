@@ -4,7 +4,7 @@
       "kcal": 20,
       "protein": 200,
       "carbs": 170,
-      "fats": 70
+      "fat": 70
     }
   },
   "meals": [
@@ -13,9 +13,9 @@
       "name": "☀️ Desayuno",
       "macros": {
         "kcal": 0,
-        "protein": 150,
-        "carbs": 0,
-        "fats": 0
+        "protein": 100,
+        "carbs": 20,
+        "fat": 0
       }
     },
     {
@@ -25,7 +25,7 @@
         "kcal": 600,
         "protein": 40,
         "carbs": 50,
-        "fats": 20
+        "fat": 20
       }
     },
     {
@@ -35,7 +35,7 @@
         "kcal": 400,
         "protein": 25,
         "carbs": 35,
-        "fats": 15
+        "fat": 15
       }
     },
     {
@@ -45,7 +45,7 @@
         "kcal": 300,
         "protein": 25,
         "carbs": 25,
-        "fats": 10
+        "fat": 10
       }
     },
     {
@@ -55,7 +55,7 @@
         "kcal": 300,
         "protein": 25,
         "carbs": 25,
-        "fats": 10
+        "fat": 10
       }
     }
   ],
@@ -67,7 +67,7 @@
       "unit": "g",
       "macros": {
         "protein": 13,
-        "fats": 6,
+        "fat": 6,
         "carbs": 68,
         "kcal": 379
       },
@@ -83,7 +83,7 @@
       "unit": "ml",
       "macros": {
         "protein": 3.4,
-        "fats": 1.6,
+        "fat": 1.6,
         "carbs": 4.8,
         "kcal": 42
       },

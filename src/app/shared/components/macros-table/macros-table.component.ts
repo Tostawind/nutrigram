@@ -41,7 +41,7 @@ export class MacrosTableComponent {
     { key: 'kcal' as MacrosKey, label: 'Kcal', unit: 'kcal' },
     { key: 'protein' as MacrosKey, label: 'P', unit: 'g' },
     { key: 'carbs' as MacrosKey, label: 'H', unit: 'g' },
-    { key: 'fats' as MacrosKey, label: 'G', unit: 'g' },
+    { key: 'fat' as MacrosKey, label: 'G', unit: 'g' },
   ];
 
   getMacrosKeys(key: MacrosKey): string {
