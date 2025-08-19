@@ -3,6 +3,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { Meal } from '../models/meal.model';
 import { MEAL_BY_ID, MEALS } from '../constants/api';
+import { LayoutService } from './layout.service';
 
 
 @Injectable({
@@ -10,6 +11,7 @@ import { MEAL_BY_ID, MEALS } from '../constants/api';
 })
 export class MealService {
   private _http = inject(HttpClient);
+  private _layoutService = inject(LayoutService);
 
   private _meals = signal<Meal[]>([]);
   meals = this._meals.asReadonly();
@@ -32,6 +34,7 @@ export class MealService {
       this._meals.set(result);
     } catch (err) {
       this._error.set('No se pudieron cargar las comidas');
+      this._layoutService.toast('Error', 'No se pudieron cargar las comidas', 'error');
     } finally {
       this._loading.set(false);
     }
@@ -46,6 +49,8 @@ export class MealService {
       this._currentMeal.set(result);
     } catch (err) {
       this._error.set('No se pudo cargar la comida');
+      this._layoutService.toast('Error', `No se pudo cargar la comida: ${mealId}`, 'error');
+
     } finally {
       this._loading.set(false);
     }
@@ -62,6 +67,7 @@ export class MealService {
       this._meals.set(this._meals()?.map(m => m.id === updated.id ? updated : m) || []);
     } catch (err) {
       this._error.set('No se pudieron actualizar las comidas');
+      this._layoutService.toast('Error', `Error al actualizar la comida ${meal.name}`, 'error');
     } finally {
       this._loading.set(false);
     }

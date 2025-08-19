@@ -4,18 +4,20 @@
 
 ## To Do ✅
 
-- [ ] **Fix fat**
-- [ ] **Toast**: Crear toast e implementar en llamadas (exito /success)
+- [ ] **Toast**: Revisar todo los errores y mostrar toast
 - [ ] **JSON-SERVER**
-  - [ ] Verificar settings
-  - [ ] Arreglar recipes
-  - [ ] Arreglar ingredients
   - [ ] Validador de seguridad
   - [ ] Separar rutas del servidor
 - [ ] **Interceptor**: (o unificar llamadas): Control y toast
-- [ ] **Loading**: Loading en llamads (mira angular.dev @defer)
 - [ ] **Refactor**: Revisar antiguo y cambiar a signals (input, output)
-- [ ] Calculo automatico de las unidades
+- [-] Calculo automatico de las unidades
+- [ ] RECIPES
+  - Tag comida (tab absolute right)
+  - Ingredientes por tabla
+- [ ] SETTINGS
+  - Tabla diff: Que el numero diff este en el mismo ???
+  - Tabla modal: Focus input
+  - Tabla modal: Al pulsar Enter que se guarde
 
 ## ENDPOINTS
 

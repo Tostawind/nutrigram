@@ -17,23 +17,26 @@
       [editableFields]="['protein', 'carbs', 'fat']"
       (save)="updateSettings($event)"
     />
+
+    
+    <h3 class="title--2">Diferencias</h3>
+    <app-macros-table
+      [macros]="[{ protein: diffs?.protein || 0, carbs: diffs?.carbs || 0, fat: diffs?.fat || 0, kcal: diffs?.kcal || 0 }]"
+      [showDiffColors]="true"
+    />
   }
 }
 
 @if(settingLoading) {
-  <p>Cargando configuración...</p>
+  <app-status-spinner status="loading" label="Cargando configuración..."/>
 } 
 
 @if(settingError) {
-  <p>Error al cargar configuración</p>
+  <app-status-spinner status="error" label="Error al cargar configuración"/>
+
   <button (click)="settingsService.getSettings()">volver a cargar</button>
 }
 
-<h3 class="title--2">Diferencias</h3>
-<app-macros-table
-  [macros]="[{ protein: diffs?.protein || 0, carbs: diffs?.carbs || 0, fat: diffs?.fat || 0, kcal: diffs?.kcal || 0 }]"
-  [showDiffColors]="true"
-/>
 
 <hr style="opacity: 0.2; margin: 32px 0" />
 
@@ -51,11 +54,11 @@
 } 
 
 @if(mealLoading) {
-  <p>Cargando comidas...</p>
+  <app-status-spinner status="loading" label="Cargando comidas..."/>
 } 
 
 @if(mealError) {
-  <p>Error al cargar comidas</p>
+  <app-status-spinner status="error" label="Error al cargar comidas"/>
   <button (click)="mealService.getMeals()">volver a cargar</button>
 }
 

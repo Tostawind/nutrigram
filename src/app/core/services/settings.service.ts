@@ -3,12 +3,14 @@ import { Settings } from '../models/settings.model';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { SETTINGS } from '../constants/api';
+import { LayoutService } from './layout.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SettingsService {
   private _http = inject(HttpClient);
+  private _layoutService = inject(LayoutService);
 
   private _settings = signal<Settings | null>(null);
   settings = this._settings.asReadonly();
@@ -28,6 +30,7 @@ export class SettingsService {
       this._settings.set(result);
     } catch (err) {
       this._error.set('No se pudieron cargar los ajustes');
+      this._layoutService.toast('Error', 'Error al cargar los ajustes', 'error');
     } finally {
       this._loading.set(false);
     }
@@ -44,6 +47,7 @@ export class SettingsService {
       this._settings.set(updated);
     } catch (err) {
       this._error.set('No se pudieron actualizar los ajustes');
+      this._layoutService.toast('Error', 'Error al actualizar los ajustes', 'error');
     } finally {
       this._loading.set(false);
     }

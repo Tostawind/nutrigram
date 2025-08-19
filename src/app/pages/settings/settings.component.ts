@@ -5,10 +5,11 @@ import { MealService } from '../../core/services/meal.service';
 import { LayoutService } from '../../core/services/layout.service';
 import { Macros } from '../../core/models/macros.model';
 import { calculateCalories } from '../../core/utils/nutrition.utils';
+import { StatusSpinnerComponent } from "../../shared/components/status-spinner/status-spinner.component";
 
 @Component({
   selector: 'app-settings',
-  imports: [MacrosTableComponent],
+  imports: [MacrosTableComponent, StatusSpinnerComponent],
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.scss',
 })

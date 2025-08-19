@@ -1,0 +1,20 @@
+.status-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: fit-content;
+  padding: 20px 0;
+
+  &--loading {
+    color: var(--BLACK);
+  }
+  
+  &--error {
+    color: var(--RED);
+  }
+  
+  &--success {
+    color: var(--RED-GREEN);
+  }
+}

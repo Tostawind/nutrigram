@@ -10,6 +10,14 @@ td {
   }
 }
 
+.diff {
+  display: flex;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
 .unit {
   position: absolute;
   right: 3px;
@@ -31,3 +39,4 @@ td {
 .under {
   color: var(--ORANGE);
 }
+

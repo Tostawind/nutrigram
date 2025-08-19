@@ -9,6 +9,7 @@ import {
   scaleMacros,
 } from '../utils/nutrition.utils';
 import { RECIPE_BY_ID, RECIPES } from '../constants/api';
+import { LayoutService } from './layout.service';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +17,7 @@ import { RECIPE_BY_ID, RECIPES } from '../constants/api';
 export class RecipeService {
   private _http = inject(HttpClient);
   private _mealService = inject(MealService);
+  private _layoutService = inject(LayoutService);
 
   private _recipes = signal<Recipe[]>([]);
   recipes = this._recipes.asReadonly();
@@ -41,6 +43,7 @@ export class RecipeService {
       this._recipes.set(result);
     } catch (err) {
       this._error.set('No se pudieron cargar las recetas');
+      this._layoutService.toast('Error', 'No se pudieron cargar las recetas', 'error');
     } finally {
       this._loading.set(false);
     }
@@ -64,7 +67,8 @@ export class RecipeService {
 
       this._currentRecipe.set(recipe);
     } catch (err) {
-      this._error.set('No se pudo cargar la receta');
+      this._layoutService.toast('Error', `No se pudo cargar la receta: ${recipeId}`, 'error');
+
     } finally {
       this._loading.set(false);
     }

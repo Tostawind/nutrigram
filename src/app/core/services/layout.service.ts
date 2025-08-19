@@ -8,11 +8,12 @@ export class LayoutService {
   readonly messageService = inject(MessageService);
 
   toast(
+    title: string,
     message: string,
     severity: 'info' | 'success' | 'warn' | 'error' = 'info'
   ) {
     this.messageService.add({
-      summary: 'Info',
+      summary: title,
       detail: message,
       severity,
     });

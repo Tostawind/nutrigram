@@ -17,7 +17,21 @@
         [class.over]="showDiffColors() && macro[col.key] > 0" 
         [class.under]="showDiffColors() && macro[col.key] < 0"
       >
-        {{ macro[col.key] }} <span class="unit">{{ col.unit }}</span>
+        @if(showDiffColors()) {
+          <span class="diff">
+            @if(macro[col.key] > 0) {
+              <svg  xmlns="http://www.w3.org/2000/svg" width="16"  height="16"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-down"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg>
+            } @else if(macro[col.key] < 0) {
+              <svg  xmlns="http://www.w3.org/2000/svg" width="16"  height="16"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-up"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 15l6 -6l6 6" /></svg>
+            }
+          </span>
+        }
+
+        <span>{{ macro[col.key] }} </span>
+        
+        <span class="unit">{{ col.unit }}</span>
+
+
       </td>
       }
     </tr>
