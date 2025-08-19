@@ -116,7 +116,7 @@ server.get("/recipes/:recipeId", (req, res) => {
 // Use default router for other routes
 server.use(router);
 
-const PORT = 3000;
+const PORT = 3007;
 server.listen(PORT, () => {
   console.log(`JSON Server running on http://localhost:${PORT}`);
 });

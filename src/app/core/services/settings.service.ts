@@ -2,8 +2,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { Settings } from '../models/settings.model';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
-
-const API_URL = 'http://localhost:3000/settings';
+import { SETTINGS } from '../constants/api';
 
 @Injectable({
   providedIn: 'root',
@@ -25,7 +24,7 @@ export class SettingsService {
     this._error.set(null);
 
     try {
-      const result = await firstValueFrom(this._http.get<Settings>(API_URL));
+      const result = await firstValueFrom(this._http.get<Settings>(SETTINGS));
       this._settings.set(result);
     } catch (err) {
       this._error.set('No se pudieron cargar los ajustes');
@@ -40,7 +39,7 @@ export class SettingsService {
 
     try {
       const updated = await firstValueFrom(
-        this._http.put<Settings>(API_URL, newSettings)
+        this._http.put<Settings>(SETTINGS, newSettings)
       );
       this._settings.set(updated);
     } catch (err) {

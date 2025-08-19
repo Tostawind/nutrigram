@@ -3,12 +3,12 @@
 
 <h2 class="title--1">{{ recipeName }}</h2>
 
-<app-macros-table [macros]="[macrosDefault]" />
+<app-macros-table [macros]="[macros]" />
 
 <h3 class="title--2">Ingredientes</h3>
 
 <ul class="meals-list">
   @for(ingredient of ingredients; track ingredient.id) {
-    <li>{{ ingredient.name }} ({{ ingredient.portion }} {{ ingredient.unit }})</li>
+    <li><b>{{ ingredient.name }}</b>: <br>Kcal: {{ ingredient.macros.kcal }}  P: {{ ingredient.macros.protein }} | H: {{ ingredient.macros.carbs }} | G: {{ ingredient.macros.fat }} | {{ ingredient.unit }}</li>
   }
 </ul>

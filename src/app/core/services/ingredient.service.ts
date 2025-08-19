@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { Ingredient } from '../models/ingredient.model';
 
-const API_URL = 'http://localhost:3000/ingredients';
 
 
 @Injectable({

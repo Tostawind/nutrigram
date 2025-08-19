@@ -1,16 +1,18 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { Recipe } from '../models/recipe.model';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
-
-const API_URL = 'http://localhost:3000/recipes';
+import { MealService } from './meal.service';
+import { calculateIngredientGrams, scaleMacros } from '../utils/nutrition.utils';
+import { RECIPE_BY_ID, RECIPES } from '../constants/api';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RecipeService {
   private _http = inject(HttpClient);
-
+  private _mealService = inject(MealService);
+  
   private _recipes = signal<Recipe[]>([]);
   recipes = this._recipes.asReadonly();
 
@@ -28,7 +30,10 @@ export class RecipeService {
     this._error.set(null);
 
     try {
-      const result = await firstValueFrom(this._http.get<Recipe[]>(API_URL, {params: {meal: mealId}}));
+      const params = new HttpParams().set('meal', mealId);
+      const result = await firstValueFrom(
+        this._http.get<Recipe[]>(RECIPES, { params })
+      );
       this._recipes.set(result);
     } catch (err) {
       this._error.set('No se pudieron cargar las recetas');
@@ -42,10 +47,40 @@ export class RecipeService {
     this._error.set(null);
 
     try {
-      const result = await firstValueFrom(
-        this._http.get<Recipe>(`${API_URL}/${recipeId}`)
+      const recipe = await firstValueFrom(
+        this._http.get<Recipe>(RECIPE_BY_ID(recipeId))
       );
-      this._currentRecipe.set(result);
+      // 🔹 Tomamos la primera meal de la receta para objetivo
+      const mealId = recipe.meals[0];
+      const meal = this._mealService.meals().find(m => m.id === mealId);
+
+      let adjustedIngredients = recipe.ingredients;
+
+      if (meal) {
+        adjustedIngredients = recipe.ingredients.map((ing: any) => {
+          const focus = ing.categories.includes('carbs')
+            ? 'carbs'
+            : ing.categories.includes('protein')
+            ? 'protein'
+            : 'fat';
+
+          const grams = calculateIngredientGrams(ing, meal.macros, focus);
+          const scaled = scaleMacros(ing, grams);
+
+          return {
+            ...ing,
+            grams: +grams.toFixed(1),
+            scaledMacros: scaled,
+          };
+        });
+      }
+
+      
+      this._currentRecipe.set({
+        ...recipe,
+        ingredients: adjustedIngredients,
+      });
+      console.log('Adjusted Ingredients:', adjustedIngredients);
     } catch (err) {
       this._error.set('No se pudo cargar la receta');
     } finally {

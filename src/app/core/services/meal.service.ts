@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
-import { firstValueFrom, Observable } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import { Meal } from '../models/meal.model';
+import { MEAL_BY_ID, MEALS } from '../constants/api';
 
-const API_URL = 'http://localhost:3000/meals';
 
 @Injectable({
   providedIn: 'root',
@@ -28,7 +28,7 @@ export class MealService {
     this._error.set(null);
 
     try {
-      const result = await firstValueFrom(this._http.get<Meal[]>(API_URL));
+      const result = await firstValueFrom(this._http.get<Meal[]>(MEALS));
       this._meals.set(result);
     } catch (err) {
       this._error.set('No se pudieron cargar las comidas');
@@ -42,7 +42,7 @@ export class MealService {
     this._error.set(null);
 
     try {
-      const result = await firstValueFrom(this._http.get<Meal>(`${API_URL}/${mealId}`));
+      const result = await firstValueFrom(this._http.get<Meal>(MEAL_BY_ID(mealId)));
       this._currentMeal.set(result);
     } catch (err) {
       this._error.set('No se pudo cargar la comida');
@@ -57,7 +57,7 @@ export class MealService {
 
     try {
       const updated = await firstValueFrom(
-        this._http.put<Meal>(`${API_URL}/${meal.id}`, meal)
+        this._http.put<Meal>(MEAL_BY_ID(meal.id), meal)
       );
       this._meals.set(this._meals()?.map(m => m.id === updated.id ? updated : m) || []);
     } catch (err) {
