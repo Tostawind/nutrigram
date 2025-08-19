@@ -3,7 +3,11 @@ import { Recipe } from '../models/recipe.model';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { MealService } from './meal.service';
-import { calculateIngredientGrams, scaleMacros } from '../utils/nutrition.utils';
+import {
+  adjustIngredientsToTarget,
+  calculateIngredientGrams,
+  scaleMacros,
+} from '../utils/nutrition.utils';
 import { RECIPE_BY_ID, RECIPES } from '../constants/api';
 
 @Injectable({
@@ -12,7 +16,7 @@ import { RECIPE_BY_ID, RECIPES } from '../constants/api';
 export class RecipeService {
   private _http = inject(HttpClient);
   private _mealService = inject(MealService);
-  
+
   private _recipes = signal<Recipe[]>([]);
   recipes = this._recipes.asReadonly();
 
@@ -52,35 +56,13 @@ export class RecipeService {
       );
       // 🔹 Tomamos la primera meal de la receta para objetivo
       const mealId = recipe.meals[0];
-      const meal = this._mealService.meals().find(m => m.id === mealId);
+      const targetMacros = this._mealService.meals().find((m) => m.id === mealId)?.macros;
 
-      let adjustedIngredients = recipe.ingredients;
-
-      if (meal) {
-        adjustedIngredients = recipe.ingredients.map((ing: any) => {
-          const focus = ing.categories.includes('carbs')
-            ? 'carbs'
-            : ing.categories.includes('protein')
-            ? 'protein'
-            : 'fat';
-
-          const grams = calculateIngredientGrams(ing, meal.macros, focus);
-          const scaled = scaleMacros(ing, grams);
-
-          return {
-            ...ing,
-            grams: +grams.toFixed(1),
-            scaledMacros: scaled,
-          };
-        });
+      if (targetMacros && recipe.ingredients?.length) {
+        recipe.ingredients = adjustIngredientsToTarget(recipe.ingredients, targetMacros, 'carbs');
       }
 
-      
-      this._currentRecipe.set({
-        ...recipe,
-        ingredients: adjustedIngredients,
-      });
-      console.log('Adjusted Ingredients:', adjustedIngredients);
+      this._currentRecipe.set(recipe);
     } catch (err) {
       this._error.set('No se pudo cargar la receta');
     } finally {

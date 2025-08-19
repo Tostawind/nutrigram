@@ -10,7 +10,7 @@
 <ul class="meals-list">
   @for(recipe of recipes; track recipe.id) {
     <li>
-      <a [routerLink]="['/recipe', recipe.id]">
+      <a [routerLink]="['/meals', mealId, 'recipes', recipe.id]">
         <p-card [header]="recipe.name" />
       </a>
     </li>

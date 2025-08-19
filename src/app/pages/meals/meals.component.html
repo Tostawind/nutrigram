@@ -5,7 +5,7 @@
 <ul class="meals-list">
   @for(meal of mealService.meals(); track meal.id) {
   <li>
-    <a [routerLink]="['/meal', meal.id]">
+    <a [routerLink]="['/meals', meal.id]">
       <p-card [header]="meal.name" />
     </a>
   </li>

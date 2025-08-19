@@ -19,12 +19,12 @@ export class RecipesComponent implements OnInit {
   recipeService = inject(RecipeService);
 
   macrosDefault = MACROS_DEFAULT;
-
+  mealId: string = '';
   ngOnInit() {
-    const mealId = this.route.snapshot.paramMap.get('mealId') || '';
+    this.mealId = this.route.snapshot.paramMap.get('mealId') || '';
 
 
-    this.mealService.getMeal(mealId);
-    this.recipeService.getRecipesByMeal(mealId);
+    this.mealService.getMeal(this.mealId);
+    this.recipeService.getRecipesByMeal(this.mealId);
   }
 }

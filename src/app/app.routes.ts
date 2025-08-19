@@ -9,11 +9,11 @@ export const routes: Routes = [
     component: MealsComponent,
   },
   {
-    path: 'meal/:mealId',
+    path: 'meals/:mealId',
     component: RecipesComponent,
   },
   {
-    path: 'recipe/:recipeId',
+    path: 'meals/:mealId/recipes/:recipeId',
     component: RecipeComponent,
   },
   {
