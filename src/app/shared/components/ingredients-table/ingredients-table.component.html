@@ -1,0 +1,24 @@
+<p-table [value]="ingredients()" showGridlines stripedRows>
+  <ng-template #header>
+    <tr>
+      @for(col of columns; track col.key) {
+      <th [class.cell--small]="col.unit === 'g'">
+        {{ col.label }}
+      </th>
+      }
+    </tr>
+  </ng-template>
+  <ng-template #body let-macro>
+    <tr>
+      @for(col of columns; track col.key) {
+      <td>
+
+        <span>{{ macro[col.key] }} </span>
+        
+        <span class="unit">{{ col.unit }}</span>
+
+      </td>
+      }
+    </tr>
+  </ng-template>
+</p-table>

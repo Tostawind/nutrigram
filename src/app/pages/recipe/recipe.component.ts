@@ -6,10 +6,11 @@ import { MACROS_DEFAULT } from '../../core/constants/macros';
 import { Ingredient } from '../../core/models/ingredient.model';
 import { MealService } from '../../core/services/meal.service';
 import { StatusSpinnerComponent } from "../../shared/components/status-spinner/status-spinner.component";
+import { IngredientsTableComponent } from "../../shared/components/ingredients-table/ingredients-table.component";
 
 @Component({
   selector: 'app-recipe',
-  imports: [MacrosTableComponent, StatusSpinnerComponent],
+  imports: [MacrosTableComponent, StatusSpinnerComponent, IngredientsTableComponent],
   templateUrl: './recipe.component.html',
   styleUrl: './recipe.component.scss',
 })

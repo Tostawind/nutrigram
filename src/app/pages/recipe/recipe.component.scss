@@ -1,0 +1,16 @@
+.title--1 {
+  position: relatative;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .title__tag {
+    font-size: 14px;
+    background-color: #22222210;
+    border: 1px solid #22222220;
+    padding: 4px 12px 4px 8px;
+    border-radius: 100px;
+    font-weight: 400;
+  }
+}

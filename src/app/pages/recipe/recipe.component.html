@@ -14,7 +14,10 @@
 <!------------------------------------------------------------------------------>
 <!-- SUCCESS -->
 @if(!recipeLoading && !mealLoading) {
-  <h2 class="title--1">{{ recipe?.name }} - ({{ meal?.name }})</h2>
+  <h2 class="title--1">
+    {{ recipe?.name }}
+    <span class="title__tag">{{ meal?.name }}</span>
+  </h2>
   
   <h3 class="title--2">Objetivo</h3>
   <app-macros-table [macros]="[goalMacros]" />
@@ -22,12 +25,8 @@
   <app-macros-table [macros]="[macros]" />
   
   <h3 class="title--2">Ingredientes</h3>
-  
-  <ul class="meals-list">
-    @for(ingredient of recipe?.ingredients; track ingredient.id) {
-      <li><b>{{ ingredient.name }}</b>: <br>Kcal: {{ ingredient.macros.kcal }}  P: {{ ingredient.macros.protein }} | H: {{ ingredient.macros.carbs }} | G: {{ ingredient.macros.fat }} | {{ ingredient.unit }}</li>
-    }
-  </ul>
+
+  <app-ingredients-table [ingredients]="recipe?.ingredients || []" />
 }
 
 <!------------------------------------------------------------------------------>

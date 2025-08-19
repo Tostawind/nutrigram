@@ -12,12 +12,14 @@
 - [ ] **Refactor**: Revisar antiguo y cambiar a signals (input, output)
 - [-] Calculo automatico de las unidades
 - [ ] RECIPES
-  - Tag comida (tab absolute right)
   - Ingredientes por tabla
 - [ ] SETTINGS
   - Tabla diff: Que el numero diff este en el mismo ???
+
+- FIXES:
   - Tabla modal: Focus input
   - Tabla modal: Al pulsar Enter que se guarde
+
 
 ## ENDPOINTS
 
