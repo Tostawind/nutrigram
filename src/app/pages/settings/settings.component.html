@@ -8,8 +8,12 @@
 
 @let diffs = getDiffs();
 
-<h2 class="title--1">Configuración</h2>
+<!------------------------------------------------------------------------------>
 
+
+<!------------------------------------------------------------------------------>
+<!-- SETTINGS -->
+<h2 class="title--1">Configuración</h2>
 @if(!settingLoading) {
   @if (settings) {
     <app-macros-table
@@ -40,6 +44,8 @@
 
 <hr style="opacity: 0.2; margin: 32px 0" />
 
+<!------------------------------------------------------------------------------>
+<!-- MEALS -->
 <h2 class="title--1">Comidas</h2>
 @if(!mealLoading) {
   @for(meal of meals; track meal.id) {

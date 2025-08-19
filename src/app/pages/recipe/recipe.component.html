@@ -1,19 +1,45 @@
-@let ingredients = recipeService.currentRecipe()?.ingredients || [];
-@let recipeName = recipeService.currentRecipe()?.name;
-@let goalMacros = mealService.currentMeal()?.macros || macrosDefault;
+
 @let meal = mealService.currentMeal();
+@let mealLoading = mealService.loading();
+@let mealError = mealService.error();
+@let goalMacros = mealService.currentMeal()?.macros || macrosDefault;
 
-<h2 class="title--1">{{ recipeName }} - ({{ meal?.name }})</h2>
+@let recipe = recipeService.currentRecipe();
+@let recipeLoading = recipeService.loading();
+@let recipeError = recipeService.error();
 
-<h3 class="title--2">Objetivo</h3>
-<app-macros-table [macros]="[goalMacros]" />
-<h3 class="title--2">Real</h3>
-<app-macros-table [macros]="[macros]" />
+<!------------------------------------------------------------------------------>
 
-<h3 class="title--2">Ingredientes</h3>
 
-<ul class="meals-list">
-  @for(ingredient of ingredients; track ingredient.id) {
-    <li><b>{{ ingredient.name }}</b>: <br>Kcal: {{ ingredient.macros.kcal }}  P: {{ ingredient.macros.protein }} | H: {{ ingredient.macros.carbs }} | G: {{ ingredient.macros.fat }} | {{ ingredient.unit }}</li>
-  }
-</ul>
+<!------------------------------------------------------------------------------>
+<!-- SUCCESS -->
+@if(!recipeLoading && !mealLoading) {
+  <h2 class="title--1">{{ recipe?.name }} - ({{ meal?.name }})</h2>
+  
+  <h3 class="title--2">Objetivo</h3>
+  <app-macros-table [macros]="[goalMacros]" />
+  <h3 class="title--2">Real</h3>
+  <app-macros-table [macros]="[macros]" />
+  
+  <h3 class="title--2">Ingredientes</h3>
+  
+  <ul class="meals-list">
+    @for(ingredient of recipe?.ingredients; track ingredient.id) {
+      <li><b>{{ ingredient.name }}</b>: <br>Kcal: {{ ingredient.macros.kcal }}  P: {{ ingredient.macros.protein }} | H: {{ ingredient.macros.carbs }} | G: {{ ingredient.macros.fat }} | {{ ingredient.unit }}</li>
+    }
+  </ul>
+}
+
+<!------------------------------------------------------------------------------>
+<!-- LOADING -->
+@if(recipeLoading || mealLoading) {
+  <app-status-spinner status="loading" label="Cargando..."/>
+} 
+
+<!------------------------------------------------------------------------------>
+<!-- ERROR -->
+@if(recipeError || mealError) {
+  <app-status-spinner status="error" label="Error al cargar datos"/>
+
+  <button (click)="recipeService.getRecipe(recipeId); mealService.getMeal(mealId)">Volver a cargar</button>
+}

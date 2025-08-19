@@ -67,6 +67,7 @@ export class RecipeService {
 
       this._currentRecipe.set(recipe);
     } catch (err) {
+      this._error.set(`No se pudo cargar la receta: ${recipeId}`);
       this._layoutService.toast('Error', `No se pudo cargar la receta: ${recipeId}`, 'error');
 
     } finally {
