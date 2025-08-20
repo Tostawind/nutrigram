@@ -7,7 +7,7 @@
 
 <h3 class="title--2">Recetas</h3>
 
-<ul class="meals-list">
+<ul class="card-list">
   @for(recipe of recipes; track recipe.id) {
     <li>
       <a [routerLink]="['/meals', mealId, 'recipes', recipe.id]">

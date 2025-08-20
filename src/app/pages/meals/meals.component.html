@@ -17,7 +17,7 @@
 
   <app-macros-table [macros]="[settings?.macros || macrosDefault]" />
   
-  <ul class="meals-list">
+  <ul class="card-list">
     @for(meal of meals; track meal.id) {
     <li>
       <a [routerLink]="['/meals', meal.id]">

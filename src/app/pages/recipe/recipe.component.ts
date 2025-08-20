@@ -21,7 +21,7 @@ export class RecipeComponent implements OnInit {
 
   recipeId = '';
   mealId = '';
-  macros = MACROS_DEFAULT;
+  recipeMacros = MACROS_DEFAULT;
   macrosDefault = MACROS_DEFAULT;
 
   ngOnInit(): void {
@@ -33,16 +33,17 @@ export class RecipeComponent implements OnInit {
     this.mealId = this._route.snapshot.paramMap.get('mealId') || '';
     await this.recipeService.getRecipe(this.recipeId);
     await this.mealService.getMeal(this.mealId);
-    this.macros = this.calculteTotalMacros(this.recipeService.currentRecipe()?.ingredients || []);
+    this.recipeMacros = this.calculateTotalMacros(this.recipeService.currentRecipe()?.ingredients || []);
   }
 
-  calculteTotalMacros(ingredients: Ingredient[]): any {
+  // Suma los macros de los ingredientes de la receta:
+  calculateTotalMacros(ingredients: Ingredient[]): any {
     return ingredients.reduce((acc, ingredient) => {
       acc.kcal += ingredient.macros.kcal;
       acc.protein += ingredient.macros.protein;
       acc.carbs += ingredient.macros.carbs;
       acc.fat += ingredient.macros.fat;
       return acc;
-    }, { ...this.macros });
+    }, { ...this.recipeMacros });
   }
 }
