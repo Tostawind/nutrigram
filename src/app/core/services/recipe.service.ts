@@ -58,11 +58,10 @@ export class RecipeService {
         this._http.get<Recipe>(RECIPE_BY_ID(recipeId))
       );
       // 🔹 Tomamos la primera meal de la receta para objetivo
-      const mealId = recipe.meals[0];
-      const targetMacros = this._mealService.meals().find((m) => m.id === mealId)?.macros;
+      const targetMacros = this._mealService.meals().find((m) => m.id === recipe.meals[0])?.macros;
 
       if (targetMacros && recipe.ingredients?.length) {
-        recipe.ingredients = adjustIngredientsToTarget(recipe.ingredients, targetMacros, 'carbs');
+        recipe.ingredients = adjustIngredientsToTarget(recipe.ingredients, targetMacros);
       }
 
       this._currentRecipe.set(recipe);

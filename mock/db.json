@@ -71,9 +71,7 @@
         "carbs": 68,
         "kcal": 379
       },
-      "categories": [
-        "carbs"
-      ],
+      "category": "carbs",
       "note": "500g package"
     },
     {
@@ -87,9 +85,7 @@
         "carbs": 4.8,
         "kcal": 42
       },
-      "categories": [
-        "carbs"
-      ],
+      "category": "carbs",
       "note": "1 glass = 200ml"
     }
   ],

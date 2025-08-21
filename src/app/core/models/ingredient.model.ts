@@ -6,5 +6,6 @@ export interface Ingredient {
   portion: number;
   unit: 'g' | 'ml' | 'u';
   macros: Macros;
+  category: 'protein' | 'carbs' | 'fat';
   notes?: string;
 }
