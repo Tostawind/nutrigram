@@ -13,7 +13,11 @@
       @for(col of columns; track col.key) {
       <td>
 
-        <span>{{ macro[col.key] }} </span>
+         @if (['kcal', 'protein', 'carbs', 'fat'].includes(col.key)) {
+          <span>{{ macro.macros[col.key] }}</span>
+        } @else {
+          <span>{{ macro[col.key] }} </span>
+        }
         
         <span class="unit">{{ col.unit }}</span>
 

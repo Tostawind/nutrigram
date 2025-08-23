@@ -5,8 +5,10 @@
 ## TO DO ✅
 
 - 🔥 IMPORTANT
-
-  - CALCULO (arreglar)
+  - Form Recta (buscador de ingredientes, selector de comida)
+    1. Form agregar nueva receta
+    2. Editar receta es en la misma receta
+    3. Eliminar receta en la misma receta 
 
 - ⌛ FIXES:
 
@@ -14,7 +16,6 @@
   - Tabla modal: Al pulsar Enter que se guarde
 
 - 🔜 FUTURO
-  - Form para agregar recetas e ingredientes
 
 ---
 

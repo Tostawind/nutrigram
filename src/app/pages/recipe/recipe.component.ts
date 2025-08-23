@@ -3,7 +3,6 @@ import { MacrosTableComponent } from '../../shared/components/macros-table/macro
 import { ActivatedRoute } from '@angular/router';
 import { RecipeService } from '../../core/services/recipe.service';
 import { MACROS_DEFAULT } from '../../core/constants/macros';
-import { Ingredient } from '../../core/models/ingredient.model';
 import { MealService } from '../../core/services/meal.service';
 import { StatusSpinnerComponent } from "../../shared/components/status-spinner/status-spinner.component";
 import { IngredientsTableComponent } from "../../shared/components/ingredients-table/ingredients-table.component";
@@ -21,7 +20,6 @@ export class RecipeComponent implements OnInit {
 
   recipeId = '';
   mealId = '';
-  recipeMacros = MACROS_DEFAULT;
   macrosDefault = MACROS_DEFAULT;
 
   ngOnInit(): void {
@@ -31,19 +29,6 @@ export class RecipeComponent implements OnInit {
   async loadRecipe() {
     this.recipeId = this._route.snapshot.paramMap.get('recipeId') || '';
     this.mealId = this._route.snapshot.paramMap.get('mealId') || '';
-    await this.recipeService.getRecipe(this.recipeId);
-    await this.mealService.getMeal(this.mealId);
-    this.recipeMacros = this.calculateTotalMacros(this.recipeService.currentRecipe()?.ingredients || []);
-  }
-
-  // Suma los macros de los ingredientes de la receta:
-  calculateTotalMacros(ingredients: Ingredient[]): any {
-    return ingredients.reduce((acc, ingredient) => {
-      acc.kcal += ingredient.macros.kcal;
-      acc.protein += ingredient.macros.protein;
-      acc.carbs += ingredient.macros.carbs;
-      acc.fat += ingredient.macros.fat;
-      return acc;
-    }, { ...this.recipeMacros });
+    await this.recipeService.getRecipe(this.recipeId, this.mealId);
   }
 }

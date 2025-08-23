@@ -1,9 +1,11 @@
 .title--1 {
-  position: relatative;
+  position: relative;
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
 
   .title__tag {
     font-size: 14px;

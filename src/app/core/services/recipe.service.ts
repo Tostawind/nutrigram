@@ -4,9 +4,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { MealService } from './meal.service';
 import {
-  adjustIngredientsToTarget,
-  calculateIngredientGrams,
-  scaleMacros,
+  adjustIngredientsToTarget
 } from '../utils/nutrition.utils';
 import { RECIPE_BY_ID, RECIPES } from '../constants/api';
 import { LayoutService } from './layout.service';
@@ -49,7 +47,7 @@ export class RecipeService {
     }
   }
 
-  async getRecipe(recipeId: string): Promise<void> {
+  async getRecipe(recipeId: string, mealId: string): Promise<void> {
     this._loading.set(true);
     this._error.set(null);
 
@@ -57,11 +55,13 @@ export class RecipeService {
       const recipe = await firstValueFrom(
         this._http.get<Recipe>(RECIPE_BY_ID(recipeId))
       );
-      // 🔹 Tomamos la primera meal de la receta para objetivo
-      const targetMacros = this._mealService.meals().find((m) => m.id === recipe.meals[0])?.macros;
+
+      await this._mealService.getMeal(mealId);
+      const targetMacros = this._mealService.currentMeal()?.macros;
 
       if (targetMacros && recipe.ingredients?.length) {
-        recipe.ingredients = adjustIngredientsToTarget(recipe.ingredients, targetMacros);
+        recipe.ingredients = adjustIngredientsToTarget(recipe.ingredients, targetMacros).ingredients;
+        recipe.totalMacros = adjustIngredientsToTarget(recipe.ingredients, targetMacros).total;
       }
 
       this._currentRecipe.set(recipe);

@@ -22,8 +22,8 @@
   <h3 class="title--2">Objetivo</h3>
   <app-macros-table [macros]="[goalMacros]" />
   <h3 class="title--2">Real</h3>
-  <app-macros-table [macros]="[recipeMacros]" />
-  
+  <app-macros-table [macros]="[recipe?.totalMacros || macrosDefault]" />
+
   <h3 class="title--2">Ingredientes</h3>
 
   <app-ingredients-table [ingredients]="recipe?.ingredients || []" />
@@ -40,5 +40,5 @@
 @if(recipeError || mealError) {
   <app-status-spinner status="error" label="Error al cargar datos"/>
 
-  <button (click)="recipeService.getRecipe(recipeId); mealService.getMeal(mealId)">Volver a cargar</button>
+  <button (click)="recipeService.getRecipe(recipeId, mealId)">Volver a cargar</button>
 }
