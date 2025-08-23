@@ -1,0 +1,13 @@
+:host {
+  .form-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding: 10px 0;
+  }
+
+  hr { 
+    opacity: 0.4;
+  }
+}

@@ -34,7 +34,7 @@
     variant="outlined"
     [rounded]="true"
     severity="secondary"
-    (onClick)="visible = true"
+    (onClick)="isDialogVisible.set(true)"
   >
   Crear Receta
 </p-button>
@@ -42,29 +42,4 @@
 <p-toast />
 
 <!--------------------------------------------------------------------------->
-<p-dialog header="Crear Receta" [modal]="true" [(visible)]="visible" [style]="{ height: '80%', width: '80%' }">
-
-    <p-floatlabel variant="in">
-        <input pInputText id="name" [(ngModel)]="value2" autocomplete="off" />
-        <label for="name">Nombre</label>
-    </p-floatlabel>
-
-    <h3>Comida</h3>
-
-    @for (meal of meals; track meal.id) {
-      <div class="flex items-center">
-        <p-radiobutton name="meal" [value]="meal" [(ngModel)]="selectedMeal" [inputId]="meal.id" />
-        <label [for]="meal.id" class="ml-2">{{ meal.name }}</label>
-      </div>
-    } 
-
-    <h3>Ingredientes</h3>
-    <h4>Proteina</h4>
-    <h4>Hidratos</h4>
-    <h4>Grasas</h4>
-
-    <div class="flex justify-end gap-2">
-        <p-button label="Cancel" severity="secondary" (click)="visible = false" />
-        <p-button label="Save" (click)="visible = false" />
-    </div>
-</p-dialog>
+<app-recipe-form-dialog [(visible)]="isDialogVisible" />

@@ -10,6 +10,8 @@
     2. Editar receta es en la misma receta
     3. Eliminar receta en la misma receta 
 
+  - Aplicar tailwind sin romper primerng
+
 - ⌛ FIXES:
 
   - Tabla modal: Focus input
