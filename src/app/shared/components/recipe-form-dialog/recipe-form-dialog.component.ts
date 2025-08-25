@@ -13,7 +13,6 @@ import { Meal } from '../../../core/models/meal.model';
   imports: [
     DialogModule,
     InputTextModule,
-    FloatLabel,
     FormsModule,
     RadioButtonModule,
     ButtonModule,
@@ -28,7 +27,7 @@ export class RecipeFormDialogComponent {
   visible = model(false);
 
   meals: Meal[] = [];
-  
+
   // Form:
   name: string = '';
   selectedMeal: Meal | null = null;

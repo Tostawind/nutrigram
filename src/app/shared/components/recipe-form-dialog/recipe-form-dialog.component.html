@@ -1,15 +1,15 @@
 <p-dialog header="Crear Receta" [modal]="true" [(visible)]="visible" [style]="{ height: '80%', width: '80%' }">
 
   <div class="form-section">
-    <h3>Nombre</h3>
+    <h3 class="title--3">Nombre</h3>
     <input pInputText id="name" [(ngModel)]="name" autocomplete="off" />
   </div>
 
 
   <div class="form-section">
-    <h3>Comida</h3>
+    <h3 class="title--3">Comida</h3>
 
-    <div style="display: flex; justify-content: space-between; gap: 2rem;">
+    <div class="flex justify-between gap-2">
       @for (meal of meals; track meal.id) {
         <div >
           <p-radiobutton name="meal" [value]="meal" [(ngModel)]="selectedMeal" [inputId]="meal.id" />
@@ -20,13 +20,13 @@
   </div>
 
   <div class="form-section">
-    <h3>Ingredientes</h3>
-    <h4>Proteina</h4>
-    <h4>Hidratos</h4>
-    <h4>Grasas</h4>
+    <h3 class="title--3">Ingredientes</h3>
+    <h4 class="title--4">Proteina</h4>
+    <h4 class="title--4">Hidratos</h4>
+    <h4 class="title--4">Grasas</h4>
   </div>
 
-  <div class="flex justify-end gap-2">
+  <div class="flex justify-end gap-6">
       <p-button label="Cancel" severity="secondary" (click)="visible.set(false)" />
       <p-button label="Save" (click)="visible.set(false)" />
   </div>

@@ -1,3 +1,6 @@
+@import "tailwindcss";
+@plugin "tailwindcss-primeui";
+
 :root {
   --BLACK: #222;
   --BG: #fdfdfd;
@@ -31,11 +34,21 @@ a {
 // TEXT
 .title {
   &--1 {
+    @apply text-3xl font-bold;
     margin-bottom: 10px;
   }
 
   &--2 {
+    @apply text-2xl font-bold;
     margin: 20px 0;
+  }
+
+  &--3 {
+    @apply text-xl font-bold;
+  }
+
+  &--4 {
+    @apply text-lg font-bold;
   }
 }
 
