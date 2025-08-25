@@ -1,4 +1,4 @@
-import { Component, inject, model } from '@angular/core';
+import { Component, inject, input, model } from '@angular/core';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabel } from 'primeng/floatlabel';
@@ -33,6 +33,8 @@ export class RecipeFormDialogComponent {
   private _ingredientService = inject(IngredientService);
   private _layoutService = inject(LayoutService);
   private _recipeService = inject(RecipeService);
+
+  recipe = input<Recipe | null>(null);
 
   visible = model(false);
 
@@ -72,13 +74,18 @@ export class RecipeFormDialogComponent {
   };
 
   ngOnInit() {
-    this.loadMeals();
+    this.loadInit();
+  }
+
+  async loadInit() {
+    await this.loadMeals();
+    await this.loadIngredients();
+    this.loadRecipe();
   }
 
   async loadMeals() {
     await this._mealService.getMeals();
     this.meals = this._mealService.meals();
-    await this.loadIngredients();
   }
 
   async loadIngredients() {
@@ -88,6 +95,29 @@ export class RecipeFormDialogComponent {
     this.ingredients.carbs = this._ingredientService.carbsIngredients();
     await this._ingredientService.getIngredients('fat');
     this.ingredients.fat = this._ingredientService.fatIngredients();
+  }
+
+  loadRecipe() {
+    // New recipe:
+    if (!this.recipe()) return;
+
+    // Update recipe:
+    this.name = this.recipe()?.name || '';
+    this.selectedMeal = this.meals.find((meal) => meal.id === this.recipe()?.meals[0]) || null;
+    this.selectedIngredients = {
+      protein:
+        this.recipe()?.ingredients.filter(
+          (ingredient) => ingredient.category === 'protein'
+        ) || [],
+      carbs:
+        this.recipe()?.ingredients.filter(
+          (ingredient) => ingredient.category === 'carbs'
+        ) || [],
+      fat:
+        this.recipe()?.ingredients.filter(
+          (ingredient) => ingredient.category === 'fat'
+        ) || [],
+    };
   }
 
   filterIngredients(
@@ -106,8 +136,8 @@ export class RecipeFormDialogComponent {
 
   save() {
     if (this.validateForm()) {
-      const recipe: Recipe = {
-        id: undefined,
+      const recipeToSave: Recipe = {
+        id: this.recipe() ? this.recipe()?.id : undefined,
         name: this.name,
         meals: this.selectedMeal?.id ? [this.selectedMeal?.id] : [],
         ingredients: [
@@ -116,7 +146,7 @@ export class RecipeFormDialogComponent {
           ...this.selectedIngredients.fat,
         ],
       };
-      this._recipeService.createRecipe(recipe);
+      this._recipeService.updateRecipe(recipeToSave);
 
       this.resetForm();
       this.visible.set(false);

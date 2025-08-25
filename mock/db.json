@@ -591,11 +591,15 @@
       ]
     },
     {
-      "name": "Test 1",
+      "name": "Queso chidoo",
       "meals": [
         "desayuno"
       ],
-      "ingredients": [],
+      "ingredients": [
+        "i0007",
+        "i0001",
+        "i0028"
+      ],
       "id": "c8ce2479-4f4c-4ff4-af52-88a48bd86ce8"
     }
   ]

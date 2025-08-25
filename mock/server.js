@@ -138,6 +138,37 @@ server.post("/recipes", (req, res) => {
   res.status(201).json(recipeToAdd);
 });
 
+server.put("/recipes/:recipeId", (req, res) => {
+  const db = router.db;
+  const { recipeId } = req.params;
+  const updatedRecipe = req.body;
+
+  // Validaciones básicas
+  if (
+    !updatedRecipe.name ||
+    !Array.isArray(updatedRecipe.ingredients) ||
+    !Array.isArray(updatedRecipe.meals)
+  ) {
+    return res.status(400).json({ error: "Invalid recipe data" });
+  }
+
+  // Transformar ingredientes a ids
+  const ingredientIds = updatedRecipe.ingredients.map((ing) => ing.id || ing);
+
+  // Actualizar receta
+  const recipe = db
+    .get("recipes")
+    .find({ id: recipeId })
+    .assign({ ...updatedRecipe, ingredients: ingredientIds })
+    .write();
+
+  if (!recipe) {
+    return res.status(404).json({ error: "Recipe not found" });
+  }
+
+  res.json(recipe);
+});
+
 // Use default router for other routes
 server.use(router);
 

@@ -41,7 +41,11 @@ export class RecipeService {
       this._recipes.set(result);
     } catch (err) {
       this._error.set('No se pudieron cargar las recetas');
-      this._layoutService.toast('Error', 'No se pudieron cargar las recetas', 'error');
+      this._layoutService.toast(
+        'Error',
+        'No se pudieron cargar las recetas',
+        'error'
+      );
     } finally {
       this._loading.set(false);
     }
@@ -60,33 +64,45 @@ export class RecipeService {
       const targetMacros = this._mealService.currentMeal()?.macros;
 
       if (targetMacros && recipe.ingredients?.length) {
-        recipe.ingredients = adjustIngredientsToTarget(recipe.ingredients, targetMacros).ingredients;
-        recipe.totalMacros = adjustIngredientsToTarget(recipe.ingredients, targetMacros).total;
+        recipe.ingredients = adjustIngredientsToTarget(
+          recipe.ingredients,
+          targetMacros
+        ).ingredients;
+        recipe.totalMacros = adjustIngredientsToTarget(
+          recipe.ingredients,
+          targetMacros
+        ).total;
       }
 
       this._currentRecipe.set(recipe);
     } catch (err) {
       this._error.set(`No se pudo cargar la receta: ${recipeId}`);
-      this._layoutService.toast('Error', `No se pudo cargar la receta: ${recipeId}`, 'error');
-
+      this._layoutService.toast(
+        'Error',
+        `No se pudo cargar la receta: ${recipeId}`,
+        'error'
+      );
     } finally {
       this._loading.set(false);
     }
   }
 
-  async createRecipe(recipe: Recipe): Promise<void> {
+  async updateRecipe(recipe: Recipe): Promise<void> {
     this._loading.set(true);
     this._error.set(null);
 
     try {
-      await firstValueFrom(this._http.post(RECIPES, recipe));
+      if (recipe.id) {
+        await firstValueFrom(this._http.put(RECIPES + '/' + recipe.id, recipe));
+      } else {
+        await firstValueFrom(this._http.post(RECIPES, recipe));
+      }
     } catch (err) {
       this._error.set('No se pudo crear la receta');
       this._layoutService.toast('Error', 'No se pudo crear la receta', 'error');
     } finally {
       this._loading.set(false);
     }
-    
   }
 
   async deleteRecipe(recipeId: string): Promise<void> {
@@ -96,7 +112,11 @@ export class RecipeService {
     try {
       await firstValueFrom(this._http.delete(RECIPES + '/' + recipeId));
     } catch (err) {
-      this._layoutService.toast('Error', 'No se pudo eliminar la receta', 'error');
+      this._layoutService.toast(
+        'Error',
+        'No se pudo eliminar la receta',
+        'error'
+      );
     } finally {
       this._loading.set(false);
     }
