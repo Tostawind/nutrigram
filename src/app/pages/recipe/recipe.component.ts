@@ -6,10 +6,11 @@ import { MACROS_DEFAULT } from '../../core/constants/macros';
 import { MealService } from '../../core/services/meal.service';
 import { StatusSpinnerComponent } from "../../shared/components/status-spinner/status-spinner.component";
 import { IngredientsTableComponent } from "../../shared/components/ingredients-table/ingredients-table.component";
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-recipe',
-  imports: [MacrosTableComponent, StatusSpinnerComponent, IngredientsTableComponent],
+  imports: [MacrosTableComponent, StatusSpinnerComponent, IngredientsTableComponent, ButtonModule],
   templateUrl: './recipe.component.html',
   styleUrl: './recipe.component.scss',
 })
@@ -30,5 +31,13 @@ export class RecipeComponent implements OnInit {
     this.recipeId = this._route.snapshot.paramMap.get('recipeId') || '';
     this.mealId = this._route.snapshot.paramMap.get('mealId') || '';
     await this.recipeService.getRecipe(this.recipeId, this.mealId);
+  }
+
+  editRecipe() {
+    // Implement edit recipe logic
+  }
+
+  deleteRecipe() {
+    // Implement delete recipe logic
   }
 }

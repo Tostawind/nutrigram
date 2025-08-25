@@ -11,6 +11,8 @@ import { LayoutService } from '../../../core/services/layout.service';
 import { Ingredient } from '../../../core/models/ingredient.model';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { IngredientService } from '../../../core/services/ingredient.service';
+import { RecipeService } from '../../../core/services/recipe.service';
+import { Recipe } from '../../../core/models/recipe.model';
 
 @Component({
   selector: 'app-recipe-form-dialog',
@@ -30,6 +32,7 @@ export class RecipeFormDialogComponent {
   private _mealService = inject(MealService);
   private _ingredientService = inject(IngredientService);
   private _layoutService = inject(LayoutService);
+  private _recipeService = inject(RecipeService);
 
   visible = model(false);
 
@@ -87,10 +90,13 @@ export class RecipeFormDialogComponent {
     this.ingredients.fat = this._ingredientService.fatIngredients();
   }
 
-  filterIngredients(event: { query: string }, category: 'protein' | 'carbs' | 'fat') {
+  filterIngredients(
+    event: { query: string },
+    category: 'protein' | 'carbs' | 'fat'
+  ) {
     const query = event.query.toLowerCase();
-    this.filteredIngredients[category] = this.ingredients[category].filter((ingredient) =>
-      ingredient.name.toLowerCase().includes(query)
+    this.filteredIngredients[category] = this.ingredients[category].filter(
+      (ingredient) => ingredient.name.toLowerCase().includes(query)
     );
   }
 
@@ -100,15 +106,21 @@ export class RecipeFormDialogComponent {
 
   save() {
     if (this.validateForm()) {
-      console.log('Saving recipe:', {
+      const recipe: Recipe = {
+        id: undefined,
         name: this.name,
-        meal: this.selectedMeal,
+        meals: this.selectedMeal?.id ? [this.selectedMeal?.id] : [],
         ingredients: [
           ...this.selectedIngredients.protein,
           ...this.selectedIngredients.carbs,
           ...this.selectedIngredients.fat,
         ],
-      });
+      };
+      this._recipeService.createRecipe(recipe);
+
+      this.resetForm();
+      this.visible.set(false);
+      
       this._layoutService.toast(
         'Campos correctos',
         'Todos los campos son correctos',
@@ -121,5 +133,15 @@ export class RecipeFormDialogComponent {
         'error'
       );
     }
+  }
+
+  resetForm() {
+    this.name = '';
+    this.selectedMeal = null;
+    this.selectedIngredients = {
+      protein: [],
+      carbs: [],
+      fat: [],
+    };
   }
 }

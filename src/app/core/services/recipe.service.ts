@@ -73,4 +73,18 @@ export class RecipeService {
       this._loading.set(false);
     }
   }
+  async createRecipe(recipe: Recipe): Promise<void> {
+    this._loading.set(true);
+    this._error.set(null);
+
+    try {
+      await firstValueFrom(this._http.post(RECIPES, recipe));
+    } catch (err) {
+      this._error.set('No se pudo crear la receta');
+      this._layoutService.toast('Error', 'No se pudo crear la receta', 'error');
+    } finally {
+      this._loading.set(false);
+    }
+    
+  }
 }

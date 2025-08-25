@@ -4,6 +4,7 @@ const path = require("path");
 const server = jsonServer.create();
 const router = jsonServer.router(path.join(__dirname, "db.json"));
 const middlewares = jsonServer.defaults();
+const { v4: uuidv4 } = require("uuid");
 
 server.use(middlewares);
 server.use(jsonServer.bodyParser);
@@ -111,6 +112,30 @@ server.get("/recipes/:recipeId", (req, res) => {
   };
 
   res.json(recipeWithIngredients);
+});
+
+server.post("/recipes", (req, res) => {
+  const db = router.db;
+  const newRecipe = req.body;
+
+  // Validaciones básicas
+  if (
+    !newRecipe.name ||
+    !Array.isArray(newRecipe.ingredients) ||
+    !Array.isArray(newRecipe.meals)
+  ) {
+    return res.status(400).json({ error: "Invalid recipe data" });
+  }
+
+  // Transformar ingredientes para que solo guarde los ids
+  const ingredientIds = newRecipe.ingredients.map((ing) => ing.id || ing);
+
+  // Generar UUID
+  const recipeToAdd = { ...newRecipe, id: uuidv4(), ingredients: ingredientIds };
+
+  db.get("recipes").push(recipeToAdd).write();
+
+  res.status(201).json(recipeToAdd);
 });
 
 // Use default router for other routes
