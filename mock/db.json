@@ -597,18 +597,6 @@
       ],
       "ingredients": [],
       "id": "c8ce2479-4f4c-4ff4-af52-88a48bd86ce8"
-    },
-    {
-      "name": "Test 2",
-      "meals": [
-        "desayuno"
-      ],
-      "ingredients": [
-        "i0007",
-        "i0001",
-        "i0028"
-      ],
-      "id": "c5181430-0ba6-417d-8cb9-38c5ff4ddff5"
     }
   ]
 }

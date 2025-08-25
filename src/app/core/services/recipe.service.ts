@@ -73,6 +73,7 @@ export class RecipeService {
       this._loading.set(false);
     }
   }
+
   async createRecipe(recipe: Recipe): Promise<void> {
     this._loading.set(true);
     this._error.set(null);
@@ -86,5 +87,18 @@ export class RecipeService {
       this._loading.set(false);
     }
     
+  }
+
+  async deleteRecipe(recipeId: string): Promise<void> {
+    this._loading.set(true);
+    this._error.set(null);
+
+    try {
+      await firstValueFrom(this._http.delete(RECIPES + '/' + recipeId));
+    } catch (err) {
+      this._layoutService.toast('Error', 'No se pudo eliminar la receta', 'error');
+    } finally {
+      this._loading.set(false);
+    }
   }
 }

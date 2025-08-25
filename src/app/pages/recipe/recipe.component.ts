@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { MacrosTableComponent } from '../../shared/components/macros-table/macros-table.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { RecipeService } from '../../core/services/recipe.service';
 import { MACROS_DEFAULT } from '../../core/constants/macros';
 import { MealService } from '../../core/services/meal.service';
@@ -15,6 +15,7 @@ import { ButtonModule } from 'primeng/button';
   styleUrl: './recipe.component.scss',
 })
 export class RecipeComponent implements OnInit {
+  private _router = inject(Router);
   private _route = inject(ActivatedRoute);
   recipeService = inject(RecipeService);
   mealService = inject(MealService);
@@ -38,6 +39,10 @@ export class RecipeComponent implements OnInit {
   }
 
   deleteRecipe() {
-    // Implement delete recipe logic
+    const deleteConfirm = confirm('Seguro que quieres eliminar receta?');
+    if (!deleteConfirm) return;
+
+    this.recipeService.deleteRecipe(this.recipeId);
+    this._router.navigate(['/']);
   }
 }
