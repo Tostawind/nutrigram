@@ -5,6 +5,7 @@ export const SETTINGS = `${API_URL}/settings`;
 
 // INGREDIENTS
 export const INGREDIENTS = `${API_URL}/ingredients`;
+export const INGREDIENTS_BY_CATEGORY = (category: 'protein' | 'carbs' | 'fat' | undefined) => `${API_URL}/ingredients?category=${category}`;
 
 // RECIPES
 export const RECIPES = `${API_URL}/recipes`;

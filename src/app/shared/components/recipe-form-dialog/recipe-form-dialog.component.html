@@ -11,9 +11,9 @@
 
     <div class="flex justify-between gap-2">
       @for (meal of meals; track meal.id) {
-        <div >
+        <div class="flex items-center gap-2">
           <p-radiobutton name="meal" [value]="meal" [(ngModel)]="selectedMeal" [inputId]="meal.id" />
-          <label [for]="meal.id" class="ml-2">{{ meal.name }}</label>
+          <label [for]="meal.id">{{ meal.name }}</label>
         </div>
       } 
     </div>
@@ -22,12 +22,39 @@
   <div class="form-section">
     <h3 class="title--3">Ingredientes</h3>
     <h4 class="title--4">Proteina</h4>
+    <p-autocomplete 
+      [(ngModel)]="selectedIngredients.protein" 
+      [dropdown]="true" 
+      [suggestions]="filteredIngredients.protein" 
+      (completeMethod)="filterIngredients($event, 'protein')" 
+      optionLabel="name" 
+      [showClear]="true"
+      [multiple]="true"
+    />
     <h4 class="title--4">Hidratos</h4>
+    <p-autocomplete 
+      [(ngModel)]="selectedIngredients.carbs" 
+      [dropdown]="true" 
+      [suggestions]="filteredIngredients.carbs" 
+      (completeMethod)="filterIngredients($event, 'carbs')" 
+      optionLabel="name" 
+      [showClear]="true"
+      [multiple]="true"
+    />
     <h4 class="title--4">Grasas</h4>
+    <p-autocomplete 
+      [(ngModel)]="selectedIngredients.fat" 
+      [dropdown]="true" 
+      [suggestions]="filteredIngredients.fat" 
+      (completeMethod)="filterIngredients($event, 'fat')" 
+      optionLabel="name" 
+      [showClear]="true"
+      [multiple]="true"
+    />
   </div>
 
   <div class="flex justify-end gap-6">
       <p-button label="Cancel" severity="secondary" (click)="visible.set(false)" />
-      <p-button label="Save" (click)="visible.set(false)" />
+      <p-button label="Save" (click)="save()" />
   </div>
 </p-dialog>
