@@ -1,5 +1,6 @@
 import { Ingredient } from '../models/ingredient.model';
 import { Macros } from '../models/macros.model';
+import solver, { Solve } from 'javascript-lp-solver';
 
 export function calculateCalories(
   proteinGrams: number,
@@ -7,16 +8,6 @@ export function calculateCalories(
   fatGrams: number
 ): number {
   return proteinGrams * 4 + carbGrams * 4 + fatGrams * 9;
-}
-
-export function scaleMacros(ingredient: Ingredient, grams: number): Macros {
-  const factor = grams / ingredient.portion;
-  return {
-    protein: +(ingredient.macros.protein * factor).toFixed(2),
-    carbs: +(ingredient.macros.carbs * factor).toFixed(2),
-    fat: +(ingredient.macros.fat * factor).toFixed(2),
-    kcal: +(ingredient.macros.kcal * factor).toFixed(2),
-  };
 }
 
 export function adjustIngredientsToTarget(
@@ -34,64 +25,55 @@ export function adjustIngredientsToTarget(
     },
   }));
 
-  // Estado inicial
-  let grams = ingredients.map(() => 50);
+  // Modelo
+  const model: any = {
+    optimize: 'kcal', // minimizar distancia a kcal
+    opType: 'min',
+    constraints: {
+      protein: {
+        min: targetMacros.protein * 0.95,
+        max: targetMacros.protein * 1.05,
+      },
+      carbs: {
+        min: targetMacros.carbs * 0.95,
+        max: targetMacros.carbs * 1.05,
+      },
+      fat: {
+        min: targetMacros.fat * 0.95,
+        max: targetMacros.fat * 1.05,
+      },
+    },
+    variables: {},
+    ints: {},
+  };
 
-  function calcTotal(grams: number[]): Macros {
-    const total: Macros = { protein: 0, carbs: 0, fat: 0, kcal: 0 };
-    grams.forEach((g, idx) => {
-      total.protein += macrosPerGram[idx].macros.protein * g;
-      total.carbs += macrosPerGram[idx].macros.carbs * g;
-      total.fat += macrosPerGram[idx].macros.fat * g;
-      total.kcal += macrosPerGram[idx].macros.kcal * g;
-    });
-    return total;
-  }
+  // Variables dinámicas según ingredientes
+  ingredients.forEach((ing, idx) => {
+    model.variables[ing.name] = {
+      protein: macrosPerGram[idx].macros.protein,
+      carbs: macrosPerGram[idx].macros.carbs,
+      fat: macrosPerGram[idx].macros.fat,
+      kcal: macrosPerGram[idx].macros.kcal,
+    };
 
-  function error(total: Macros): number {
-    return (
-      Math.abs(total.protein - targetMacros.protein) +
-      Math.abs(total.carbs - targetMacros.carbs) +
-      Math.abs(total.fat - targetMacros.fat) +
-      Math.abs(total.kcal - targetMacros.kcal) / 10 // kcal con menos peso
-    );
-  }
+    model.ints[ing.name] = 1;
 
-  let bestGrams = [...grams];
-  let bestError = Infinity;
+    // límite máximo genérico (opcional)
+    model.constraints[ing.name] = { max: 500 };
+  });
 
-  // Búsqueda local
-  for (let iter = 0; iter < 2000; iter++) {
-    const idx = Math.floor(Math.random() * grams.length);
-    const step = (Math.random() < 0.5 ? -1 : 1) * 5; // pasos de 5g
-    const newGrams = [...grams];
-    newGrams[idx] = Math.max(0, newGrams[idx] + step);
+  // Resolver
+  const results = solver.Solve(model);
 
-    const total = calcTotal(newGrams);
-    const e = error(total);
-
-    if (e < bestError) {
-      bestError = e;
-      bestGrams = newGrams;
-    }
-
-    if (e <= error(calcTotal(grams))) {
-      grams = newGrams;
-    }
-  }
-
-  // Redondear
-  bestGrams = bestGrams.map((g) => Math.round(g));
-
-  const total = calcTotal(bestGrams);
-
-  const recipe = ingredients.map((ing, idx) => {
-    const g = bestGrams[idx];
+  // Reconstrucción de receta
+  const recipe = ingredients.map((ing) => {
+    const val = results[ing.name];
+    const g = Math.max(0, Math.round(typeof val === 'number' ? val : 0));
     const macros = {
-      protein: Math.round(macrosPerGram[idx].macros.protein * g),
-      carbs: Math.round(macrosPerGram[idx].macros.carbs * g),
-      fat: Math.round(macrosPerGram[idx].macros.fat * g),
-      kcal: Math.round(macrosPerGram[idx].macros.kcal * g),
+      protein: Math.round((ing.macros.protein / ing.portion) * g),
+      carbs: Math.round((ing.macros.carbs / ing.portion) * g),
+      fat: Math.round((ing.macros.fat / ing.portion) * g),
+      kcal: Math.round((ing.macros.kcal / ing.portion) * g),
     };
     return {
       ...ing,
@@ -100,13 +82,20 @@ export function adjustIngredientsToTarget(
     };
   });
 
+  // Totales
+  const total: Macros = recipe.reduce(
+    (acc, ing) => {
+      acc.protein += ing.macros.protein;
+      acc.carbs += ing.macros.carbs;
+      acc.fat += ing.macros.fat;
+      acc.kcal += ing.macros.kcal;
+      return acc;
+    },
+    { protein: 0, carbs: 0, fat: 0, kcal: 0 }
+  );
+
   return {
     ingredients: recipe,
-    total: {
-      protein: Math.round(total.protein),
-      carbs: Math.round(total.carbs),
-      fat: Math.round(total.fat),
-      kcal: Math.round(total.kcal),
-    },
+    total,
   };
 }
