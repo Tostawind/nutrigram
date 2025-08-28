@@ -18,7 +18,7 @@
   - Tabla modal: Al pulsar Enter que se guarde
 
 - 🔜 FUTURO
-
+  - Clicar o hover sobre ingrediente aparezca macros por 100g
 ---
 
 ## CALCULO

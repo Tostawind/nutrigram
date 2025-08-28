@@ -156,6 +156,7 @@ export class RecipeFormDialogComponent {
         'Todos los campos son correctos',
         'success'
       );
+      window.location.reload();
     } else {
       this._layoutService.toast(
         'Campos incorrectos',
