@@ -563,6 +563,54 @@
       },
       "category": "fat",
       "note": ""
+    },
+    {
+      "name": "Test ingrediente",
+      "category": {
+        "id": "protein",
+        "name": "Proteína"
+      },
+      "macros": {
+        "kcal": 0,
+        "protein": "10",
+        "carbs": "20",
+        "fat": "30"
+      },
+      "notes": "asdf",
+      "portion": 100,
+      "unit": "g",
+      "id": "cdxrqyF"
+    },
+    {
+      "name": "testtsett",
+      "category": {
+        "id": "protein",
+        "name": "Proteína"
+      },
+      "macros": {
+        "kcal": 10,
+        "protein": 20,
+        "carbs": 30,
+        "fat": 0
+      },
+      "notes": "asdfasdf",
+      "portion": 100,
+      "unit": "g",
+      "id": "wTz2-Nb"
+    },
+    {
+      "name": "sdfsdf",
+      "category": "protein",
+      "macros": {
+        "kcal": 0,
+        "protein": 0,
+        "carbs": 0,
+        "fat": 0
+      },
+      "notes": "sdf",
+      "portion": 100,
+      "unit": "g",
+      "id": "Wq_7bn8"
     }
   ],
   "recipes": [

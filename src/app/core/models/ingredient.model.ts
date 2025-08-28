@@ -1,7 +1,7 @@
 import { Macros } from './macros.model';
 
 export interface Ingredient {
-  id: string;
+  id: string | undefined;
   name: string;
   portion: number;
   unit: 'g' | 'ml' | 'u';

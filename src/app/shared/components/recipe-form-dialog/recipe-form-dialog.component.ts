@@ -22,7 +22,6 @@ import { Recipe } from '../../../core/models/recipe.model';
     FormsModule,
     RadioButtonModule,
     ButtonModule,
-    FormsModule,
     AutoCompleteModule,
   ],
   templateUrl: './recipe-form-dialog.component.html',

@@ -34,7 +34,15 @@
     variant="outlined"
     [rounded]="true"
     severity="secondary"
-    (onClick)="isDialogVisible.set(true)"
+    (onClick)="isIngredientDialogVisible.set(true)"
+  >
+  Crear Ingrediente
+</p-button>
+  <p-button
+    variant="outlined"
+    [rounded]="true"
+    severity="secondary"
+    (onClick)="isRecipeDialogVisible.set(true)"
   >
   Crear Receta
 </p-button>
@@ -42,4 +50,5 @@
 <p-toast />
 
 <!--------------------------------------------------------------------------->
-<app-recipe-form-dialog [(visible)]="isDialogVisible" />
+<app-recipe-form-dialog [(visible)]="isRecipeDialogVisible" />
+<app-ingredient-form-dialog [(visible)]="isIngredientDialogVisible" />

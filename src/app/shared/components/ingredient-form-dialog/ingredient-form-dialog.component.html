@@ -1,0 +1,74 @@
+<p-dialog header="Crear Ingrediente" [modal]="true" [(visible)]="visible" [style]="{ height: '80%', width: '80%' }">
+
+  <div class="form-section">
+    <h3 class="title--3">Nombre</h3>
+    <input pInputText id="name" [(ngModel)]="name" autocomplete="off" />
+  </div>
+
+  <div class="form-section">
+    <h3 class="title--3">Categoría</h3>
+
+    <div class="flex justify-between gap-2">
+      @for (category of categories; track category.id) {
+        <div class="flex items-center gap-2">
+          <p-radiobutton name="category" [value]="category" [(ngModel)]="selectedCategory" [inputId]="category.id" />
+          <label [for]="category.id">{{ category.name }}</label>
+        </div>
+      } 
+    </div>
+  </div>
+
+  <div class="form-section">
+    <h3 class="title--3">Macros</h3>
+    <div class="form-section">
+      <h4 class="title--4">Kcal</h4>
+      <p-inputnumber
+        id="kcal"
+        [(ngModel)]="macros.kcal"
+        [min]="0"
+        [max]="10000"
+        [step]="1"
+      />
+    </div>
+    <div class="form-section">
+      <h4 class="title--4">Proteina</h4>
+      <p-inputnumber
+        id="protein"
+        [(ngModel)]="macros.protein"
+        [min]="0"
+        [max]="10000"
+        [step]="1"
+      />
+    </div>
+    <div class="form-section">
+      <h4 class="title--4">Hidratos</h4>
+      <p-inputnumber
+        id="carbs"
+        [(ngModel)]="macros.carbs"
+        [min]="0"
+        [max]="10000"
+        [step]="1"
+      />
+    </div>
+    <div class="form-section">
+      <h4 class="title--4">Grasas</h4>
+      <p-inputnumber
+        id="fat"
+        [(ngModel)]="macros.fat"
+        [min]="0"
+        [max]="10000"
+        [step]="1"
+      />
+    </div>
+  </div>
+
+  <div class="form-section">
+    <h3 class="title--3">Notas</h3>
+    <input pInputText id="notes" [(ngModel)]="notes" autocomplete="off" />
+  </div>
+
+  <div class="flex justify-end gap-6">
+      <p-button label="Cancel" severity="secondary" (click)="visible.set(false)" />
+      <p-button label="Save" (click)="save()" />
+  </div>
+</p-dialog>

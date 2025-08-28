@@ -2,15 +2,15 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { Ingredient } from '../models/ingredient.model';
 import { firstValueFrom } from 'rxjs';
-import { INGREDIENTS_BY_CATEGORY } from '../constants/api';
-
-
+import { INGREDIENTS_BY_CATEGORY, INGREDIENTS } from '../constants/api';
+import { LayoutService } from './layout.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class IngredientService {
   private _http = inject(HttpClient);
+  private _layoutService = inject(LayoutService);
 
   private _ingredients = signal<Ingredient[]>([]);
   ingredients = this._ingredients.asReadonly();
@@ -34,7 +34,9 @@ export class IngredientService {
     this._error.set(null);
 
     try {
-      const response = await firstValueFrom(this._http.get<Ingredient[]>(INGREDIENTS_BY_CATEGORY(category)));
+      const response = await firstValueFrom(
+        this._http.get<Ingredient[]>(INGREDIENTS_BY_CATEGORY(category))
+      );
 
       switch (category) {
         case 'protein':
@@ -56,4 +58,21 @@ export class IngredientService {
     }
   }
 
+  async updateIngredient(ingredient: Ingredient): Promise<void> {
+    this._loading.set(true);
+    this._error.set(null);
+
+    try {
+      if (ingredient.id) {
+        await firstValueFrom(this._http.put(INGREDIENTS + '/' + ingredient.id, ingredient));
+      } else {
+        await firstValueFrom(this._http.post(INGREDIENTS, ingredient));
+      }
+    } catch (err) {
+      this._error.set('No se pudo crear el ingrediente');
+      this._layoutService.toast('Error', 'No se pudo crear el ingrediente', 'error');
+    } finally {
+      this._loading.set(false);
+    }
+  }
 }

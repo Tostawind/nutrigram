@@ -19,6 +19,8 @@
 }
 
 .footer {
+  display: flex;
+  justify-content: space-between;
   text-align: center;
   padding: 1rem;
   background-color: #f8f9fa;
