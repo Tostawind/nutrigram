@@ -1,3 +1,5 @@
+@use "sass:color";
+
 :host {
   display: grid;
   height: 100dvh;
@@ -37,15 +39,13 @@
     transition: background-color 0.3s;
 
     &:hover {
-      // background-color: darken(#f8f9fa, 5%);
+      // background-color: color.scale(#f8f9fa, $lightness: -5%);
+
     }
 
-    &:active {
-      background-color: darken(#f8f9fa, 10%);
-    }
-
+    &:active,
     &.active {
-      background-color: darken(#f8f9fa, 10%);
+      background-color: color.scale(#f8f9fa, $lightness: -10%);
     }
   }
 

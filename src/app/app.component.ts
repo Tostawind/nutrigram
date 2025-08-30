@@ -3,7 +3,6 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { Toast } from 'primeng/toast';
 import { RecipeFormDialogComponent } from "./shared/components/recipe-form-dialog/recipe-form-dialog.component";
-import { IngredientFormDialogComponent } from './shared/components/ingredient-form-dialog/ingredient-form-dialog.component';
 
 @Component({
   selector: 'app-root',
@@ -13,13 +12,11 @@ import { IngredientFormDialogComponent } from './shared/components/ingredient-fo
     RouterLink,
     RouterLinkActive,
     Toast,
-    RecipeFormDialogComponent,
-    IngredientFormDialogComponent
+    RecipeFormDialogComponent
 ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
   isRecipeDialogVisible = signal(false);
-  isIngredientDialogVisible = signal(false);
 }

@@ -34,9 +34,16 @@ export class IngredientService {
     this._error.set(null);
 
     try {
-      const response = await firstValueFrom(
-        this._http.get<Ingredient[]>(INGREDIENTS_BY_CATEGORY(category))
-      );
+      let response: Ingredient[];
+      if (category) {
+        response = await firstValueFrom(
+          this._http.get<Ingredient[]>(INGREDIENTS_BY_CATEGORY(category))
+        );
+      } else {
+        response = await firstValueFrom(
+          this._http.get<Ingredient[]>(INGREDIENTS)
+        );
+      }
 
       switch (category) {
         case 'protein':
