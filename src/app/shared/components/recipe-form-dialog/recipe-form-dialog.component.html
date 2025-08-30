@@ -1,4 +1,4 @@
-<p-dialog header="Crear Receta" [modal]="true" [(visible)]="visible" [style]="{ height: '80%', width: '80%' }">
+<p-dialog [header]="recipe()?.id ? 'Editar Receta' : 'Crear Receta'" [modal]="true" [(visible)]="visible" [style]="{ height: '100%', width: '95%', maxWidth: '1200px' }">
 
   <div class="form-section">
     <h3 class="title--3">Nombre</h3>
@@ -54,7 +54,7 @@
   </div>
 
   <div class="flex justify-end gap-6">
-      <p-button label="Cancel" severity="secondary" (click)="visible.set(false)" />
-      <p-button label="Save" (click)="save()" />
+      <p-button label="Cancelar" severity="secondary" (click)="visible.set(false)" />
+      <p-button label="Guardar" (click)="save()" />
   </div>
 </p-dialog>

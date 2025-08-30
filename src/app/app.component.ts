@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { Toast } from 'primeng/toast';
 import { RecipeFormDialogComponent } from "./shared/components/recipe-form-dialog/recipe-form-dialog.component";
@@ -11,6 +11,7 @@ import { IngredientFormDialogComponent } from './shared/components/ingredient-fo
     RouterOutlet,
     ButtonModule,
     RouterLink,
+    RouterLinkActive,
     Toast,
     RecipeFormDialogComponent,
     IngredientFormDialogComponent

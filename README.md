@@ -5,11 +5,13 @@
 ## TO DO ✅
 
 - 🔥 IMPORTANT
-  - Form Ingrediente
-    - Nuevo
-    - Editar
-    - Eliminar
-    - Lista de ingredientes (buscador y filtros)
+  1. [ ] INGREDIENTES
+    - [ ] Boton footer INGREDIENTES --> Vista ingredientes (lista)
+    - [ ] Vista ingredientes (lista) con boton de crear ingrediente (footer)
+    - [ ] Al pulsar en ingrediente = EDITAR + Boton eliminar
+    - [ ] Buscador ?
+ 
+ 2. [ ] LOADER: Crear un splash screen con loader general
 
 - ⌛ FIXES:
   - Tabla modal: Focus input
