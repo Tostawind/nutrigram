@@ -40,7 +40,7 @@ export class IngredientFormDialogComponent {
 
   // Form
   name: string = '';
-  selectedCategory: { id: 'protein' | 'carbs' | 'fat'; name: string } | null = null;
+  selectedCategory: { id: string; name: string } | null = null;
   macros: Macros = MACROS_DEFAULT;
   notes: string = '';
 
@@ -51,22 +51,20 @@ export class IngredientFormDialogComponent {
   loadIngredient() {
     // New ingredient:
     if (!this.ingredient()) return;
-
     // Update ingredient:
     this.name = this.ingredient()?.name || '';
-    this.selectedCategory = {
-      id: this.ingredient()?.category as 'protein' | 'carbs' | 'fat',
-      name: this.categories.find(c => c.id === this.ingredient()?.category)?.name || ''
-    };
+    this.selectedCategory =
+      this.categories.find((c) => c.id === this.ingredient()?.category) || null;
     this.macros = this.ingredient()?.macros || MACROS_DEFAULT;
     this.notes = this.ingredient()?.notes || '';
+    console.log('--------------', this.selectedCategory);
   }
 
   validateForm(): boolean {
     return this.name.trim() !== '' && this.selectedCategory !== null;
   }
 
-  save() {
+  async save() {
     if (this.validateForm()) {
       const ingredientToSave: Ingredient = {
         id: this.ingredient() ? this.ingredient()?.id : undefined,
@@ -78,7 +76,7 @@ export class IngredientFormDialogComponent {
         unit: 'g',
       };
 
-      this._ingredientService.updateIngredient(ingredientToSave);
+      await this._ingredientService.updateIngredient(ingredientToSave);
 
       this.resetForm();
       this.visible.set(false);
@@ -113,5 +111,13 @@ export class IngredientFormDialogComponent {
     this.selectedCategory = null;
     this.macros = MACROS_DEFAULT;
     this.notes = '';
+  }
+
+  async deleteIngredient() {
+    const deleteConfirm = confirm('Seguro que quieres eliminar el ingrediente?');
+    if (!deleteConfirm) return;
+
+    await this._ingredientService.deleteIngredient(this.ingredient()?.id || '');
+    // this._router.navigate(['/']);
   }
 }

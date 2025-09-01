@@ -565,18 +565,18 @@
       "note": ""
     },
     {
-      "name": "Test",
-      "category": "fat",
+      "name": "Proteina de prueba",
+      "category": "protein",
       "macros": {
-        "kcal": 10,
-        "protein": 20,
-        "carbs": 30,
-        "fat": 40
+        "kcal": 0,
+        "protein": 0,
+        "carbs": 0,
+        "fat": 0
       },
-      "notes": "Hola",
+      "notes": "",
       "portion": 100,
       "unit": "g",
-      "id": "_XP_0NC"
+      "id": "P6aCeIv"
     }
   ],
   "recipes": [
@@ -603,6 +603,16 @@
       "meals": [
         "comida"
       ]
+    },
+    {
+      "name": "Receta de prueba",
+      "meals": [
+        "desayuno"
+      ],
+      "ingredients": [
+        "P6aCeIv"
+      ],
+      "id": "91578632-485e-4f80-a408-bb72a0dd3d88"
     }
   ]
 }

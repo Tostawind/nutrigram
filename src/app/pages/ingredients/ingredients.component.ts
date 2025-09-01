@@ -11,12 +11,13 @@ import { Ingredient } from '../../core/models/ingredient.model';
   templateUrl: './ingredients.component.html',
   styleUrl: './ingredients.component.scss',
 })
-export class IngredientsComponent implements OnInit{
+export class IngredientsComponent implements OnInit {
   ingredientService = inject(IngredientService);
 
   isIngredientDialogVisible = signal(false);
+  ingredientToEdit = signal<Ingredient | null>(null);
 
-  tabs : { label: string, value: string, content: Ingredient[] }[] = [];
+  tabs: { label: string; value: string; content: Ingredient[] }[] = [];
 
   ngOnInit() {
     this._loadIngredients();
@@ -27,9 +28,26 @@ export class IngredientsComponent implements OnInit{
     await this.ingredientService.getIngredients('carbs');
     await this.ingredientService.getIngredients('fat');
     this.tabs = [
-      { label: 'P', value: '0', content: this.ingredientService.proteinIngredients() },
-      { label: 'HC', value: '1', content: this.ingredientService.carbsIngredients() },
-      { label: 'G', value: '2', content: this.ingredientService.fatIngredients() }
+      {
+        label: 'P',
+        value: '0',
+        content: this.ingredientService.proteinIngredients(),
+      },
+      {
+        label: 'HC',
+        value: '1',
+        content: this.ingredientService.carbsIngredients(),
+      },
+      {
+        label: 'G',
+        value: '2',
+        content: this.ingredientService.fatIngredients(),
+      },
     ];
+  }
+
+  editIngredient(ingredient: Ingredient) {
+    this.ingredientToEdit.set(ingredient);
+    this.isIngredientDialogVisible.set(true);
   }
 }

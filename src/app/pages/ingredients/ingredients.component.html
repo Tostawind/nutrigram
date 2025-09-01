@@ -24,7 +24,7 @@
               <p-tabpanel [value]="tab.value">
                   <div class="flex flex-col gap-2">
                       @for (ingredient of tab.content; track ingredient.id) {
-                          <p class="border !p-2 rounded-sm">{{ ingredient.name }}</p>
+                          <p class="border !p-2 rounded-sm" (click)="editIngredient(ingredient)">{{ ingredient.name }}</p>
                       }
                   </div>
               </p-tabpanel>
@@ -36,4 +36,6 @@
 
 <!------------------------------------------------------------------------------>
 <!-- DIALOG -->
-<app-ingredient-form-dialog [(visible)]="isIngredientDialogVisible" />
+ @if(isIngredientDialogVisible()) {
+   <app-ingredient-form-dialog [(visible)]="isIngredientDialogVisible" [ingredient]="ingredientToEdit()" />
+ }

@@ -6,7 +6,6 @@
 
 - 🔥 IMPORTANT
   1. [ ] INGREDIENTES
-    - [ ] Vista ingredientes (lista) con boton de crear ingrediente (footer)
     - [ ] Al pulsar en ingrediente = EDITAR + Boton eliminar
     - [ ] Buscador ?
  

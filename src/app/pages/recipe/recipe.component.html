@@ -65,4 +65,6 @@
   <button (click)="recipeService.getRecipe(recipeId, mealId)">Volver a cargar</button>
 }
 
-<app-recipe-form-dialog [(visible)]="isDialogVisible" [recipe]="recipe" />
+@if(isDialogVisible()) {
+  <app-recipe-form-dialog [(visible)]="isDialogVisible" [recipe]="recipe" />
+}

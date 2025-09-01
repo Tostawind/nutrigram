@@ -75,7 +75,11 @@ server.get("/recipes", (req, res) => {
     recipes = recipes.filter((recipe) => recipe.meals.includes(req.query.meal));
   }
 
-  // mapear cada receta y sustituir los ids de ingredientes por los objetos
+  if (req.query.ingredientId) {
+    const ingId = req.query.ingredientId;
+    recipes = recipes.filter((recipe) => recipe.ingredients.includes(ingId));
+  }
+
   const recipesWithIngredients = recipes.map((recipe) => {
     const ingredients = db
       .get("ingredients")

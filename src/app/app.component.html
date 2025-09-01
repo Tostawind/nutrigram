@@ -47,4 +47,6 @@
 <p-toast />
 
 <!--------------------------------------------------------------------------->
-<app-recipe-form-dialog [(visible)]="isRecipeDialogVisible" />
+@if(isRecipeDialogVisible()) {
+  <app-recipe-form-dialog [(visible)]="isRecipeDialogVisible" />
+}

@@ -133,7 +133,7 @@ export class RecipeFormDialogComponent {
     return this.name.trim() !== '' && this.selectedMeal !== null;
   }
 
-  save() {
+  async save() {
     if (this.validateForm()) {
       const recipeToSave: Recipe = {
         id: this.recipe() ? this.recipe()?.id : undefined,
@@ -145,7 +145,7 @@ export class RecipeFormDialogComponent {
           ...this.selectedIngredients.fat,
         ],
       };
-      this._recipeService.updateRecipe(recipeToSave);
+      await this._recipeService.updateRecipe(recipeToSave);
 
       this.resetForm();
       this.visible.set(false);

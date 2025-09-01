@@ -43,11 +43,11 @@ export class RecipeComponent implements OnInit {
     await this.recipeService.getRecipe(this.recipeId, this.mealId);
   }
 
-  deleteRecipe() {
+  async deleteRecipe() {
     const deleteConfirm = confirm('Seguro que quieres eliminar receta?');
     if (!deleteConfirm) return;
 
-    this.recipeService.deleteRecipe(this.recipeId);
+    await this.recipeService.deleteRecipe(this.recipeId);
     this._router.navigate(['/']);
   }
 }
