@@ -563,20 +563,6 @@
       },
       "category": "fat",
       "note": ""
-    },
-    {
-      "name": "Proteina de prueba",
-      "category": "protein",
-      "macros": {
-        "kcal": 0,
-        "protein": 0,
-        "carbs": 0,
-        "fat": 0
-      },
-      "notes": "",
-      "portion": 100,
-      "unit": "g",
-      "id": "P6aCeIv"
     }
   ],
   "recipes": [
@@ -609,9 +595,7 @@
       "meals": [
         "desayuno"
       ],
-      "ingredients": [
-        "P6aCeIv"
-      ],
+      "ingredients": [],
       "id": "91578632-485e-4f80-a408-bb72a0dd3d88"
     }
   ]

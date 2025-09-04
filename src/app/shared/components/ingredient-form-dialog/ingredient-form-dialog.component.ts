@@ -51,13 +51,13 @@ export class IngredientFormDialogComponent {
   loadIngredient() {
     // New ingredient:
     if (!this.ingredient()) return;
+
     // Update ingredient:
     this.name = this.ingredient()?.name || '';
     this.selectedCategory =
       this.categories.find((c) => c.id === this.ingredient()?.category) || null;
     this.macros = this.ingredient()?.macros || MACROS_DEFAULT;
     this.notes = this.ingredient()?.notes || '';
-    console.log('--------------', this.selectedCategory);
   }
 
   validateForm(): boolean {
@@ -118,6 +118,6 @@ export class IngredientFormDialogComponent {
     if (!deleteConfirm) return;
 
     await this._ingredientService.deleteIngredient(this.ingredient()?.id || '');
-    // this._router.navigate(['/']);
+    window.location.href = '/ingredients';
   }
 }

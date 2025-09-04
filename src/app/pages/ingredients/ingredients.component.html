@@ -24,7 +24,7 @@
               <p-tabpanel [value]="tab.value">
                   <div class="flex flex-col gap-2">
                       @for (ingredient of tab.content; track ingredient.id) {
-                          <p class="border !p-2 rounded-sm" (click)="editIngredient(ingredient)">{{ ingredient.name }}</p>
+                          <p class="border !p-2 rounded-sm cursor-pointer hover:bg-slate-100" (click)="editIngredient(ingredient)">{{ ingredient.name }}</p>
                       }
                   </div>
               </p-tabpanel>
