@@ -3,9 +3,7 @@ import { Recipe } from '../models/recipe.model';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { MealService } from './meal.service';
-import {
-  adjustIngredientsToTarget
-} from '../utils/nutrition.utils';
+import { adjustIngredientsToTarget } from '../utils/nutrition.utils';
 import { RECIPE_BY_ID, RECIPES } from '../constants/api';
 import { LayoutService } from './layout.service';
 
@@ -64,14 +62,13 @@ export class RecipeService {
       const targetMacros = this._mealService.currentMeal()?.macros;
 
       if (targetMacros && recipe.ingredients?.length) {
-        recipe.ingredients = adjustIngredientsToTarget(
+        const result = await adjustIngredientsToTarget(
           recipe.ingredients,
           targetMacros
-        ).ingredients;
-        recipe.totalMacros = adjustIngredientsToTarget(
-          recipe.ingredients,
-          targetMacros
-        ).total;
+        );
+        console.log('RESULT', result);
+        recipe.ingredients = result.ingredients;
+        recipe.totalMacros = result.total;
       }
 
       this._currentRecipe.set(recipe);

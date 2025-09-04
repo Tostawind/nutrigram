@@ -1,6 +1,16 @@
 import { Ingredient } from '../models/ingredient.model';
 import { Macros } from '../models/macros.model';
-import solver, { Solve } from 'javascript-lp-solver';
+import GLPK from 'glpk.js';
+
+// Tipado del resultado de glpk
+interface GLPKResult {
+  result: {
+    vars: Record<string, number>;
+    dual?: Record<string, number>;
+    z: number;
+    status: number;
+  };
+}
 
 export function calculateCalories(
   proteinGrams: number,
@@ -10,10 +20,12 @@ export function calculateCalories(
   return proteinGrams * 4 + carbGrams * 4 + fatGrams * 9;
 }
 
-export function adjustIngredientsToTarget(
+export async function adjustIngredientsToTarget(
   ingredients: Ingredient[],
   targetMacros: Macros
-): { ingredients: Ingredient[]; total: Macros } {
+): Promise<{ ingredients: Ingredient[]; total: Macros }> {
+  const glpk = await GLPK();
+
   // macros por gramo
   const macrosPerGram = ingredients.map((i) => ({
     name: i.name,
@@ -25,62 +37,84 @@ export function adjustIngredientsToTarget(
     },
   }));
 
-  // Modelo
-  const model: any = {
-    optimize: 'kcal', // minimizar distancia a kcal
-    opType: 'min',
-    constraints: {
-      protein: {
-        min: targetMacros.protein * 0.95,
-        max: targetMacros.protein * 1.05,
-      },
-      carbs: {
-        min: targetMacros.carbs * 0.95,
-        max: targetMacros.carbs * 1.05,
-      },
-      fat: {
-        min: targetMacros.fat * 0.95,
-        max: targetMacros.fat * 1.05,
-      },
+  // Construir LP
+  const lp: any = {
+    name: 'diet',
+    objective: {
+      direction: glpk.GLP_MIN,
+      name: 'kcal',
+      vars: ingredients.map((ing, idx) => ({
+        name: ing.name,
+        coef: macrosPerGram[idx].macros.kcal,
+      })),
     },
-    variables: {},
-    ints: {},
+    subjectTo: [
+      {
+        name: 'protein',
+        vars: ingredients.map((ing, idx) => ({
+          name: ing.name,
+          coef: macrosPerGram[idx].macros.protein,
+        })),
+        bnds: {
+          type: glpk.GLP_DB,
+          lb: targetMacros.protein * 0.95,
+          ub: targetMacros.protein * 1.05,
+        },
+      },
+      {
+        name: 'carbs',
+        vars: ingredients.map((ing, idx) => ({
+          name: ing.name,
+          coef: macrosPerGram[idx].macros.carbs,
+        })),
+        bnds: {
+          type: glpk.GLP_DB,
+          lb: targetMacros.carbs * 0.95,
+          ub: targetMacros.carbs * 1.05,
+        },
+      },
+      {
+        name: 'fat',
+        vars: ingredients.map((ing, idx) => ({
+          name: ing.name,
+          coef: macrosPerGram[idx].macros.fat,
+        })),
+        bnds: {
+          type: glpk.GLP_DB,
+          lb: targetMacros.fat * 0.95,
+          ub: targetMacros.fat * 1.05,
+        },
+      },
+    ],
   };
 
-  // Variables dinámicas según ingredientes
-  ingredients.forEach((ing, idx) => {
-    model.variables[ing.name] = {
-      protein: macrosPerGram[idx].macros.protein,
-      carbs: macrosPerGram[idx].macros.carbs,
-      fat: macrosPerGram[idx].macros.fat,
-      kcal: macrosPerGram[idx].macros.kcal,
-    };
+  // Resolver y tipar
+  const rawResults = await glpk.solve(lp);
+  const results = rawResults as unknown as GLPKResult;
 
-    model.ints[ing.name] = 1;
-
-    // límite máximo genérico (opcional)
-    model.constraints[ing.name] = { max: 500 };
-  });
-
-  // Resolver
-  const results = solver.Solve(model);
+  console.log('GLPK RAW RESULTS', results);
 
   // Reconstrucción de receta
   const recipe = ingredients.map((ing) => {
-    const val = results[ing.name];
-    const g = Math.max(0, Math.round(typeof val === 'number' ? val : 0));
+    // Access usando ['vars'] explícitamente
+    const val = results.result['vars'][ing.name] ?? 0;
+    const g = Math.max(0, Math.round(val));
+
     const macros = {
       protein: Math.round((ing.macros.protein / ing.portion) * g),
       carbs: Math.round((ing.macros.carbs / ing.portion) * g),
       fat: Math.round((ing.macros.fat / ing.portion) * g),
       kcal: Math.round((ing.macros.kcal / ing.portion) * g),
     };
+
     return {
       ...ing,
       portion: g,
       macros,
     };
   });
+
+  console.log('GLPK RESULT', recipe);
 
   // Totales
   const total: Macros = recipe.reduce(
@@ -94,8 +128,5 @@ export function adjustIngredientsToTarget(
     { protein: 0, carbs: 0, fat: 0, kcal: 0 }
   );
 
-  return {
-    ingredients: recipe,
-    total,
-  };
+  return { ingredients: recipe, total };
 }
