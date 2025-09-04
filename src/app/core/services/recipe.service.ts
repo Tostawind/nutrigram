@@ -21,15 +21,8 @@ export class RecipeService {
   private _currentRecipe = signal<Recipe | null>(null);
   currentRecipe = this._currentRecipe.asReadonly();
 
-  private _loading = signal(false);
-  loading = this._loading.asReadonly();
-
-  private _error = signal<string | null>(null);
-  error = this._error.asReadonly();
-
   async getRecipesByMeal(mealId: string): Promise<void> {
-    this._loading.set(true);
-    this._error.set(null);
+    this._layoutService.showSplashScreen('loading');
 
     try {
       const params = new HttpParams().set('meal', mealId);
@@ -37,21 +30,20 @@ export class RecipeService {
         this._http.get<Recipe[]>(RECIPES, { params })
       );
       this._recipes.set(result);
+      this._layoutService.hideSplashScreen();
     } catch (err) {
-      this._error.set('No se pudieron cargar las recetas');
+      this._layoutService.showSplashScreen(
+        'error','No se pudieron cargar las recetas');
       this._layoutService.toast(
         'Error',
         'No se pudieron cargar las recetas',
         'error'
       );
-    } finally {
-      this._loading.set(false);
-    }
+    } 
   }
 
   async getRecipe(recipeId: string, mealId: string): Promise<void> {
-    this._loading.set(true);
-    this._error.set(null);
+    this._layoutService.showSplashScreen('loading');
 
     try {
       const recipe = await firstValueFrom(
@@ -72,39 +64,37 @@ export class RecipeService {
       }
 
       this._currentRecipe.set(recipe);
+      this._layoutService.hideSplashScreen();
     } catch (err) {
-      this._error.set(`No se pudo cargar la receta: ${recipeId}`);
+      this._layoutService.showSplashScreen(
+        'error',`No se pudo cargar la receta: ${recipeId}`);
       this._layoutService.toast(
         'Error',
         `No se pudo cargar la receta: ${recipeId}`,
         'error'
       );
-    } finally {
-      this._loading.set(false);
-    }
+    } 
   }
 
   async updateRecipe(recipe: Recipe): Promise<void> {
-    this._loading.set(true);
-    this._error.set(null);
+    this._layoutService.showSplashScreen('loading');
 
     try {
       if (recipe.id) {
         await firstValueFrom(this._http.put(RECIPES + '/' + recipe.id, recipe));
+        this._layoutService.hideSplashScreen();
       } else {
         await firstValueFrom(this._http.post(RECIPES, recipe));
       }
     } catch (err) {
-      this._error.set('No se pudo crear la receta');
       this._layoutService.toast('Error', 'No se pudo crear la receta', 'error');
-    } finally {
-      this._loading.set(false);
+    }  finally {
+      this._layoutService.hideSplashScreen();
     }
   }
 
   async deleteRecipe(recipeId: string): Promise<void> {
-    this._loading.set(true);
-    this._error.set(null);
+    this._layoutService.showSplashScreen('loading');
 
     try {
       await firstValueFrom(this._http.delete(RECIPES + '/' + recipeId));
@@ -115,7 +105,7 @@ export class RecipeService {
         'error'
       );
     } finally {
-      this._loading.set(false);
-    }
+      this._layoutService.hideSplashScreen();
+    } 
   }
 }

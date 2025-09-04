@@ -15,41 +15,32 @@ export class SettingsService {
   private _settings = signal<Settings | null>(null);
   settings = this._settings.asReadonly();
 
-  private _loading = signal(false);
-  loading = this._loading.asReadonly();
-
-  private _error = signal<string | null>(null);
-  error = this._error.asReadonly();
-
   async getSettings(): Promise<void> {
-    this._loading.set(true);
-    this._error.set(null);
+    this._layoutService.showSplashScreen('loading');
 
     try {
       const result = await firstValueFrom(this._http.get<Settings>(SETTINGS));
       this._settings.set(result);
+      this._layoutService.hideSplashScreen();
     } catch (err) {
-      this._error.set('No se pudieron cargar los ajustes');
       this._layoutService.toast('Error', 'Error al cargar los ajustes', 'error');
-    } finally {
-      this._loading.set(false);
+      this._layoutService.showSplashScreen('error', 'Error al cargar los ajustes');
+
     }
   }
 
   async updateSettings(newSettings: Settings): Promise<void> {
-    this._loading.set(true);
-    this._error.set(null);
+    this._layoutService.showSplashScreen('loading');
 
     try {
       const updated = await firstValueFrom(
         this._http.put<Settings>(SETTINGS, newSettings)
       );
       this._settings.set(updated);
+      this._layoutService.hideSplashScreen();
     } catch (err) {
-      this._error.set('No se pudieron actualizar los ajustes');
       this._layoutService.toast('Error', 'Error al actualizar los ajustes', 'error');
-    } finally {
-      this._loading.set(false);
+      this._layoutService.toast('Error', 'Error al actualizar los ajustes', 'error');
     }
   }
 }

@@ -5,10 +5,7 @@
 ## TO DO ✅
 
 - 🔥 IMPORTANT
-  1. [ ] INGREDIENTES
-    - [ ] Al pulsar en ingrediente = EDITAR + Boton eliminar
-    - [ ] Buscador ?
- 
+ 1. [ ] Revisar FIXES (hacer pruebas)
  2. [ ] LOADER: Crear un splash screen con loader general
 
 - ⌛ FIXES:
@@ -23,20 +20,23 @@
 
 ## ENDPOINTS
 
-> Pendiente revisar...
-
 **SETTINGS**
-
-- GET /settings --> solo macros
-- PUT /settings --> solo macros
+- GET /settings
+- PUT /settings
 
 **MEALS**
-
-- GET /meals --> todas las comidas
-- PUT /meals/:mealId --> actualizar meal
+- GET /meals
+- PUT /meals/:mealId
 
 **RECIPES**
+- GET /recipes (queryParams: meal, ingredientId)
+- GET /recipes/:recipeId
+- POST /recipes
+- PUT /recipes/:recipeId
+- DELETE /recipes/:recipeId
 
-- GET /recipes --> todos
-  - ?meal=desayuno --> filtrar por desayuno
-- GET /recipes/:recipeId --> receta por ID
+**INGREDIENTS**
+- GET /ingredients (queryParams: category)
+- PUT /ingredients
+- POST /ingredients/:ingredientId
+- DELETE /ingredients/:ingredientId

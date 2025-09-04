@@ -5,7 +5,6 @@ import { Meal } from '../models/meal.model';
 import { MEAL_BY_ID, MEALS } from '../constants/api';
 import { LayoutService } from './layout.service';
 
-
 @Injectable({
   providedIn: 'root',
 })
@@ -19,57 +18,69 @@ export class MealService {
   private _currentMeal = signal<Meal | null>(null);
   currentMeal = this._currentMeal.asReadonly();
 
-  private _loading = signal(false);
-  loading = this._loading.asReadonly();
-
-  private _error = signal<string | null>(null);
-  error = this._error.asReadonly();
-
   async getMeals(): Promise<void> {
-    this._loading.set(true);
-    this._error.set(null);
+    this._layoutService.showSplashScreen('loading');
 
     try {
       const result = await firstValueFrom(this._http.get<Meal[]>(MEALS));
       this._meals.set(result);
+      this._layoutService.hideSplashScreen();
     } catch (err) {
-      this._error.set('No se pudieron cargar las comidas');
-      this._layoutService.toast('Error', 'No se pudieron cargar las comidas', 'error');
-    } finally {
-      this._loading.set(false);
+      this._layoutService.toast(
+        'Error',
+        'No se pudieron cargar las comidas',
+        'error'
+      );
+      this._layoutService.showSplashScreen(
+        'error',
+        'No se pudieron cargar las comidas'
+      );
     }
   }
 
   async getMeal(mealId: string): Promise<void> {
-    this._loading.set(true);
-    this._error.set(null);
+    this._layoutService.showSplashScreen('loading');
 
     try {
-      const result = await firstValueFrom(this._http.get<Meal>(MEAL_BY_ID(mealId)));
+      const result = await firstValueFrom(
+        this._http.get<Meal>(MEAL_BY_ID(mealId))
+      );
       this._currentMeal.set(result);
+      this._layoutService.hideSplashScreen();
     } catch (err) {
-      this._error.set('No se pudo cargar la comida');
-      this._layoutService.toast('Error', `No se pudo cargar la comida: ${mealId}`, 'error');
-
-    } finally {
-      this._loading.set(false);
+      this._layoutService.toast(
+        'Error',
+        `No se pudo cargar la comida: ${mealId}`,
+        'error'
+      );
+      this._layoutService.showSplashScreen(
+        'error',
+        'No se pudo cargar la comida'
+      );
     }
   }
 
   async updateMeal(meal: Meal): Promise<void> {
-    this._loading.set(true);
-    this._error.set(null);
+    this._layoutService.showSplashScreen('loading');
 
     try {
       const updated = await firstValueFrom(
         this._http.put<Meal>(MEAL_BY_ID(meal.id), meal)
       );
-      this._meals.set(this._meals()?.map(m => m.id === updated.id ? updated : m) || []);
+      this._meals.set(
+        this._meals()?.map((m) => (m.id === updated.id ? updated : m)) || []
+      );
+      this._layoutService.hideSplashScreen();
     } catch (err) {
-      this._error.set('No se pudieron actualizar las comidas');
-      this._layoutService.toast('Error', `Error al actualizar la comida ${meal.name}`, 'error');
-    } finally {
-      this._loading.set(false);
+      this._layoutService.toast(
+        'Error',
+        `Error al actualizar la comida ${meal.name}`,
+        'error'
+      );
+      this._layoutService.showSplashScreen(
+        'error',
+        'No se pudieron actualizar las comidas'
+      );
     }
   }
 }

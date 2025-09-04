@@ -1,43 +1,20 @@
 @let settings = settingsService.settings();
-@let settingLoading = settingsService.loading();
-@let settingError = settingsService.error();
 
 @let meals = mealService.meals();
-@let mealLoading = mealService.loading();
-@let mealError = mealService.error();
 
 <!------------------------------------------------------------------------------>
 
 
 <h2 class="title--1">Comidas</h2>
 
-<!------------------------------------------------------------------------------>
-<!-- SUCCESS -->
-@if(!settingLoading && !mealLoading) {
+<app-macros-table [macros]="[settings?.macros || macrosDefault]" />
 
-  <app-macros-table [macros]="[settings?.macros || macrosDefault]" />
-  
-  <ul class="card-list">
-    @for(meal of meals; track meal.id) {
-    <li>
-      <a [routerLink]="['/meals', meal.id]">
-        <p-card [header]="meal.name" />
-      </a>
-    </li>
-    }
-  </ul>
-}
-
-<!------------------------------------------------------------------------------>
-<!-- LOADING -->
-@if(settingLoading || mealLoading) {
-  <app-status-spinner status="loading" label="Cargando..."/>
-} 
-
-<!------------------------------------------------------------------------------>
-<!-- ERROR -->
-@if(settingError || mealError) {
-  <app-status-spinner status="error" label="Error al cargar datos"/>
-
-  <button (click)="settingsService.getSettings(); mealService.getMeals()">Volver a cargar</button>
-}
+<ul class="card-list">
+  @for(meal of meals; track meal.id) {
+  <li>
+    <a [routerLink]="['/meals', meal.id]">
+      <p-card [header]="meal.name" />
+    </a>
+  </li>
+  }
+</ul>

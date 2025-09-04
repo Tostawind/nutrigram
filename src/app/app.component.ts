@@ -3,6 +3,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { Toast } from 'primeng/toast';
 import { RecipeFormDialogComponent } from "./shared/components/recipe-form-dialog/recipe-form-dialog.component";
+import { SplashScreenComponent } from "./shared/components/splash-screen/splash-screen.component";
 
 @Component({
   selector: 'app-root',
@@ -12,7 +13,8 @@ import { RecipeFormDialogComponent } from "./shared/components/recipe-form-dialo
     RouterLink,
     RouterLinkActive,
     Toast,
-    RecipeFormDialogComponent
+    RecipeFormDialogComponent,
+    SplashScreenComponent
 ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
