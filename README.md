@@ -6,7 +6,6 @@
 
 - 🔥 IMPORTANT
  1. [ ] Revisar FIXES (hacer pruebas)
- 2. [ ] LOADER: Crear un splash screen con loader general
 
 - ⌛ FIXES:
   - Tabla modal: Focus input
@@ -14,6 +13,7 @@
 
 - 🔜 FUTURO
   - Clicar o hover sobre ingrediente aparezca macros por 100g
+  - Poner mas bonito el spash-screen
 ---
 
 

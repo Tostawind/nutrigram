@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
+import { lastValueFrom } from 'rxjs';
 import { Ingredient } from '../models/ingredient.model';
-import { firstValueFrom } from 'rxjs';
 import { INGREDIENTS_BY_CATEGORY, INGREDIENTS, RECIPES } from '../constants/api';
 import { LayoutService } from './layout.service';
 import { Recipe } from '../models/recipe.model';
@@ -24,21 +24,15 @@ export class IngredientService {
   carbsIngredients = this._carbsIngredients.asReadonly();
   fatIngredients = this._fatIngredients.asReadonly();
 
-
   async getIngredients(category?: 'protein' | 'carbs' | 'fat'): Promise<void> {
     this._layoutService.showSplashScreen('loading');
 
     try {
-      let response: Ingredient[];
-      if (category) {
-        response = await firstValueFrom(
-          this._http.get<Ingredient[]>(INGREDIENTS_BY_CATEGORY(category))
-        );
-      } else {
-        response = await firstValueFrom(
-          this._http.get<Ingredient[]>(INGREDIENTS)
-        );
-      }
+      const response = await lastValueFrom(
+        category
+          ? this._http.get<Ingredient[]>(INGREDIENTS_BY_CATEGORY(category))
+          : this._http.get<Ingredient[]>(INGREDIENTS)
+      );
 
       switch (category) {
         case 'protein':
@@ -53,12 +47,10 @@ export class IngredientService {
         default:
           this._ingredients.set(response);
       }
-      this._layoutService.hideSplashScreen();
-
     } catch (error) {
-      this._layoutService.showSplashScreen(
-        'error','Error loading ingredients');
-    } 
+      this._layoutService.toast('Error', 'Error al cargar ingredientes', 'error');
+      this._layoutService.showSplashScreen('error', 'Error al cargar ingredientes');
+    }
   }
 
   async updateIngredient(ingredient: Ingredient): Promise<void> {
@@ -66,21 +58,15 @@ export class IngredientService {
 
     try {
       if (ingredient.id) {
-        await firstValueFrom(
-          this._http.put(INGREDIENTS + '/' + ingredient.id, ingredient)
+        await lastValueFrom(
+          this._http.put(`${INGREDIENTS}/${ingredient.id}`, ingredient)
         );
       } else {
-        await firstValueFrom(this._http.post(INGREDIENTS, ingredient));
+        await lastValueFrom(this._http.post(INGREDIENTS, ingredient));
       }
     } catch (err) {
-
-      this._layoutService.toast(
-        'Error',
-        'No se pudo crear el ingrediente',
-        'error'
-      );
-    } finally {
-      this._layoutService.hideSplashScreen();
+      this._layoutService.toast('Error', 'No se pudo guardar el ingrediente', 'error');
+      this._layoutService.showSplashScreen('error', 'No se pudo guardar el ingrediente');
     }
   }
 
@@ -88,55 +74,31 @@ export class IngredientService {
     this._layoutService.showSplashScreen('loading');
 
     try {
-      // 1️⃣ Buscar recetas que usan este ingrediente usando filter
-      const recipesUsingIngredient: Recipe[] = await firstValueFrom(
+      // 1️⃣ Buscar recetas que usan este ingrediente
+      const recipesUsingIngredient = await lastValueFrom(
         this._http.get<Recipe[]>(`${RECIPES}?ingredientId=${id}`)
       );
 
-
       if (recipesUsingIngredient.length > 0) {
-        // 2️⃣ Si hay recetas, no eliminar y mostrar error
-        const recipeNames = recipesUsingIngredient
-          .map((r) => r.name)
-          .join(', ');
-        this._layoutService.showSplashScreen(
-        'error',
-          `No se puede eliminar. Ingrediente usado en: ${recipeNames}`
-        );
+        // 2️⃣ Si está en uso, error
+        const recipeNames = recipesUsingIngredient.map((r) => r.name).join(', ');
         this._layoutService.toast(
           'Error',
           `No se puede eliminar. Ingrediente usado en: ${recipeNames}`,
           'error'
         );
-      } else {
-        // 3️⃣ Si no hay recetas, eliminar ingrediente
-        await firstValueFrom(this._http.delete(`${INGREDIENTS}/${id}`));
-        this._layoutService.toast(
-          'Éxito',
-          'Ingrediente eliminado correctamente',
-          'success'
+        this._layoutService.showSplashScreen(
+          'error',
+          `No se puede eliminar. Ingrediente usado en: ${recipeNames}`
         );
-
-        // // 4️⃣ Actualizar lista local
-        // this._ingredients.set(this._ingredients().filter((i) => i.id !== id));
-        // this._proteinIngredients.set(
-        //   this._proteinIngredients().filter((i) => i.id !== id)
-        // );
-        // this._carbsIngredients.set(
-        //   this._carbsIngredients().filter((i) => i.id !== id)
-        // );
-        // this._fatIngredients.set(
-        //   this._fatIngredients().filter((i) => i.id !== id)
-        // );
+      } else {
+        // 3️⃣ Eliminar ingrediente
+        await lastValueFrom(this._http.delete(`${INGREDIENTS}/${id}`));
+        this._layoutService.toast('Éxito', 'Ingrediente eliminado correctamente', 'success');
       }
     } catch (err) {
-      this._layoutService.toast(
-        'Error',
-        'No se pudo eliminar el ingrediente',
-        'error'
-      );
-    } finally {
-      this._layoutService.hideSplashScreen();
-    } 
+      this._layoutService.toast('Error', 'No se pudo eliminar el ingrediente', 'error');
+      this._layoutService.showSplashScreen('error', 'No se pudo eliminar el ingrediente');
+    }
   }
 }

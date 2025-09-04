@@ -5,22 +5,34 @@ import { MacrosTableComponent } from '../../shared/components/macros-table/macro
 import { SettingsService } from '../../core/services/settings.service';
 import { MACROS_DEFAULT } from '../../core/constants/macros';
 import { MealService } from '../../core/services/meal.service';
-import { StatusSpinnerComponent } from "../../shared/components/status-spinner/status-spinner.component";
+import { LayoutService } from '../../core/services/layout.service';
 
 @Component({
   selector: 'app-meals',
-  imports: [CardModule, RouterLink, MacrosTableComponent, StatusSpinnerComponent],
+  standalone: true,
+  imports: [CardModule, RouterLink, MacrosTableComponent],
   templateUrl: './meals.component.html',
   styleUrl: './meals.component.scss',
 })
 export class MealsComponent implements OnInit {
+  private _layoutService = inject(LayoutService);
   settingsService = inject(SettingsService);
   mealService = inject(MealService);
 
   macrosDefault = MACROS_DEFAULT;
 
   ngOnInit(): void {
-    this.settingsService.getSettings();
-    this.mealService.getMeals();
+    this._loadData();
+  }
+
+  private async _loadData(): Promise<void> {
+    try {
+      await this.settingsService.getSettings();
+      await this.mealService.getMeals();
+      // this._layoutService.hideSplashScreen(); // ✅ cerrar spinner al terminar
+    } catch {
+      // Los services ya muestran el toast y el splash en caso de error
+      // Aquí no hace falta repetir la gestión de error
+    }
   }
 }
