@@ -12,6 +12,6 @@ export const RECIPES = `${API_URL}/recipes`;
 export const RECIPE_BY_ID = (recipeId: string) => `${API_URL}/recipes/${recipeId}`;
 
 // MEALS
-export const MEALS = `${API_URL}/mealss`;
+export const MEALS = `${API_URL}/meals`;
 export const MEAL_BY_ID = (mealId: string) => `${API_URL}/meals/${mealId}`;
 

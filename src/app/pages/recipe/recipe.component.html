@@ -1,8 +1,8 @@
 
-@let meal = mealService.currentMeal();
-@let goalMacros = mealService.currentMeal()?.macros || macrosDefault;
+@let meal = mealStore.currentMeal();
+@let goalMacros = mealStore.currentMeal()?.macros || macrosDefault;
 
-@let recipe = recipeService.currentRecipe();
+@let recipe = recipeStore.currentRecipe();
 
 <!------------------------------------------------------------------------------>
 

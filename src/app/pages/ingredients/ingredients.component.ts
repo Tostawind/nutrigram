@@ -1,9 +1,9 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { IngredientFormDialogComponent } from "../../shared/components/ingredient-form-dialog/ingredient-form-dialog.component";
-import { IngredientService } from '../../core/services/ingredient.service';
 import { TabsModule } from 'primeng/tabs';
 import { Ingredient } from '../../core/models/ingredient.model';
+import { IngredientStoreService } from '../../core/services/stores/ingredient-store.service';
 
 @Component({
   selector: 'app-ingredients',
@@ -12,7 +12,7 @@ import { Ingredient } from '../../core/models/ingredient.model';
   styleUrl: './ingredients.component.scss',
 })
 export class IngredientsComponent implements OnInit {
-  ingredientService = inject(IngredientService);
+  ingredientStore = inject(IngredientStoreService);
 
   isIngredientDialogVisible = signal(false);
   ingredientToEdit = signal<Ingredient | null>(null);
@@ -24,24 +24,24 @@ export class IngredientsComponent implements OnInit {
   }
 
   private async _loadIngredients() {
-    await this.ingredientService.getIngredients('protein');
-    await this.ingredientService.getIngredients('carbs');
-    await this.ingredientService.getIngredients('fat');
+    await this.ingredientStore.loadIngredients('protein');
+    await this.ingredientStore.loadIngredients('carbs');
+    await this.ingredientStore.loadIngredients('fat');
     this.tabs = [
       {
         label: 'P',
         value: '0',
-        content: this.ingredientService.proteinIngredients(),
+        content: this.ingredientStore.proteinIngredients(),
       },
       {
         label: 'HC',
         value: '1',
-        content: this.ingredientService.carbsIngredients(),
+        content: this.ingredientStore.carbsIngredients(),
       },
       {
         label: 'G',
         value: '2',
-        content: this.ingredientService.fatIngredients(),
+        content: this.ingredientStore.fatIngredients(),
       },
     ];
   }

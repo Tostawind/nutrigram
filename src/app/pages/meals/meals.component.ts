@@ -2,10 +2,10 @@ import { Component, inject, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CardModule } from 'primeng/card';
 import { MacrosTableComponent } from '../../shared/components/macros-table/macros-table.component';
-import { SettingsService } from '../../core/services/settings.service';
-import { MACROS_DEFAULT } from '../../core/constants/macros';
-import { MealService } from '../../core/services/meal.service';
 import { LayoutService } from '../../core/services/layout.service';
+import { MealStoreService } from '../../core/services/stores/meal-store.service';
+import { MACROS_DEFAULT } from '../../core/constants/macros';
+import { SettingsStoreService } from '../../core/services/stores/settings-store.service';
 
 @Component({
   selector: 'app-meals',
@@ -16,8 +16,8 @@ import { LayoutService } from '../../core/services/layout.service';
 })
 export class MealsComponent implements OnInit {
   private _layoutService = inject(LayoutService);
-  settingsService = inject(SettingsService);
-  mealService = inject(MealService);
+  settingsStore = inject(SettingsStoreService);
+  mealStore = inject(MealStoreService);
 
   macrosDefault = MACROS_DEFAULT;
 
@@ -26,13 +26,7 @@ export class MealsComponent implements OnInit {
   }
 
   private async _loadData(): Promise<void> {
-    try {
-      await this.settingsService.getSettings();
-      await this.mealService.getMeals();
-      // this._layoutService.hideSplashScreen(); // ✅ cerrar spinner al terminar
-    } catch {
-      // Los services ya muestran el toast y el splash en caso de error
-      // Aquí no hace falta repetir la gestión de error
-    }
+    await this.settingsStore.loadSettings();
+    await this.mealStore.loadMeals();
   }
 }

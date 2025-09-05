@@ -14,17 +14,28 @@ export class LayoutService {
   // estado de error global
   private _errorMessage = signal<string | null>(null);
 
+  private _splashScreen = signal<{
+    visible: boolean;
+    status: Status;
+    message?: string;
+  }>({
+    visible: false,
+    status: 'loading',
+    message: 'CARGANDO',
+  });
+
   // signals públicos
-  loading = computed(() => this._loadingCounter() > 0);
-  error = this._errorMessage.asReadonly();
+  isLoading = computed(() => this._loadingCounter() > 0);
+  errorMessage = computed(() => this._errorMessage());
+  splashScreen = computed(() => this._splashScreen());
 
   // métodos internos
   startLoading() {
-    this._loadingCounter.update(v => v + 1);
+    this._loadingCounter.update((v) => v + 1);
   }
 
   stopLoading() {
-    this._loadingCounter.update(v => Math.max(0, v - 1));
+    this._loadingCounter.update((v) => Math.max(0, v - 1));
   }
 
   setError(message: string) {
@@ -35,12 +46,6 @@ export class LayoutService {
   clearError() {
     this._errorMessage.set(null);
   }
-
-  splashScrren: {visible: boolean; status: Status; message?: string} = {
-    visible: false,
-    status: 'loading',
-    message: 'CARGANDO',
-  };
 
   toast(
     title: string,
@@ -55,10 +60,10 @@ export class LayoutService {
   }
 
   showSplashScreen(status: Status, message?: string) {
-    this.splashScrren = { visible: true, status, message };
+    this._splashScreen.set({ visible: true, status, message });
   }
 
   hideSplashScreen() {
-    this.splashScrren.visible = false;
+    this._splashScreen.update((s) => ({ ...s, visible: false }));
   }
 }

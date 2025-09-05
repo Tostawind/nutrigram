@@ -6,10 +6,10 @@ import { InputTextModule } from 'primeng/inputtext';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { Ingredient } from '../../../core/models/ingredient.model';
 import { Macros } from '../../../core/models/macros.model';
-import { IngredientService } from '../../../core/services/ingredient.service';
 import { LayoutService } from '../../../core/services/layout.service';
 import { MACROS_DEFAULT } from '../../../core/constants/macros';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { IngredientStoreService } from '../../../core/services/stores/ingredient-store.service';
 
 @Component({
   selector: 'app-ingredient-form-dialog',
@@ -25,7 +25,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
   styleUrl: './ingredient-form-dialog.component.scss',
 })
 export class IngredientFormDialogComponent {
-  private _ingredientService = inject(IngredientService);
+  private _ingredientStore = inject(IngredientStoreService);
   private _layoutService = inject(LayoutService);
 
   ingredient = input<Ingredient | null>(null);
@@ -76,7 +76,7 @@ export class IngredientFormDialogComponent {
         unit: 'g',
       };
 
-      await this._ingredientService.updateIngredient(ingredientToSave);
+      await this._ingredientStore.saveIngredient(ingredientToSave);
 
       this.resetForm();
       this.visible.set(false);
@@ -117,7 +117,7 @@ export class IngredientFormDialogComponent {
     const deleteConfirm = confirm('Seguro que quieres eliminar el ingrediente?');
     if (!deleteConfirm) return;
 
-    await this._ingredientService.deleteIngredient(this.ingredient()?.id || '');
+    await this._ingredientStore.deleteIngredient(this.ingredient()?.id || '');
     window.location.href = '/ingredients';
   }
 }

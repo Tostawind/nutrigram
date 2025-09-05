@@ -1,30 +1,29 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { MacrosTableComponent } from '../../shared/components/macros-table/macros-table.component';
-import { SettingsService } from '../../core/services/settings.service';
-import { MealService } from '../../core/services/meal.service';
 import { LayoutService } from '../../core/services/layout.service';
 import { Macros } from '../../core/models/macros.model';
 import { calculateCalories } from '../../core/utils/nutrition.utils';
-import { StatusSpinnerComponent } from "../../shared/components/status-spinner/status-spinner.component";
+import { SettingsStoreService } from '../../core/services/stores/settings-store.service';
+import { MealStoreService } from '../../core/services/stores/meal-store.service';
 
 @Component({
   selector: 'app-settings',
-  imports: [MacrosTableComponent, StatusSpinnerComponent],
+  imports: [MacrosTableComponent],
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.scss',
 })
 export class SettingsComponent implements OnInit {
   readonly layoutService = inject(LayoutService);
-  settingsService = inject(SettingsService);
-  mealService = inject(MealService);
+  settingsStore = inject(SettingsStoreService);
+  mealStore = inject(MealStoreService);
 
   ngOnInit() {
-    this.settingsService.getSettings();
-    this.mealService.getMeals();
+    this.settingsStore.loadSettings();
+    this.mealStore.loadMeals();
   }
 
   updateSettings(macros: Macros[]) {
-    const current = this.settingsService.settings();
+    const current = this.settingsStore.settings();
     if (!current) return;
 
     const newMacros: Macros = {
@@ -38,11 +37,11 @@ export class SettingsComponent implements OnInit {
 
     const updated = { ...current, macros: newMacros };
 
-    this.settingsService.updateSettings(updated);
+    this.settingsStore.updateSettings(updated);
   }
 
   updateMeal(macros: Macros[], mealId: string) {
-    const current = this.mealService.meals();
+    const current = this.mealStore.meals();
     const meal = current?.find((m) => m.id === mealId);
     if (!meal) return;
 
@@ -57,11 +56,11 @@ export class SettingsComponent implements OnInit {
 
     const updated = { ...meal, macros: newMacros };
 
-    this.mealService.updateMeal(updated);
+    this.mealStore.updateMeal(updated);
   }
 
   getTotals() {
-    const meals = this.mealService.meals();
+    const meals = this.mealStore.meals();
     if (!meals) return null;
 
     return meals.reduce(
@@ -78,7 +77,7 @@ export class SettingsComponent implements OnInit {
 
   getDiffs() {
     const totals = this.getTotals();
-    const settings = this.settingsService.settings();
+    const settings = this.settingsStore.settings();
 
     if (!totals || !settings) return null;
 

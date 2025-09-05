@@ -2,9 +2,9 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { MacrosTableComponent } from '../../shared/components/macros-table/macros-table.component';
 import { CardModule } from 'primeng/card';
-import { MealService } from '../../core/services/meal.service';
 import { MACROS_DEFAULT } from '../../core/constants/macros';
-import { RecipeService } from '../../core/services/recipe.service';
+import { RecipeStoreService } from '../../core/services/stores/recipe-store.service';
+import { MealStoreService } from '../../core/services/stores/meal-store.service';
 
 
 @Component({
@@ -15,8 +15,8 @@ import { RecipeService } from '../../core/services/recipe.service';
 })
 export class RecipesComponent implements OnInit {
   readonly route = inject(ActivatedRoute);
-  mealService = inject(MealService);
-  recipeService = inject(RecipeService);
+  mealStore = inject(MealStoreService);
+  recipeStore = inject(RecipeStoreService);
 
   macrosDefault = MACROS_DEFAULT;
   mealId: string = '';
@@ -24,7 +24,7 @@ export class RecipesComponent implements OnInit {
     this.mealId = this.route.snapshot.paramMap.get('mealId') || '';
 
 
-    this.mealService.getMeal(this.mealId);
-    this.recipeService.getRecipesByMeal(this.mealId);
+    this.mealStore.loadMeal(this.mealId);
+    this.recipeStore.loadRecipesByMeal(this.mealId);
   }
 }

@@ -5,14 +5,14 @@ import { FloatLabel } from 'primeng/floatlabel';
 import { FormsModule } from '@angular/forms';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { ButtonModule } from 'primeng/button';
-import { MealService } from '../../../core/services/meal.service';
 import { Meal } from '../../../core/models/meal.model';
 import { LayoutService } from '../../../core/services/layout.service';
 import { Ingredient } from '../../../core/models/ingredient.model';
 import { AutoCompleteModule } from 'primeng/autocomplete';
-import { IngredientService } from '../../../core/services/ingredient.service';
-import { RecipeService } from '../../../core/services/recipe.service';
 import { Recipe } from '../../../core/models/recipe.model';
+import { IngredientStoreService } from '../../../core/services/stores/ingredient-store.service';
+import { RecipeStoreService } from '../../../core/services/stores/recipe-store.service';
+import { MealStoreService } from '../../../core/services/stores/meal-store.service';
 
 @Component({
   selector: 'app-recipe-form-dialog',
@@ -28,10 +28,10 @@ import { Recipe } from '../../../core/models/recipe.model';
   styleUrl: './recipe-form-dialog.component.scss',
 })
 export class RecipeFormDialogComponent {
-  private _mealService = inject(MealService);
-  private _ingredientService = inject(IngredientService);
+  private _mealStore = inject(MealStoreService);
+  private _ingredientStore = inject(IngredientStoreService);
   private _layoutService = inject(LayoutService);
-  private _recipeService = inject(RecipeService);
+  private _recipeStore = inject(RecipeStoreService);
 
   recipe = input<Recipe | null>(null);
 
@@ -83,17 +83,17 @@ export class RecipeFormDialogComponent {
   }
 
   async loadMeals() {
-    await this._mealService.getMeals();
-    this.meals = this._mealService.meals();
+    await this._mealStore.loadMeals();
+    this.meals = this._mealStore.meals();
   }
 
   async loadIngredients() {
-    await this._ingredientService.getIngredients('protein');
-    this.ingredients.protein = this._ingredientService.proteinIngredients();
-    await this._ingredientService.getIngredients('carbs');
-    this.ingredients.carbs = this._ingredientService.carbsIngredients();
-    await this._ingredientService.getIngredients('fat');
-    this.ingredients.fat = this._ingredientService.fatIngredients();
+    await this._ingredientStore.loadIngredients('protein');
+    this.ingredients.protein = this._ingredientStore.proteinIngredients();
+    await this._ingredientStore.loadIngredients('carbs');
+    this.ingredients.carbs = this._ingredientStore.carbsIngredients();
+    await this._ingredientStore.loadIngredients('fat');
+    this.ingredients.fat = this._ingredientStore.fatIngredients();
   }
 
   loadRecipe() {
@@ -145,7 +145,7 @@ export class RecipeFormDialogComponent {
           ...this.selectedIngredients.fat,
         ],
       };
-      await this._recipeService.updateRecipe(recipeToSave);
+      await this._recipeStore.saveRecipe(recipeToSave);
 
       this.resetForm();
       this.visible.set(false);
