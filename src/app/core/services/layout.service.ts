@@ -30,17 +30,30 @@ export class LayoutService {
   splashScreen = computed(() => this._splashScreen());
 
   // métodos internos
-  startLoading() {
+  startLoading(message?: string) {
     this._loadingCounter.update((v) => v + 1);
+
+    // mostrar splash automáticamente si no está visible
+    if (!this._splashScreen().visible) {
+      this.showSplashScreen('loading', message ?? 'CARGANDO');
+    }
   }
 
   stopLoading() {
     this._loadingCounter.update((v) => Math.max(0, v - 1));
+
+    // Ocultar splash solo si no hay requests y no hay error
+    if (this._loadingCounter() === 0 && !this._errorMessage()) {
+      this.hideSplashScreen();
+    }
   }
 
   setError(message: string) {
     this._errorMessage.set(message);
     this.toast('Error', message, 'error');
+
+    // Mostrar splash de error
+    this.showSplashScreen('error', message);
   }
 
   clearError() {
