@@ -31,7 +31,6 @@ export class SettingsStoreService {
         this.api.updateSettings(newSettings)
       );
       this._settings.set(updated);
-
       this.layout.toast('Configuración actualizada', '', 'success');
     } catch (err) {
       this.layout.setError('Error al actualizar configuración');

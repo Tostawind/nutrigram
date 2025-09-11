@@ -47,12 +47,10 @@ export class MealStoreService {
     try {
       const updated = await firstValueFrom(this.api.updateMeal(meal));
 
-      // Actualiza lista en memoria
       this._meals.update((meals) =>
         meals.map((m) => (m.id === updated.id ? updated : m))
       );
 
-      // Si el currentMeal es el mismo, actualizarlo también
       if (this._currentMeal()?.id === updated.id) {
         this._currentMeal.set(updated);
       }

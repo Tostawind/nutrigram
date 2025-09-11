@@ -9,3 +9,12 @@ export interface Recipe {
   meals: string[];
   totalMacros?: Macros;
 }
+
+// --- API ---
+export interface RecipeApi {
+  id?: string;
+  name: string;
+  ingredients: string[]; // solo ids
+  notes?: string;
+  meals: string[];
+}

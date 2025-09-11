@@ -5,12 +5,16 @@ import { LayoutService } from '../layout.service';
 import { MealStoreService } from './meal-store.service';
 import { adjustIngredientsToTarget } from '../../utils/nutrition.utils';
 import { RecipeApiService } from '../api/recipe-api.service';
+import { IngredientStoreService } from './ingredient-store.service';
+import { fromApiRecipe } from '../../adapters/recipe.adapter';
+import { Ingredient } from '../../models/ingredient.model';
 
 @Injectable({ providedIn: 'root' })
 export class RecipeStoreService {
   private api = inject(RecipeApiService);
   private layout = inject(LayoutService);
   private mealStore = inject(MealStoreService);
+  private ingredientStore = inject(IngredientStoreService);
 
   private _recipes = signal<Recipe[]>([]);
   recipes = this._recipes.asReadonly();
@@ -21,8 +25,16 @@ export class RecipeStoreService {
   async loadRecipesByMeal(mealId: string): Promise<void> {
     this.layout.startLoading();
     try {
-      const result = await firstValueFrom(this.api.getRecipesByMeal(mealId));
-      this._recipes.set(result);
+      const apiRecipes = await firstValueFrom(
+        this.api.getRecipesByMeal(mealId)
+      );
+      // convertir a frontend usando ingredientes cargados
+      const allIngredients = this.ingredientStore.ingredients();
+      this._recipes.set(
+        apiRecipes
+          .map((r) => fromApiRecipe(r, allIngredients))
+          .sort((a, b) => a.name.localeCompare(b.name))
+      );
     } catch (err) {
       this.layout.setError('Error al cargar recetas');
     } finally {
@@ -33,9 +45,16 @@ export class RecipeStoreService {
   async loadRecipe(recipeId: string, mealId: string): Promise<void> {
     this.layout.startLoading();
     try {
-      const recipe = await firstValueFrom(this.api.getRecipe(recipeId));
+      if (this.ingredientStore.ingredients().length === 0) {
+        await this.ingredientStore.loadIngredients();
+      }
 
-      // cargar meal para obtener macros
+      const allIngredients = this.ingredientStore.ingredients();
+      const apiRecipe = await firstValueFrom(this.api.getRecipe(recipeId));
+
+      let recipe = fromApiRecipe(apiRecipe, allIngredients);
+
+      // cargar meal para ajustar macros
       await this.mealStore.loadMeal(mealId);
       const targetMacros = this.mealStore.currentMeal()?.macros;
 
@@ -59,17 +78,26 @@ export class RecipeStoreService {
   async saveRecipe(recipe: Recipe): Promise<void> {
     this.layout.startLoading();
     try {
-      const updated = await firstValueFrom(this.api.updateRecipe(recipe));
-
-      // actualizar lista de recipes
-      this._recipes.update((recipes) =>
-        recipes.map((r) => (r.id === updated.id ? updated : r))
+      const savedApiRecipe = await firstValueFrom(
+        this.api.updateRecipe(recipe)
       );
 
-      // actualizar currentRecipe si coincide
-      if (this._currentRecipe()?.id === updated.id) {
-        this._currentRecipe.set(updated);
+      if (this.ingredientStore.ingredients().length === 0) {
+        await this.ingredientStore.loadIngredients();
       }
+
+      const allIngredients: Ingredient[] = this.ingredientStore.ingredients();
+      const savedRecipe = fromApiRecipe(savedApiRecipe, allIngredients);
+
+      // actualizar lista
+      this._recipes.update((recipes) =>
+        recipes.some((r) => r.id === savedRecipe.id)
+          ? recipes.map((r) => (r.id === savedRecipe.id ? savedRecipe : r))
+          : [...recipes, savedRecipe]
+      );
+
+      // 🔑 refrescar también el currentRecipe para que la vista lo note
+      this._currentRecipe.set(savedRecipe);
 
       this.layout.toast('Receta guardada', '', 'success');
     } catch (err) {
@@ -83,16 +111,12 @@ export class RecipeStoreService {
     this.layout.startLoading();
     try {
       await firstValueFrom(this.api.deleteRecipe(recipeId));
-
       this._recipes.update((recipes) =>
         recipes.filter((r) => r.id !== recipeId)
       );
-
-      // limpiar currentRecipe si coincide
       if (this._currentRecipe()?.id === recipeId) {
         this._currentRecipe.set(null);
       }
-
       this.layout.toast('Receta eliminada', '', 'success');
     } catch (err) {
       this.layout.setError('Error al eliminar la receta');

@@ -91,9 +91,9 @@ export class IngredientStoreService {
         const recipeNames = recipesUsingIngredient
           .map((r) => r.name)
           .join(', ');
-        this.layout.setError(
-          `No se puede eliminar. Ingrediente usado en: ${recipeNames}`
-        );
+
+        this.layout.toast('No se puede eliminar', `Ingrediente usado en: ${recipeNames}`, 'error');
+
         return;
       }
 
@@ -109,7 +109,7 @@ export class IngredientStoreService {
 
       this.layout.toast('Ingrediente eliminado', '', 'success');
     } catch (err) {
-      this.layout.setError('No se pudo eliminar el ingrediente');
+      this.layout.toast('No se pudo eliminar el ingrediente', '', 'error');
     } finally {
       this.layout.stopLoading();
     }

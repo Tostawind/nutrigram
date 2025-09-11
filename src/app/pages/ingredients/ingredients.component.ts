@@ -27,23 +27,7 @@ export class IngredientsComponent implements OnInit {
     await this.ingredientStore.loadIngredients('protein');
     await this.ingredientStore.loadIngredients('carbs');
     await this.ingredientStore.loadIngredients('fat');
-    this.tabs = [
-      {
-        label: 'P',
-        value: '0',
-        content: this.ingredientStore.proteinIngredients(),
-      },
-      {
-        label: 'HC',
-        value: '1',
-        content: this.ingredientStore.carbsIngredients(),
-      },
-      {
-        label: 'G',
-        value: '2',
-        content: this.ingredientStore.fatIngredients(),
-      },
-    ];
+
   }
 
   editIngredient(ingredient: Ingredient) {

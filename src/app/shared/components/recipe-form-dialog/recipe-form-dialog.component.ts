@@ -150,12 +150,6 @@ export class RecipeFormDialogComponent {
       this.resetForm();
       this.visible.set(false);
       
-      this._layoutService.toast(
-        'Campos correctos',
-        'Todos los campos son correctos',
-        'success'
-      );
-      window.location.reload();
     } else {
       this._layoutService.toast(
         'Campos incorrectos',

@@ -1,22 +1,39 @@
-import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { Observable, from } from 'rxjs';
 import { Meal } from '../../models/meal.model';
-import { MEAL_BY_ID, MEALS } from '../../constants/api';
-import { Observable } from 'rxjs';
+import { SupabaseService } from './supabase.service';
 
 @Injectable({ providedIn: 'root' })
 export class MealApiService {
-  private http = inject(HttpClient);
+  private supabaseService = inject(SupabaseService);
 
   getMeals(): Observable<Meal[]> {
-    return this.http.get<Meal[]>(MEALS);
+    return from(
+      this.supabaseService.getMeals().then(({ data, error }) => {
+        if (error) throw error;
+        return (data ?? []) as Meal[];
+      })
+    );
   }
 
   getMeal(mealId: string): Observable<Meal> {
-    return this.http.get<Meal>(MEAL_BY_ID(mealId));
+    return from(
+      this.supabaseService.getMeals().then(({ data, error }) => {
+        if (error) throw error;
+        const meal = data?.find((m: Meal) => m.id === mealId);
+        if (!meal) throw new Error('Meal no encontrado');
+        return meal as Meal;
+      })
+    );
   }
 
   updateMeal(meal: Meal): Observable<Meal> {
-    return this.http.put<Meal>(MEAL_BY_ID(meal.id), meal);
+    return from(
+      this.supabaseService.updateMeal(meal).then(({ data, error }) => {
+        if (error) throw error;
+        if (!data) throw new Error('Meal no encontrado');
+        return data as Meal;
+      })
+    );
   }
 }

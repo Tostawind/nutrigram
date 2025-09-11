@@ -10,6 +10,7 @@
 - ⌛ FIXES:
   - Tabla modal: Focus input
   - Tabla modal: Al pulsar Enter que se guarde
+  - Quitar autocomplete en los forms
 
 - 🔜 FUTURO
   - Clicar o hover sobre ingrediente aparezca macros por 100g

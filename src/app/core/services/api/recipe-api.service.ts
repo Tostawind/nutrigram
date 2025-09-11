@@ -1,31 +1,51 @@
-import { inject, Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { Recipe } from '../../models/recipe.model';
-import { RECIPES, RECIPE_BY_ID } from '../../constants/api';
+import { Injectable, inject } from '@angular/core';
+import { from, Observable } from 'rxjs';
+import { Recipe, RecipeApi } from '../../models/recipe.model';
+import { SupabaseService } from './supabase.service';
+import { toApiRecipe } from '../../adapters/recipe.adapter';
 
 @Injectable({ providedIn: 'root' })
 export class RecipeApiService {
-  private http = inject(HttpClient);
+  private supabase = inject(SupabaseService);
 
-  getRecipesByMeal(mealId: string): Observable<Recipe[]> {
-    const params = new HttpParams().set('meal', mealId);
-    return this.http.get<Recipe[]>(RECIPES, { params });
+  getRecipesByMeal(mealId: string): Observable<RecipeApi[]> {
+    return from(
+      this.supabase.getRecipesByMeal(mealId).then((res) => {
+        const { data, error } = res;
+        if (error) throw error;
+        return data as RecipeApi[];
+      })
+    );
   }
 
-  getRecipe(recipeId: string): Observable<Recipe> {
-    return this.http.get<Recipe>(RECIPE_BY_ID(recipeId));
+  getRecipe(recipeId: string): Observable<RecipeApi> {
+    return from(
+      this.supabase.getRecipe(recipeId).then((res) => {
+        const { data, error } = res;
+        if (error) throw error;
+        if (!data) throw new Error('Receta no encontrada');
+        return data as RecipeApi;
+      })
+    );
   }
 
-  updateRecipe(recipe: Recipe): Observable<Recipe> {
-    if (recipe.id) {
-      return this.http.put<Recipe>(`${RECIPES}/${recipe.id}`, recipe);
-    } else {
-      return this.http.post<Recipe>(RECIPES, recipe);
-    }
+  updateRecipe(recipe: Recipe): Observable<RecipeApi> {
+    const apiRecipe: RecipeApi = toApiRecipe(recipe); // 👈 convierte a RecipeApi
+
+    return from(
+      this.supabase.upsertRecipe(apiRecipe).then(({ data, error }) => {
+        if (error) throw error;
+        if (!data) throw new Error('No se pudo guardar la receta');
+        return data as RecipeApi; // 👈 tipamos correctamente
+      })
+    );
   }
 
   deleteRecipe(recipeId: string): Observable<void> {
-    return this.http.delete<void>(`${RECIPES}/${recipeId}`);
+    return from(
+      this.supabase.deleteRecipe(recipeId).then(({ error }) => {
+        if (error) throw error;
+      })
+    );
   }
 }

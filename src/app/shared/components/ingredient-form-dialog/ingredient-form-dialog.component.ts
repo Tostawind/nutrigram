@@ -81,22 +81,10 @@ export class IngredientFormDialogComponent {
       this.resetForm();
       this.visible.set(false);
 
-      this._layoutService.toast(
-        'Ingrediente actualizado',
-        'El ingrediente se ha actualizado correctamente',
-        'success'
-      );
-      window.location.reload();
+      this._ingredientStore.loadIngredients('protein');
+      this._ingredientStore.loadIngredients('carbs');
+      this._ingredientStore.loadIngredients('fat');
 
-      this.resetForm();
-      this.visible.set(false);
-
-      this._layoutService.toast(
-        'Campos correctos',
-        'Todos los campos son correctos',
-        'success'
-      );
-      window.location.reload();
     } else {
       this._layoutService.toast(
         'Campos incorrectos',
@@ -118,6 +106,6 @@ export class IngredientFormDialogComponent {
     if (!deleteConfirm) return;
 
     await this._ingredientStore.deleteIngredient(this.ingredient()?.id || '');
-    window.location.href = '/ingredients';
+    // window.location.href = '/ingredients';
   }
 }
