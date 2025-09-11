@@ -74,7 +74,7 @@ export class IngredientStoreService {
 
       this.layout.toast('Ingrediente guardado', updated.name, 'success');
     } catch (err) {
-      this.layout.setError('No se pudo guardar el ingrediente');
+      this.layout.toast('No se pudo guardar el ingrediente', '', 'error');
     } finally {
       this.layout.stopLoading();
     }

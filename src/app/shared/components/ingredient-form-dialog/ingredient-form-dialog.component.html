@@ -37,7 +37,8 @@
         [(ngModel)]="macros.protein"
         [min]="0"
         [max]="10000"
-        [step]="1"
+        mode="decimal" 
+        [minFractionDigits]="2"
       />
     </div>
     <div class="form-section">
@@ -47,7 +48,8 @@
         [(ngModel)]="macros.carbs"
         [min]="0"
         [max]="10000"
-        [step]="1"
+        mode="decimal" 
+        [minFractionDigits]="2"
       />
     </div>
     <div class="form-section">
@@ -57,7 +59,8 @@
         [(ngModel)]="macros.fat"
         [min]="0"
         [max]="10000"
-        [step]="1"
+        mode="decimal" 
+        [minFractionDigits]="2"
       />
     </div>
   </div>
