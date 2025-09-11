@@ -2,6 +2,19 @@
 
 ---
 
+## DESPLEGAR 🚀
+
+```bash
+# 1. Construir proyecto:
+ng build --configuration production
+
+# 2. Desplegar en Github Pages (sustituye branch gh-pages)
+npx ngh --dir=dist/nutrigram/browser
+```
+
+https://Tostawind.github.io/nutrigram/#/
+
+
 ## TO DO ✅
 
 - 🔥 IMPORTANT
