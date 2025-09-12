@@ -19,7 +19,11 @@
 
 <h3 class="title--2">Ingredientes</h3>
 
-<app-ingredients-table [ingredients]="recipe?.ingredients || []" />
+@if((recipe?.ingredients?.length ?? 0) > 0) {
+  <app-ingredients-table [ingredients]="recipe?.ingredients || []" />
+} @else {
+  <p class="opacity-60">No hay ingredientes en esta receta.</p>
+}
 
 <div class="flex justify-center gap-10 !mt-10">
   <p-button

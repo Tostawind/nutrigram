@@ -18,18 +18,23 @@ https://Tostawind.github.io/nutrigram/#/
 ## TO DO ✅
 
 - 🔥 IMPORTANT
- 1. [ ] Revisar FIXES (hacer pruebas)
 
 - ⌛ FIXES:
-  - Tabla modal: Focus input
-  - Tabla modal: Al pulsar Enter que se guarde
-  - Quitar autocomplete en los forms
+  - FACIL:
+
+  - DIFICIL:
+    - Cuando se agrega un ingrediente a la receta no hace el calculo automático, sino lo pone con 100. Al refrescar si calcula
+    - Optimizar llamadas a la api:
+      - Para evitar llamadas en cada pagina hacer spa y hacer una llamada inicial de todo y luego concretamente lo que se necesite
+      - Al editar settings en la tabla e ir celda a celda es una llamada por celda, pudiendo ser un modal con todos los datos y un unico envió 
+    - Ajustes no queda claro la diferencia con el objetivo
+    - Al cambiar los ajustes ahora la receta no calcula automatic
+
+
 
 - 🔜 FUTURO
   - Clicar o hover sobre ingrediente aparezca macros por 100g
-  - Poner mas bonito el spash-screen
----
-
+  - Al meterse en una meal estaria bien boton agregar añadir receta (ya seteando el meal actual)
 
 
 ## ENDPOINTS

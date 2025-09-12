@@ -21,7 +21,7 @@ export class LayoutService {
   }>({
     visible: false,
     status: 'loading',
-    message: 'CARGANDO',
+    message: '',
   });
 
   // signals públicos
@@ -35,7 +35,7 @@ export class LayoutService {
 
     // mostrar splash automáticamente si no está visible
     if (!this._splashScreen().visible) {
-      this.showSplashScreen('loading', message ?? 'CARGANDO');
+      this.showSplashScreen('loading', message ?? '');
     }
   }
 

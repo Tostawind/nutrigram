@@ -106,6 +106,7 @@ export class IngredientFormDialogComponent {
     if (!deleteConfirm) return;
 
     await this._ingredientStore.deleteIngredient(this.ingredient()?.id || '');
-    // window.location.href = '/ingredients';
+    this.resetForm();
+    this.visible.set(false);
   }
 }
