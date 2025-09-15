@@ -3,6 +3,7 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { Meal } from '../../models/meal.model';
 import { Settings } from '../../models/settings.model';
 import { Recipe, RecipeApi } from '../../models/recipe.model';
+import { Ingredient } from '../../models/ingredient.model';
 
 @Injectable({ providedIn: 'root' })
 export class SupabaseService {
@@ -81,6 +82,11 @@ export class SupabaseService {
   }
 
   // --- RECIPES ---
+  // Obtener todas las recetas
+  getRecipes() {
+    return this.supabase.from('recipes').select('*');
+  }
+
   // Obtener recetas que contienen un mealId
   getRecipesByMeal(mealId: string) {
     return this.supabase
@@ -115,4 +121,45 @@ export class SupabaseService {
   deleteRecipe(recipeId: string) {
     return this.supabase.from('recipes').delete().eq('id', recipeId);
   }
+
+  // --- INGREDIENTS ---
+  getIngredients() {
+    return this.supabase.from('ingredients').select('*');
+  }
+
+  getIngredientsByCategory(category: 'protein' | 'carbs' | 'fat') {
+    return this.supabase
+      .from('ingredients')
+      .select('*')
+      .eq('category', category);
+  }
+
+  upsertIngredient(ingredient: Ingredient) {
+    if (ingredient.id) {
+      return this.supabase
+        .from('ingredients')
+        .update(ingredient)
+        .eq('id', ingredient.id)
+        .select()
+        .single();
+    } else {
+      return this.supabase
+        .from('ingredients')
+        .insert(ingredient)
+        .select()
+        .single();
+    }
+  }
+
+  deleteIngredient(id: string) {
+    return this.supabase.from('ingredients').delete().eq('id', id);
+  }
+
+  getRecipesUsingIngredient(ingredientId: string) {
+    return this.supabase
+      .from('recipes')
+      .select('*')
+      .contains('ingredients', [ingredientId]);
+  }
 }
+

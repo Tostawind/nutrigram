@@ -8,72 +8,54 @@ import { SupabaseService } from './supabase.service';
 export class IngredientApiService {
   private supabase = inject(SupabaseService);
 
-  getIngredients(
-    category?: 'protein' | 'carbs' | 'fat'
-  ): Observable<Ingredient[]> {
+  getIngredients(): Observable<Ingredient[]> {
     return from(
-      (async () => {
-        let query = this.supabase.supabase.from('ingredients').select('*');
-        if (category) {
-          query = query.eq('category', category);
-        }
-        const { data, error } = await query;
+      this.supabase.getIngredients().then(({ data, error }) => {
         if (error) throw error;
         return (data ?? []) as Ingredient[];
-      })()
+      })
+    );
+  }
+
+  getIngredientsByCategory(
+    category: 'protein' | 'carbs' | 'fat'
+  ): Observable<Ingredient[]> {
+    return from(
+      this.supabase
+        .getIngredientsByCategory(category)
+        .then(({ data, error }) => {
+          if (error) throw error;
+          return (data ?? []) as Ingredient[];
+        })
     );
   }
 
   updateIngredient(ingredient: Ingredient): Observable<Ingredient> {
     return from(
-      (async () => {
-        let response;
-        if (ingredient.id) {
-          response = await this.supabase.supabase
-            .from('ingredients')
-            .update(ingredient)
-            .eq('id', ingredient.id)
-            .select()
-            .single();
-        } else {
-          response = await this.supabase.supabase
-            .from('ingredients')
-            .insert(ingredient)
-            .select()
-            .single();
-        }
-
-        const { data, error } = response;
+      this.supabase.upsertIngredient(ingredient).then(({ data, error }) => {
         if (error) throw error;
+        if (!data) throw new Error('No se pudo guardar el ingrediente');
         return data as Ingredient;
-      })()
+      })
     );
   }
 
   deleteIngredient(id: string): Observable<void> {
     return from(
-      (async () => {
-        const { error } = await this.supabase.supabase
-          .from('ingredients')
-          .delete()
-          .eq('id', id);
-
+      this.supabase.deleteIngredient(id).then(({ error }) => {
         if (error) throw error;
-      })()
+      })
     );
   }
 
   getRecipesUsingIngredient(ingredientId: string): Observable<Recipe[]> {
     return from(
-      (async () => {
-        const { data, error } = await this.supabase.supabase
-          .from('recipes')
-          .select('*')
-          .contains('ingredients', [ingredientId]);
-
-        if (error) throw error;
-        return (data ?? []) as Recipe[];
-      })()
+      this.supabase
+        .getRecipesUsingIngredient(ingredientId)
+        .then(({ data, error }) => {
+          if (error) throw error;
+          return (data ?? []) as Recipe[];
+        })
     );
   }
 }

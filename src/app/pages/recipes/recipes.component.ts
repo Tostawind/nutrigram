@@ -20,9 +20,9 @@ export class RecipesComponent implements OnInit {
 
   macrosDefault = MACROS_DEFAULT;
   mealId: string = '';
+
   ngOnInit() {
     this.mealId = this.route.snapshot.paramMap.get('mealId') || '';
-
 
     this.mealStore.loadMeal(this.mealId);
     this.recipeStore.loadRecipesByMeal(this.mealId);

@@ -81,10 +81,6 @@ export class IngredientFormDialogComponent {
       this.resetForm();
       this.visible.set(false);
 
-      this._ingredientStore.loadIngredients('protein');
-      this._ingredientStore.loadIngredients('carbs');
-      this._ingredientStore.loadIngredients('fat');
-
     } else {
       this._layoutService.toast(
         'Campos incorrectos',

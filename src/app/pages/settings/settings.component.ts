@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MacrosTableComponent } from '../../shared/components/macros-table/macros-table.component';
 import { LayoutService } from '../../core/services/layout.service';
 import { Macros } from '../../core/models/macros.model';
@@ -12,15 +12,10 @@ import { MealStoreService } from '../../core/services/stores/meal-store.service'
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.scss',
 })
-export class SettingsComponent implements OnInit {
+export class SettingsComponent {
   readonly layoutService = inject(LayoutService);
   settingsStore = inject(SettingsStoreService);
   mealStore = inject(MealStoreService);
-
-  ngOnInit() {
-    this.settingsStore.loadSettings();
-    this.mealStore.loadMeals();
-  }
 
   updateSettings(macros: Macros[]) {
     const current = this.settingsStore.settings();

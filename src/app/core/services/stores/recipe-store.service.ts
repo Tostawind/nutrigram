@@ -22,19 +22,31 @@ export class RecipeStoreService {
   private _currentRecipe = signal<Recipe | null>(null);
   currentRecipe = this._currentRecipe.asReadonly();
 
+  async loadRecipes(): Promise<void> {
+    this.layout.startLoading();
+    try {
+      const apiRecipes = await firstValueFrom(this.api.getRecipes());
+      this._recipes.set(
+        apiRecipes
+          .map((r) => fromApiRecipe(r, this.ingredientStore.ingredients()))
+          .sort((a, b) => a.name.localeCompare(b.name))
+      );
+    } catch (err) {
+      this.layout.setError('Error al cargar recetas');
+    } finally {
+      this.layout.stopLoading();
+    }
+  }
+
   async loadRecipesByMeal(mealId: string): Promise<void> {
     this.layout.startLoading();
     try {
-      const apiRecipes = await firstValueFrom(
-        this.api.getRecipesByMeal(mealId)
-      );
-      // convertir a frontend usando ingredientes cargados
-      const allIngredients = this.ingredientStore.ingredients();
-      this._recipes.set(
-        apiRecipes
-          .map((r) => fromApiRecipe(r, allIngredients))
-          .sort((a, b) => a.name.localeCompare(b.name))
-      );
+      const allRecipes = this._recipes();
+      const filtered = allRecipes
+        .filter((r) => r.meals?.some((id) => id === mealId))
+        .sort((a, b) => a.name.localeCompare(b.name));
+      this._recipes.set(filtered);
+
     } catch (err) {
       this.layout.setError('Error al cargar recetas');
     } finally {
@@ -45,15 +57,11 @@ export class RecipeStoreService {
   async loadRecipe(recipeId: string, mealId: string): Promise<void> {
     this.layout.startLoading();
     try {
-      if (this.ingredientStore.ingredients().length === 0) {
-        await this.ingredientStore.loadIngredients();
-      }
-
-      const allIngredients = this.ingredientStore.ingredients();
-      const apiRecipe = await firstValueFrom(this.api.getRecipe(recipeId));
-
-      let recipe = fromApiRecipe(apiRecipe, allIngredients);
-
+      
+      const recipe = this._recipes().find((r) => r.id === recipeId);
+      
+      if (!recipe) throw new Error('Receta no encontrada');
+      
       // cargar meal para ajustar macros
       await this.mealStore.loadMeal(mealId);
       const targetMacros = this.mealStore.currentMeal()?.macros;
@@ -69,7 +77,7 @@ export class RecipeStoreService {
 
       this._currentRecipe.set(recipe);
     } catch (err) {
-      this.layout.setError('Error al cargar la receta');
+      this.layout.toast('Error al cargar la receta', '', 'error');
     } finally {
       this.layout.stopLoading();
     }
@@ -81,10 +89,6 @@ export class RecipeStoreService {
       const savedApiRecipe = await firstValueFrom(
         this.api.updateRecipe(recipe)
       );
-
-      if (this.ingredientStore.ingredients().length === 0) {
-        await this.ingredientStore.loadIngredients();
-      }
 
       const allIngredients: Ingredient[] = this.ingredientStore.ingredients();
       const savedRecipe = fromApiRecipe(savedApiRecipe, allIngredients);

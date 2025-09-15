@@ -8,6 +8,16 @@ import { toApiRecipe } from '../../adapters/recipe.adapter';
 export class RecipeApiService {
   private supabase = inject(SupabaseService);
 
+  getRecipes(): Observable<RecipeApi[]> {
+    return from(
+      this.supabase.getRecipes().then((res) => {
+        const { data, error } = res;
+        if (error) throw error;
+        return data as RecipeApi[];
+      })
+    );
+  }
+
   getRecipesByMeal(mealId: string): Observable<RecipeApi[]> {
     return from(
       this.supabase.getRecipesByMeal(mealId).then((res) => {

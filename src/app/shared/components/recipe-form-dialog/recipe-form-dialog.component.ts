@@ -73,29 +73,18 @@ export class RecipeFormDialogComponent {
   };
 
   ngOnInit() {
-    this.loadInit();
-  }
+    // Meals:
+    this.meals = this._mealStore.meals();
 
-  async loadInit() {
-    await this.loadMeals();
-    await this.loadIngredients();
+    // Ingredients:
+    this.ingredients.protein = this._ingredientStore.proteinIngredients();
+    this.ingredients.carbs = this._ingredientStore.carbsIngredients();
+    this.ingredients.fat = this._ingredientStore.fatIngredients();
+
+    // Recipe:
     this.loadRecipe();
   }
-
-  async loadMeals() {
-    await this._mealStore.loadMeals();
-    this.meals = this._mealStore.meals();
-  }
-
-  async loadIngredients() {
-    await this._ingredientStore.loadIngredients('protein');
-    this.ingredients.protein = this._ingredientStore.proteinIngredients();
-    await this._ingredientStore.loadIngredients('carbs');
-    this.ingredients.carbs = this._ingredientStore.carbsIngredients();
-    await this._ingredientStore.loadIngredients('fat');
-    this.ingredients.fat = this._ingredientStore.fatIngredients();
-  }
-
+  
   loadRecipe() {
     // New recipe:
     if (!this.recipe()) return;

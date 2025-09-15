@@ -32,8 +32,15 @@ export class MealStoreService {
     this.layout.startLoading();
 
     try {
-      const result = await firstValueFrom(this.api.getMeal(mealId));
-      this._currentMeal.set(result);
+      const meals = this._meals();
+      const mealFound = meals.find((m) => m.id === mealId) || null;
+
+      if (!mealFound) {
+        this._currentMeal.set(null);
+      } else {
+        this._currentMeal.set(mealFound);
+      }
+
     } catch (err) {
       this.layout.setError('Error al cargar la comida');
     } finally {
@@ -53,6 +60,10 @@ export class MealStoreService {
 
       if (this._currentMeal()?.id === updated.id) {
         this._currentMeal.set(updated);
+
+        this._meals.update((meals) =>
+          meals.map((m) => (m.id === updated.id ? updated : m))
+        );
       }
 
       this.layout.toast('Comida actualizada', updated.name, 'success');
