@@ -26,14 +26,13 @@ export async function adjustIngredientsToTarget(
 ): Promise<{ ingredients: Ingredient[]; total: Macros }> {
   const glpk = await GLPK();
 
-  // macros por gramo
+  // macros por gramo (partiendo SIEMPRE de los ingredientes base)
   const macrosPerGram = ingredients.map((i) => ({
     name: i.name,
     macros: {
       protein: i.macros.protein / i.portion,
       carbs: i.macros.carbs / i.portion,
       fat: i.macros.fat / i.portion,
-      kcal: i.macros.kcal / i.portion,
     },
   }));
 
@@ -45,7 +44,11 @@ export async function adjustIngredientsToTarget(
       name: 'kcal',
       vars: ingredients.map((ing, idx) => ({
         name: ing.name,
-        coef: macrosPerGram[idx].macros.kcal,
+        coef: calculateCalories(
+          macrosPerGram[idx].macros.protein,
+          macrosPerGram[idx].macros.carbs,
+          macrosPerGram[idx].macros.fat
+        ),
       })),
     },
     subjectTo: [
@@ -86,25 +89,32 @@ export async function adjustIngredientsToTarget(
         },
       },
     ],
+    // 🚀 fuerza a que todas las variables sean enteras y >= 0
+    bounds: ingredients.map((ing) => ({
+      name: ing.name,
+      type: glpk.GLP_LO,
+      lb: 0,
+    })),
+    generals: ingredients.map((ing) => ing.name),
   };
 
-  // Resolver y tipar
+  // Resolver
   const rawResults = await glpk.solve(lp);
   const results = rawResults as unknown as GLPKResult;
 
-  console.log('GLPK RAW RESULTS', results);
-
-  // Reconstrucción de receta
+  // Reconstrucción de receta con enteros
   const recipe = ingredients.map((ing) => {
-    // Access usando ['vars'] explícitamente
-    const val = results.result['vars'][ing.name] ?? 0;
-    const g = Math.max(0, Math.round(val));
+    const g = Math.max(0, results.result.vars[ing.name] ?? 0);
+
+    const protein = (ing.macros.protein / ing.portion) * g;
+    const carbs = (ing.macros.carbs / ing.portion) * g;
+    const fat = (ing.macros.fat / ing.portion) * g;
 
     const macros = {
-      protein: Math.round((ing.macros.protein / ing.portion) * g),
-      carbs: Math.round((ing.macros.carbs / ing.portion) * g),
-      fat: Math.round((ing.macros.fat / ing.portion) * g),
-      kcal: Math.round((ing.macros.kcal / ing.portion) * g),
+      protein: Math.round(protein),
+      carbs: Math.round(carbs),
+      fat: Math.round(fat),
+      kcal: calculateCalories(protein, carbs, fat), // 🔥 siempre consistente
     };
 
     return {
@@ -113,8 +123,6 @@ export async function adjustIngredientsToTarget(
       macros,
     };
   });
-
-  console.log('GLPK RESULT', recipe);
 
   // Totales
   const total: Macros = recipe.reduce(

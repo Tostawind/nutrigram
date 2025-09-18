@@ -16,6 +16,7 @@
         [class.not-editable]="!editableFields().includes(col.key)"
         [class.over]="showDiffColors() && macro[col.key] > 0" 
         [class.under]="showDiffColors() && macro[col.key] < 0"
+        class="text-nowrap"
       >
         @if(showDiffColors()) {
           <span class="diff">
@@ -27,7 +28,7 @@
           </span>
         }
 
-        <span>{{ macro[col.key] }} </span>
+        <span>{{ macro[col.key] | number:'1.0-0'  }}</span>
         
         <span class="unit">{{ col.unit }}</span>
 

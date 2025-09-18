@@ -34,8 +34,7 @@ Orden de llamadas:
 
 - 🔥 IMPORTANT
     - Optimizar llamadas a la api:
-      - Para evitar llamadas en cada pagina hacer spa y hacer una llamada inicial de todo y luego concretamente lo que se necesite
-      - Al editar settings en la tabla e ir celda a celda es una llamada por celda, pudiendo ser un modal con todos los datos y un unico envió 
+      - Al final hay que hacer llamadas necesarias opr cada una de las vistas
 
 - ⌛ FIXES:
   - FACIL:

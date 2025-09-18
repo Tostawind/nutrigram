@@ -56,9 +56,25 @@ export class IngredientStoreService {
   async deleteIngredient(id: string): Promise<void> {
     this.layout.startLoading();
     try {
+      // 1️⃣ Comprobar si el ingrediente se usa en alguna receta
+      const recipes = await firstValueFrom(
+        this.api.getRecipesUsingIngredient(id)
+      );
+
+      if (recipes.length > 0) {
+        const recipeNames = recipes.map((r) => r.name).join(', ');
+        this.layout.toast(
+          'No se puede eliminar el ingrediente',
+          `Está usado en las recetas: ${recipeNames}`,
+          'error'
+        );
+        return; // Salimos sin eliminar
+      }
+
+      // 2️⃣ Si no se usa, eliminar ingrediente
       await firstValueFrom(this.api.deleteIngredient(id));
 
-      this._ingredients.update(list => list.filter(i => i.id !== id));
+      this._ingredients.update((list) => list.filter((i) => i.id !== id));
 
       this.layout.toast('Ingrediente eliminado', '', 'success');
     } catch {
@@ -70,7 +86,7 @@ export class IngredientStoreService {
 
   // 🔹 helper para reemplazar o agregar
   private _replaceOrAdd(list: Ingredient[], updated: Ingredient): Ingredient[] {
-    const index = list.findIndex(i => i.id === updated.id);
+    const index = list.findIndex((i) => i.id === updated.id);
     if (index > -1) {
       const clone = [...list];
       clone[index] = updated;

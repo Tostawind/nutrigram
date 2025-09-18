@@ -17,7 +17,7 @@ export class SettingsStoreService {
     try {
       const result = await firstValueFrom(this.api.getSettings());
       this._settings.set(result);
-    } catch (err) {
+    } catch {
       this.layout.setError('Error al cargar configuración');
     } finally {
       this.layout.stopLoading();
@@ -32,7 +32,7 @@ export class SettingsStoreService {
       );
       this._settings.set(updated);
       this.layout.toast('Configuración actualizada', '', 'success');
-    } catch (err) {
+    } catch {
       this.layout.setError('Error al actualizar configuración');
     } finally {
       this.layout.stopLoading();

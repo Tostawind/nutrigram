@@ -1,10 +1,11 @@
 import { Component, input } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { Ingredient } from '../../../core/models/ingredient.model';
+import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-ingredients-table',
-  imports: [TableModule],
+  imports: [TableModule, DecimalPipe],
   templateUrl: './ingredients-table.component.html',
   styleUrl: './ingredients-table.component.scss'
 })

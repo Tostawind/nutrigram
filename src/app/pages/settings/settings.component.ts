@@ -5,6 +5,7 @@ import { Macros } from '../../core/models/macros.model';
 import { calculateCalories } from '../../core/utils/nutrition.utils';
 import { SettingsStoreService } from '../../core/services/stores/settings-store.service';
 import { MealStoreService } from '../../core/services/stores/meal-store.service';
+import { MACROS_DEFAULT } from '../../core/constants/macros';
 
 @Component({
   selector: 'app-settings',
@@ -16,6 +17,9 @@ export class SettingsComponent {
   readonly layoutService = inject(LayoutService);
   settingsStore = inject(SettingsStoreService);
   mealStore = inject(MealStoreService);
+
+  macrosDefault = MACROS_DEFAULT;
+  
 
   updateSettings(macros: Macros[]) {
     const current = this.settingsStore.settings();

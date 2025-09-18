@@ -11,6 +11,7 @@ import {
   MACROS_DEFAULT,
   MacrosKey,
 } from '../../../core/constants/macros';
+import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-macros-table',
@@ -21,6 +22,7 @@ import {
     InputNumberModule,
     FormsModule,
     FloatLabel,
+    DecimalPipe
   ],
   templateUrl: './macros-table.component.html',
   styleUrl: './macros-table.component.scss',

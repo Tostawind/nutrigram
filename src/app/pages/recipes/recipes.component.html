@@ -1,21 +1,21 @@
-@let meal = mealStore.currentMeal();
-@let recipes = recipeStore.recipes();
+@let meal = mealStore.currentMeal;
+@let recipes = recipeStore.filteredRecipes;
 
-<h2 class="title--1">{{ meal?.name }}</h2>
+<h2 class="title--1">{{ meal()?.name }}</h2>
 
-<app-macros-table [macros]="[meal?.macros || macrosDefault]" />
+<app-macros-table [macros]="[meal()?.macros || macrosDefault]" />
 
 <h3 class="title--2">Recetas</h3>
 
 <ul class="card-list">
-  @for(recipe of recipes; track recipe.id) {
+  @for(recipe of recipes(); track recipe.id) {
     <li>
       <a [routerLink]="['/meals', mealId, 'recipes', recipe.id]">
         <p-card [header]="recipe.name" />
       </a>
     </li>
   }
-  @if(recipes.length === 0) {
+  @if(recipes().length === 0) {
     <li>
       <p>No hay recetas disponibles para esta comida.</p>
     </li>

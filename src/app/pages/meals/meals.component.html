@@ -1,4 +1,4 @@
-@let settings = settingsStore.settings();
+@let settings = settingsStore.settings;
 
 @let meals = mealStore.meals();
 
@@ -7,7 +7,7 @@
 
 <h2 class="title--1">Objetivo</h2>
 
-<app-macros-table [macros]="[settings?.macros || macrosDefault]" />
+<app-macros-table [macros]="[settings()?.macros || macrosDefault]" />
 
 <h2 class="title--1 | !mt-6">Comidas</h2>
 <ul class="card-list">

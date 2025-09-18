@@ -1,6 +1,6 @@
-@let settings = settingsStore.settings();
+@let settings = settingsStore.settings;
 
-@let meals = mealStore.meals();
+@let meals = mealStore.meals;
 
 @let diffs = getDiffs();
 
@@ -10,9 +10,9 @@
 <!------------------------------------------------------------------------------>
 <!-- SETTINGS -->
 <h2 class="title--1">Configuración</h2>
-@if (settings) {
+@if (settings()) {
   <app-macros-table
-    [macros]="[settings.macros]"
+    [macros]="[settings()?.macros || macrosDefault]"
     [editableFields]="['protein', 'carbs', 'fat']"
     (save)="updateSettings($event)"
   />
@@ -31,7 +31,7 @@
 <!------------------------------------------------------------------------------>
 <!-- MEALS -->
 <h2 class="title--1">Comidas</h2>
-@for(meal of meals; track meal.id) {
+@for(meal of meals(); track meal.id) {
   <hr style="opacity: 0.2; margin-top: 32px" />
   <h3 class="title--2">{{ meal.name }}</h3>
   <app-macros-table

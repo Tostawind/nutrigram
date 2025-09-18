@@ -1,26 +1,25 @@
 
-@let meal = mealStore.currentMeal();
-@let goalMacros = mealStore.currentMeal()?.macros || macrosDefault;
+@let meal = mealStore.currentMeal;
 
-@let recipe = recipeStore.currentRecipe();
+@let recipe = recipeStore.currentRecipe;
 
 <!------------------------------------------------------------------------------>
 
 
 <h2 class="title--1">
-  {{ recipe?.name }}
-  <span class="title__tag">{{ meal?.name }}</span>
+  {{ recipe()?.name }}
+  <span class="title__tag">{{ meal()?.name }}</span>
 </h2>
 
 <h3 class="title--2">Objetivo</h3>
-<app-macros-table [macros]="[goalMacros]" />
+<app-macros-table [macros]="[meal()?.macros || macrosDefault]" />
 <h3 class="title--2">Real</h3>
-<app-macros-table [macros]="[recipe?.totalMacros || macrosDefault]" />
+<app-macros-table [macros]="[recipe()?.totalMacros || macrosDefault]" />
 
 <h3 class="title--2">Ingredientes</h3>
 
-@if((recipe?.ingredients?.length ?? 0) > 0) {
-  <app-ingredients-table [ingredients]="recipe?.ingredients || []" />
+@if((recipe()?.ingredients?.length ?? 0) > 0) {
+  <app-ingredients-table [ingredients]="recipe()?.ingredients || []" />
 } @else {
   <p class="opacity-60">No hay ingredientes en esta receta.</p>
 }
@@ -50,5 +49,5 @@
 <!------------------------------------------------------------------------------>
 
 @if(isDialogVisible()) {
-  <app-recipe-form-dialog [(visible)]="isDialogVisible" [recipe]="recipe" />
+  <app-recipe-form-dialog [(visible)]="isDialogVisible" [recipe]="recipe()" />
 }

@@ -22,6 +22,7 @@ import { MealStoreService } from '../../core/services/stores/meal-store.service'
 export class RecipeComponent implements OnInit {
   private _router = inject(Router);
   private _route = inject(ActivatedRoute);
+  
   recipeStore = inject(RecipeStoreService);
   mealStore = inject(MealStoreService);
 

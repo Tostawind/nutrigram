@@ -19,19 +19,28 @@ export class RecipeStoreService {
   private _recipes = signal<Recipe[]>([]);
   recipes = this._recipes.asReadonly();
 
+  private _filteredRecipes = signal<Recipe[]>([]);
+  filteredRecipes = this._filteredRecipes.asReadonly();
+
   private _currentRecipe = signal<Recipe | null>(null);
   currentRecipe = this._currentRecipe.asReadonly();
 
   async loadRecipes(): Promise<void> {
     this.layout.startLoading();
+
     try {
       const apiRecipes = await firstValueFrom(this.api.getRecipes());
+
+      if (!this.ingredientStore.ingredients().length) {
+        await this.ingredientStore.loadIngredients();
+      }
+
       this._recipes.set(
         apiRecipes
           .map((r) => fromApiRecipe(r, this.ingredientStore.ingredients()))
           .sort((a, b) => a.name.localeCompare(b.name))
       );
-    } catch (err) {
+    } catch {
       this.layout.setError('Error al cargar recetas');
     } finally {
       this.layout.stopLoading();
@@ -40,15 +49,21 @@ export class RecipeStoreService {
 
   async loadRecipesByMeal(mealId: string): Promise<void> {
     this.layout.startLoading();
+
     try {
+      if (!this._recipes().length) {
+        await this.loadRecipes();
+      }
+
       const allRecipes = this._recipes();
+
       const filtered = allRecipes
         .filter((r) => r.meals?.some((id) => id === mealId))
         .sort((a, b) => a.name.localeCompare(b.name));
-      this._recipes.set(filtered);
 
-    } catch (err) {
-      this.layout.setError('Error al cargar recetas');
+      this._filteredRecipes.set(filtered);
+    } catch {
+      this.layout.setError('Error al cargar recetas de la comida');
     } finally {
       this.layout.stopLoading();
     }
@@ -56,12 +71,20 @@ export class RecipeStoreService {
 
   async loadRecipe(recipeId: string, mealId: string): Promise<void> {
     this.layout.startLoading();
+
     try {
-      
+      if (!this._recipes().length) {
+        await this.loadRecipes();
+      }
+
       const recipe = this._recipes().find((r) => r.id === recipeId);
-      
-      if (!recipe) throw new Error('Receta no encontrada');
-      
+
+      if (!recipe) {
+        this.layout.toast('Receta no encontrada', '', 'error');
+        this._currentRecipe.set(null);
+        return;
+      }
+
       // cargar meal para ajustar macros
       await this.mealStore.loadMeal(mealId);
       const targetMacros = this.mealStore.currentMeal()?.macros;
@@ -71,12 +94,13 @@ export class RecipeStoreService {
           recipe.ingredients,
           targetMacros
         );
+
         recipe.ingredients = result.ingredients;
         recipe.totalMacros = result.total;
       }
 
       this._currentRecipe.set(recipe);
-    } catch (err) {
+    } catch {
       this.layout.toast('Error al cargar la receta', '', 'error');
     } finally {
       this.layout.stopLoading();
@@ -104,7 +128,7 @@ export class RecipeStoreService {
       this._currentRecipe.set(savedRecipe);
 
       this.layout.toast('Receta guardada', '', 'success');
-    } catch (err) {
+    } catch {
       this.layout.setError('Error al guardar la receta');
     } finally {
       this.layout.stopLoading();
@@ -122,7 +146,7 @@ export class RecipeStoreService {
         this._currentRecipe.set(null);
       }
       this.layout.toast('Receta eliminada', '', 'success');
-    } catch (err) {
+    } catch {
       this.layout.setError('Error al eliminar la receta');
     } finally {
       this.layout.stopLoading();

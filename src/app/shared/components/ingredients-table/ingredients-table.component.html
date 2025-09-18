@@ -11,10 +11,11 @@
   <ng-template #body let-macro>
     <tr>
       @for(col of columns; track col.key) {
-      <td>
+      <td class="text-nowrap">
 
          @if (['kcal', 'protein', 'carbs', 'fat'].includes(col.key)) {
-          <span>{{ macro.macros[col.key] }}</span>
+
+          <span>{{ macro.macros[col.key] | number:'1.0-0'  }}</span>
         } @else {
           <span>{{ macro[col.key] }} </span>
         }
