@@ -5,7 +5,7 @@
 
 <app-macros-table [macros]="[meal()?.macros || macrosDefault]" />
 
-<h3 class="title--2">Recetas</h3>
+<h3 class="title--3 | !my-6">Recetas</h3>
 
 <ul class="card-list">
   @for(recipe of recipes(); track recipe.id) {

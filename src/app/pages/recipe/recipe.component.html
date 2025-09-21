@@ -11,12 +11,12 @@
   <span class="title__tag">{{ meal()?.name }}</span>
 </h2>
 
-<h3 class="title--2">Objetivo</h3>
+<h3 class="title--3 | !my-6">Objetivo</h3>
 <app-macros-table [macros]="[meal()?.macros || macrosDefault]" />
-<h3 class="title--2">Real</h3>
+<h3 class="title--3 | !my-6">Real</h3>
 <app-macros-table [macros]="[recipe()?.totalMacros || macrosDefault]" />
 
-<h3 class="title--2">Ingredientes</h3>
+<h3 class="title--3 | !my-6">Ingredientes</h3>
 
 @if((recipe()?.ingredients?.length ?? 0) > 0) {
   <app-ingredients-table [ingredients]="recipe()?.ingredients || []" />

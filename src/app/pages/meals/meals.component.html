@@ -4,12 +4,11 @@
 
 <!------------------------------------------------------------------------------>
 
-
-<h2 class="title--1">Objetivo</h2>
+<h2 class="title--3 | !mb-6">Objetivo</h2>
 
 <app-macros-table [macros]="[settings()?.macros || macrosDefault]" />
 
-<h2 class="title--1 | !mt-6">Comidas</h2>
+<h2 class="title--3 | !my-6">Comidas</h2>
 <ul class="card-list">
   @for(meal of meals; track meal.id) {
   <li>

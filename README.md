@@ -16,7 +16,7 @@ https://Tostawind.github.io/nutrigram/#/
 
 
 ## TO DO ✅
-
+2. No calcula los gramos
 
 - 🔥 IMPORTANT
 

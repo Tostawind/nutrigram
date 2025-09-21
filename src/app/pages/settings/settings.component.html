@@ -9,7 +9,7 @@
 
 <!------------------------------------------------------------------------------>
 <!-- SETTINGS -->
-<h2 class="title--1">Configuración</h2>
+<h2 class="title--2">Configuración</h2>
 @if (settings()) {
   <app-macros-table
     [macros]="[settings()?.macros || macrosDefault]"
@@ -17,8 +17,8 @@
     (save)="updateSettings($event)"
   />
 
-  
-  <h3 class="title--2">Diferencias</h3>
+
+  <h3 class="title--3 | !my-6">Diferencias</h3>
   <app-macros-table
     [macros]="[{ protein: diffs?.protein || 0, carbs: diffs?.carbs || 0, fat: diffs?.fat || 0, kcal: diffs?.kcal || 0 }]"
     [showDiffColors]="true"
@@ -30,10 +30,10 @@
 
 <!------------------------------------------------------------------------------>
 <!-- MEALS -->
-<h2 class="title--1">Comidas</h2>
+<h2 class="title--2">Comidas</h2>
 @for(meal of meals(); track meal.id) {
   <hr style="opacity: 0.2; margin-top: 32px" />
-  <h3 class="title--2">{{ meal.name }}</h3>
+  <h3 class="title--4 | !mt-6 !mb-2">{{ meal.name }}</h3>
   <app-macros-table
     [macros]="[meal.macros]"
     [editableFields]="['protein', 'carbs', 'fat']"
