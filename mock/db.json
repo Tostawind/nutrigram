@@ -486,10 +486,10 @@
       "portion": 100,
       "unit": "g",
       "macros": {
-        "protein": 6.2,
-        "fat": 69.6,
-        "carbs": 55.4,
-        "kcal": 716
+        "protein": 18,
+        "fat": 58,
+        "carbs": 11,
+        "kcal": 653
       },
       "category": "fat",
       "note": ""

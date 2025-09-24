@@ -19,7 +19,7 @@ https://Tostawind.github.io/nutrigram/#/
 2. No calcula los gramos
 
 - 🔥 IMPORTANT
-
+  - Si hay algun ingredientes con macros irreales como controlarlo?
 - ⌛ FIXES:
   - FACIL:
 

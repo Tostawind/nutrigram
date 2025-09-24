@@ -24,9 +24,8 @@ export async function adjustIngredientsToTarget(
   ingredients: Ingredient[],
   targetMacros: Macros
 ): Promise<{ ingredients: Ingredient[]; total: Macros }> {
-  const glpk = await GLPK();
+  const glpk = await GLPK(); // macros por gramo (partiendo SIEMPRE de los ingredientes base)
 
-  // macros por gramo (partiendo SIEMPRE de los ingredientes base)
   const macrosPerGram = ingredients.map((i) => ({
     name: i.name,
     macros: {
@@ -34,9 +33,23 @@ export async function adjustIngredientsToTarget(
       carbs: i.macros.carbs / i.portion,
       fat: i.macros.fat / i.portion,
     },
-  }));
+  })); // Construir LP 
 
-  // Construir LP
+  // 📍 Aquí puedes añadir un console.log para ver los datos de entrada
+  console.log('Entrada del LP:');
+  console.log('Ingredientes por gramo:', macrosPerGram);
+  console.log('Macros objetivo:', targetMacros);
+  console.log('Rangos de macros (95%-105%):');
+  console.log(
+    `Proteína: ${targetMacros.protein * 0.95} - ${targetMacros.protein * 1.05}`
+  );
+  console.log(
+    `Carbohidratos: ${targetMacros.carbs * 0.95} - ${targetMacros.carbs * 1.05}`
+  );
+  console.log(
+    `Grasas: ${targetMacros.fat * 0.95} - ${targetMacros.fat * 1.05}`
+  );
+
   const lp: any = {
     name: 'diet',
     objective: {
@@ -88,21 +101,33 @@ export async function adjustIngredientsToTarget(
           ub: targetMacros.fat * 1.05,
         },
       },
-    ],
-    // 🚀 fuerza a que todas las variables sean enteras y >= 0
-    bounds: ingredients.map((ing) => ({
-      name: ing.name,
-      type: glpk.GLP_LO,
-      lb: 0,
-    })),
-    generals: ingredients.map((ing) => ing.name),
-  };
+    ], // Se han eliminado las restricciones de `bounds` y `generals` // para permitir porciones decimales y simplificar el problema.
+  }; // Resolver
 
-  // Resolver
   const rawResults = await glpk.solve(lp);
-  const results = rawResults as unknown as GLPKResult;
+  const results = rawResults as unknown as GLPKResult; // Verificar el estado del resultado
 
-  // Reconstrucción de receta con enteros
+  if (
+    results.result.status !== glpk.GLP_OPT &&
+    results.result.status !== glpk.GLP_FEAS
+  ) {
+    // Si no se encuentra una solución óptima o factible, devuelve cero.
+    // Considera añadir un log o manejo de errores aquí.
+    console.warn(
+      'GLPK no pudo encontrar una solución. Estado:',
+      results.result.status
+    );
+    const emptyResult = ingredients.map((ing) => ({
+      ...ing,
+      portion: 0,
+      macros: { protein: 0, carbs: 0, fat: 0, kcal: 0 },
+    }));
+    return {
+      ingredients: emptyResult,
+      total: { protein: 0, carbs: 0, fat: 0, kcal: 0 },
+    };
+  } // Reconstrucción de receta
+
   const recipe = ingredients.map((ing) => {
     const g = Math.max(0, results.result.vars[ing.name] ?? 0);
 
@@ -111,10 +136,10 @@ export async function adjustIngredientsToTarget(
     const fat = (ing.macros.fat / ing.portion) * g;
 
     const macros = {
-      protein: Math.round(protein),
-      carbs: Math.round(carbs),
-      fat: Math.round(fat),
-      kcal: calculateCalories(protein, carbs, fat), // 🔥 siempre consistente
+      protein: protein,
+      carbs: carbs,
+      fat: fat,
+      kcal: calculateCalories(protein, carbs, fat),
     };
 
     return {
@@ -122,9 +147,8 @@ export async function adjustIngredientsToTarget(
       portion: g,
       macros,
     };
-  });
+  }); // Totales
 
-  // Totales
   const total: Macros = recipe.reduce(
     (acc, ing) => {
       acc.protein += ing.macros.protein;
